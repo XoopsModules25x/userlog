@@ -1,0 +1,14 @@
+LANGUAGE DIFFERENCES
+=====================
+
+Below are language differences from a version to next version.
+Version 1.01
+----------------
+admin.php
+----------
+edit:
+define("_AM_USERLOG_ITEMS_NUM","Number of items to display.");
+
+add:
+define("_AM_USERLOG_CONFIG_CHMOD_ERROR","Could not create any folder inside '%1\$s' because its chmod is under %2\$d.");
+define("_AM_USERLOG_CONFIG_CREATE_FOLDER","If you need to store logs in file, you should create folder '%1\$s' and set chmod = %2\$d manually using Cpanel.");

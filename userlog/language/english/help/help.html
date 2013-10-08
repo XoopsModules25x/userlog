@@ -1,0 +1,83 @@
+<div id="help-template" class="outer">
+<h1 class="head">Help: <a class="ui-corner-all tooltip" href="<{$xoops_url}>/modules/userlog/admin/index.php" title="Back to the administration of Userlog"> Userlog <img src="<{xoAdminIcons home.png}>" alt="Back to the administration of Userlog"/></a></h1>
+<h4 class="odd">Description</h4>
+<p class="even">
+Userlog is a node logger which can log your user/visitor activities in your site from a preferred node.<br />
+This is a very useful tool for webmasters in busy sites. For example, you can log your other Admins navigation.<br />
+Current nodes for logging are: user ID, user group and visitor IP.<br />
+You can store logs in a database, in a file or both.<br /><br />
+<b>Attention: userlog module will only work in Admin part of modules that use the ModuleAdmin class.</b><br /><br />
+</p>
+<h4 class="odd">Userlog preferences</h4>
+After Installation we strongly recommend  to go first to Preferences.<br /><br />
+Here you can set your desired values for important configuration items.<br /><br />
+Important configs are:<br /><br />
+<b>Log file configs</b>:
+If you need to store logs in a file, set the working path, working file size, working file name, ... here<br /><br />
+<b>Log database configs</b>:
+If you need to store logs in database, set the maximum logs thresholds here.<br /><br />
+<h4 class="odd">Setting</h4>
+<p class="even">
+"Setting" provides a wide range of options that you can use to set for specific users to be logged.<br />
+<br />
+<b>Setting name</b>: here you can input any name you like. It is not important for the module activities. It is just for you.<br />
+<br />
+<b>logby</b>: here you will choose the 'node' you want to log users by,  and in the next part you should input the Unique ID for this node. Currently you can log users by "user id", "user group" and "visitor IP".<br />
+- by selecting uid only that specific user will be logged. eg uid=1<br />
+- by selecting user group all activities of users belong to that specific group will be logged. eg: gid=3<br />
+- visitor IP is very useful to log robots, malicious visitors and ... eg: ip=66.249.66.1<br />
+- if you set Unique id = 0 (read the next part) Userlog module will log all users/visitors regardless of logby.
+the priority for getting settings is as below.<br /><br />
+IF EXIST uid get it<br />
+ELSE IF EXIST gid get it<br />
+ELSE IF EXIST ip get it<br />
+ELSE IF Unique id = 0 log all users<br />
+
+<br />
+<b>Unique ID</b>: here you must choose one unique ID (node id) to be logged.<br />
+(eg: uid=1, gid=3 (anonymous), ip=66.249.66.1) enter 0 means all users.<br />
+<br />
+<b>options:</b> you can select which user or page data you want to be logged. Also here you can choose 3 settings. Store in file? Store in database? And log user views?<br />
+select log user views means store uid, groups, script name, pagetitle, pageadmin, module dirname, module name, item name, item ID in Database.<br />
+<br />
+<b>Log scope:</b> if you want to log users activities in some specific module,  you can do it here.<br />
+select nothing means all website.<br />
+<br />
+Attention: we assume you will not have many settings in your site (eg: less than 100 settings) so we don't provide many navigation facilities like order and sort in set list table. You just have a page navigation.<br />
+Advise: more settings will only confuse you more. Choose logby and Unique ID wisely to avoid any overlap.<br />
+For example for a specific user use "uid" but for a group use "gid".<br />
+</p>
+
+<h4 class="odd">Logs</h4>
+<p class="even">
+You can see/delete/purge/export users logs through the Admin section of the userlog Module.<br /><br />
+You can get logs from database or file source engine.<br /><br />
+To search for logs based on a criteria you have an advance form.<br /><br />
+Export files will be stored in "the working path"/export folder.<br /><br />
+</p>
+<h4 class="odd">File manager</h4>
+<p class="even">
+You can see/delete/rename/copy/merge/compress(zip)/export users log files through the file manager of the userlog Module.<br /><br />
+Zip files will be stored in "the working path"/zip folder.<br /><br />
+Export files will be stored in "the working path"/export folder. <br /><br />
+You can select a name for your result (e.g.: copied file) but if you leave that empty, userlog will generate an automatic name by using the current criteria and date.<br /><br />
+The difference between The file manager section and logs section when you select file engine is, in logs section you dynamically work with files data and can see them rows by rows in detail but in file manager you just can work on the whole data in files.<br /><br />
+For example in logs section you can select some rows to export but in file manager you just can export whole data from some selected files.<br /><br />
+<b>Attention: If you work on too many files at once you may end up a white screen. It is because the server runs out of memory and/or cpu.</b>
+</p>
+<h4 class="odd">Statistics</h4>
+<p class="even">
+You can see total module views, total user views, total group views through the Statistics of the userlog Module.<br /><br />
+Also you have an advance form to see any item views using some criteria like what is the module/link/log time/viewer uid/viewer group id of the item<br /><br />
+Statistics is under develop. please let us know what do you like to see here.<br /><br />
+</p>
+
+<h4 class="odd">Views block</h4>
+<p class="even">
+Many XOOPS users have a wish for a block to see most viewed items in a module or in the whole website  in a specific period of time.<br /><br />
+for example in news module we just have a most viewed block that shows forever views.<br /><br />
+Now with userlog module this wish is completely addressed. You have many options in this block. Check it out yourself and play with it to see more.<br/>
+<br /><br />
+</p>
+
+</div>
