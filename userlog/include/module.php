@@ -23,39 +23,43 @@ defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
 require_once dirname(__FILE__) . '/common.php';
 function xoops_module_uninstall_userlog(&$module)
 {
-	$logsetObj = UserlogSetting::getInstance();
-	return $logsetObj->cleanCache(); // delete all settings caches
+    $logsetObj = UserlogSetting::getInstance();
+
+    return $logsetObj->cleanCache(); // delete all settings caches
 }
 function xoops_module_update_userlog(&$module, $prev_version = null)
 {
-	if ($prev_version == round( $module->getInfo("version") * 100, 2 )) {
-		$module->setErrors("You have the latest " . $module->getInfo("name") . " module (". $module->getInfo("dirname") . " version " . $module->getInfo("version") . ") and update is not necessary"); 
-		print_r($module->getErrors());
-		return true;
-	}
-	$ret = false;
-	// first db update
-	if ($prev_version == 100) {
-		$ret = update_userlog_v100($module);
-	}
-	print_r($module->getErrors());
-	return $ret;
+    if ($prev_version == round( $module->getInfo("version") * 100, 2 )) {
+        $module->setErrors("You have the latest " . $module->getInfo("name") . " module (". $module->getInfo("dirname") . " version " . $module->getInfo("version") . ") and update is not necessary");
+        print_r($module->getErrors());
+
+        return true;
+    }
+    $ret = false;
+    // first db update
+    if ($prev_version == 100) {
+        $ret = update_userlog_v100($module);
+    }
+    print_r($module->getErrors());
+
+    return $ret;
 }
 
 // update database from v1 to 1.01 (Beta1 to RC1)
 // module_name VARCHAR(25) change to VARCHAR(50)
 function update_userlog_v100(&$module)
 {
-	$field = "module_name";
-	$Userlog = Userlog::getInstance();
-	$ret = $Userlog->getHandler('log')->showFields($field);
-	preg_match_all('!\d+!', $ret[$field]["Type"], $nums);
-	// only change if module_name Type was VARCHAR(25)
-	if($nums[0][0] == 25) {
-		$ret2 = $Userlog->getHandler('log')->changeField($field, "VARCHAR(50)");
-	} else {
-		$ret2 = true;	
-		$module->setErrors("Your table field ({$field}) with size {$ret[$field]['Type']} dont need change.");
-	}
-	return $ret2;
+    $field = "module_name";
+    $Userlog = Userlog::getInstance();
+    $ret = $Userlog->getHandler('log')->showFields($field);
+    preg_match_all('!\d+!', $ret[$field]["Type"], $nums);
+    // only change if module_name Type was VARCHAR(25)
+    if($nums[0][0] == 25) {
+        $ret2 = $Userlog->getHandler('log')->changeField($field, "VARCHAR(50)");
+    } else {
+        $ret2 = true;
+        $module->setErrors("Your table field ({$field}) with size {$ret[$field]['Type']} dont need change.");
+    }
+
+    return $ret2;
 }

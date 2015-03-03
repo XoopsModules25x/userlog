@@ -50,7 +50,6 @@ $modversion['dirmoduleadmin']   = 'Frameworks/moduleclasses';
 $modversion['icons16']          = 'Frameworks/moduleclasses/icons/16';
 $modversion['icons32']          = 'Frameworks/moduleclasses/icons/32';
 
-
 $modversion['sqlfile']['mysql'] = "sql/mysql.sql";
 
 // Tables created by sql file (without prefix!)
@@ -292,53 +291,53 @@ $modversion['config'][$i]['default'] = 1;
 $modversion['config'][$i]['options'] = range(0, 100);
 $modversion['config'][$i]['category'] = 'prob';
 
-// START add webmaster permission from file to add additional permission check for all webmasters 
+// START add webmaster permission from file to add additional permission check for all webmasters
 global $xoopsOption, $xoopsModule;
 // effective only in admin side
 if (isset($xoopsOption['pagetype']) && $xoopsOption['pagetype'] == "admin" && is_object($xoopsModule)) {
-	// get dirname
-	$dirname = $xoopsModule->getVar('dirname');
-	// START if dirname is system
-	if($dirname == "system" && isset($_REQUEST['fct'])) {
-		$hModule =& xoops_gethandler('module');
-		// if we are in preferences of modules
-		if($_REQUEST['fct'] == "preferences" && isset($_REQUEST['mod'])) {
-			$mod = intval($_REQUEST['mod']);
-			$module =& $hModule->get($mod);
-			$dirname = $module->getVar('dirname');
-		}
-		// if we are in modules admin - can be done with onuninstall and onupdate???
-		if($_REQUEST['fct'] == "modulesadmin" && isset($_REQUEST['module'])) {
-			$dirname = $_REQUEST['module'];
-		}
-		// if we are in maintenance - now all modules - how to do it for only one module?
-		if($_REQUEST['fct'] == "maintenance") {
-			$dump_modules = isset($_REQUEST['dump_modules']) ? $_REQUEST['dump_modules'] : false;
-			$dump_tables = isset($_REQUEST['dump_tables']) ? $_REQUEST['dump_tables'] : false;
-			if ($dump_tables == true || $dump_modules == true) {
-				$dirname = $modversion['dirname'];
-			}
-		}
-	}
-	// END if dirname is system
-	
-	// now check permission from file
-	if($dirname == $modversion['dirname']) {
-		if (file_exists($permFile = XOOPS_ROOT_PATH . "/modules/" . $modversion['dirname'] . "/admin/addon/perm.php")) {
-			$perm = include $permFile;
-			if (count($perm["super"]["uid"]) > 0 || count($perm["super"]["group"]) > 0) {
-				global $xoopsUser;
-				if (is_object($xoopsUser) && 
-						!in_array($xoopsUser->getVar("uid"), $perm["super"]["uid"]) &&
-						count(array_intersect($xoopsUser->getGroups(),$perm["super"]["group"])) == 0
-					) {
-					$modversion['hasAdmin'] = 0;
-					$modversion['system_menu'] = 0;
-					$modversion['tables'] = null;
-					redirect_header(XOOPS_URL . "/modules/system/help.php?mid=" . (!empty($mod) ? $mod : $xoopsModule->getVar("mid", "s")) . "&amp;page=help", 1, sprintf(_MI_USERLOG_WEBMASTER_NOPERM,implode(",", $perm["super"]["uid"]), implode(",", $perm["super"]["group"])) );
-				}
-			}
-		}
-	}
+    // get dirname
+    $dirname = $xoopsModule->getVar('dirname');
+    // START if dirname is system
+    if($dirname == "system" && isset($_REQUEST['fct'])) {
+        $hModule =& xoops_gethandler('module');
+        // if we are in preferences of modules
+        if($_REQUEST['fct'] == "preferences" && isset($_REQUEST['mod'])) {
+            $mod = intval($_REQUEST['mod']);
+            $module =& $hModule->get($mod);
+            $dirname = $module->getVar('dirname');
+        }
+        // if we are in modules admin - can be done with onuninstall and onupdate???
+        if($_REQUEST['fct'] == "modulesadmin" && isset($_REQUEST['module'])) {
+            $dirname = $_REQUEST['module'];
+        }
+        // if we are in maintenance - now all modules - how to do it for only one module?
+        if($_REQUEST['fct'] == "maintenance") {
+            $dump_modules = isset($_REQUEST['dump_modules']) ? $_REQUEST['dump_modules'] : false;
+            $dump_tables = isset($_REQUEST['dump_tables']) ? $_REQUEST['dump_tables'] : false;
+            if ($dump_tables == true || $dump_modules == true) {
+                $dirname = $modversion['dirname'];
+            }
+        }
+    }
+    // END if dirname is system
+    
+    // now check permission from file
+    if($dirname == $modversion['dirname']) {
+        if (file_exists($permFile = XOOPS_ROOT_PATH . "/modules/" . $modversion['dirname'] . "/admin/addon/perm.php")) {
+            $perm = include $permFile;
+            if (count($perm["super"]["uid"]) > 0 || count($perm["super"]["group"]) > 0) {
+                global $xoopsUser;
+                if (is_object($xoopsUser) &&
+                        !in_array($xoopsUser->getVar("uid"), $perm["super"]["uid"]) &&
+                        count(array_intersect($xoopsUser->getGroups(),$perm["super"]["group"])) == 0
+                    ) {
+                    $modversion['hasAdmin'] = 0;
+                    $modversion['system_menu'] = 0;
+                    $modversion['tables'] = null;
+                    redirect_header(XOOPS_URL . "/modules/system/help.php?mid=" . (!empty($mod) ? $mod : $xoopsModule->getVar("mid", "s")) . "&amp;page=help", 1, sprintf(_MI_USERLOG_WEBMASTER_NOPERM,implode(",", $perm["super"]["uid"]), implode(",", $perm["super"]["group"])) );
+                }
+            }
+        }
+    }
 }
-// END add webmaster permission from file to add additional permission check for all webmasters 
+// END add webmaster permission from file to add additional permission check for all webmasters

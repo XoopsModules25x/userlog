@@ -48,6 +48,7 @@ class UserlogRequest
     static function getOptions()
     {
         $method = strtoupper($_SERVER['REQUEST_METHOD']);
+
         return $method;
     }
 
@@ -69,13 +70,13 @@ class UserlogRequest
      *
      * @static
      *
-     * @param   string  $name       Variable name
-     * @param   string  $default    Default value if the variable does not exist
-     * @param   string  $hash       Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
-     * @param   string  $type       Return type for the variable, for valid values see {@link JFilterInput::clean()}
-     * @param   int     $mask       Filter mask for the variable
+     * @param string $name    Variable name
+     * @param string $default Default value if the variable does not exist
+     * @param string $hash    Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
+     * @param string $type    Return type for the variable, for valid values see {@link JFilterInput::clean()}
+     * @param int    $mask    Filter mask for the variable
      *
-     * @return  mixed   Requested variable
+     * @return mixed Requested variable
      */
     static function getVar($name, $default = null, $hash = 'default', $type = 'none', $mask = 0)
     {
@@ -123,6 +124,7 @@ class UserlogRequest
         } else {
             $var = $default;
         }
+
         return $var;
     }
 
@@ -134,11 +136,11 @@ class UserlogRequest
      *
      * @static
      *
-     * @param   string  $name       Variable name
-     * @param   int     $default    Default value if the variable does not exist
-     * @param   string  $hash       Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
+     * @param string $name    Variable name
+     * @param int    $default Default value if the variable does not exist
+     * @param string $hash    Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
      *
-     * @return  integer Requested variable
+     * @return integer Requested variable
      */
     static function getInt($name, $default = 0, $hash = 'default')
     {
@@ -153,11 +155,11 @@ class UserlogRequest
      *
      * @static
      *
-     * @param    string    $name        Variable name
-     * @param    float     $default     Default value if the variable does not exist
-     * @param    string    $hash        Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
+     * @param string $name    Variable name
+     * @param float  $default Default value if the variable does not exist
+     * @param string $hash    Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
      *
-     * @return    float    Requested variable
+     * @return float Requested variable
      */
     static function getFloat($name, $default = 0.0, $hash = 'default')
     {
@@ -172,11 +174,11 @@ class UserlogRequest
      *
      * @static
      *
-     * @param    string    $name        Variable name
-     * @param    bool      $default     Default value if the variable does not exist
-     * @param    string    $hash        Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
+     * @param string $name    Variable name
+     * @param bool   $default Default value if the variable does not exist
+     * @param string $hash    Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
      *
-     * @return    bool        Requested variable
+     * @return bool Requested variable
      */
     static function getBool($name, $default = false, $hash = 'default')
     {
@@ -191,11 +193,11 @@ class UserlogRequest
      *
      * @static
      *
-     * @param    string    $name        Variable name
-     * @param    string    $default     Default value if the variable does not exist
-     * @param    string    $hash        Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
+     * @param string $name    Variable name
+     * @param string $default Default value if the variable does not exist
+     * @param string $hash    Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
      *
-     * @return    string    Requested variable
+     * @return string Requested variable
      */
     static function getWord($name, $default = '', $hash = 'default')
     {
@@ -210,11 +212,11 @@ class UserlogRequest
      *
      * @static
      *
-     * @param    string    $name        Variable name
-     * @param    string    $default     Default value if the variable does not exist
-     * @param    string    $hash        Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
+     * @param string $name    Variable name
+     * @param string $default Default value if the variable does not exist
+     * @param string $hash    Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
      *
-     * @return    string    Requested variable
+     * @return string Requested variable
      */
     static function getCmd($name, $default = '', $hash = 'default')
     {
@@ -229,12 +231,12 @@ class UserlogRequest
      *
      * @static
      *
-     * @param    string     $name        Variable name
-     * @param    string     $default     Default value if the variable does not exist
-     * @param    string     $hash        Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
-     * @param    int        $mask        Filter mask for the variable
+     * @param string $name    Variable name
+     * @param string $default Default value if the variable does not exist
+     * @param string $hash    Where the var should come from (POST, GET, FILES, COOKIE, METHOD)
+     * @param int    $mask    Filter mask for the variable
      *
-     * @return    string    Requested variable
+     * @return string Requested variable
      */
     static function getString($name, $default = '', $hash = 'default', $mask = 0)
     {
@@ -257,12 +259,12 @@ class UserlogRequest
      *
      * @access    public
      *
-     * @param    string     $name         Name
-     * @param    string     $value        Value
-     * @param    string     $hash         Hash
-     * @param    boolean    $overwrite    Boolean
+     * @param string  $name      Name
+     * @param string  $value     Value
+     * @param string  $hash      Hash
+     * @param boolean $overwrite Boolean
      *
-     * @return    string    Previous value
+     * @return string Previous value
      */
     static function setVar($name, $value = null, $hash = 'method', $overwrite = true)
     {
@@ -299,6 +301,7 @@ class UserlogRequest
                 $_SERVER['name'] = $value;
                 break;
         }
+
         return $previous;
     }
 
@@ -319,10 +322,10 @@ class UserlogRequest
      *
      * @static
      *
-     * @param    string     $hash    to get (POST, GET, FILES, METHOD)
-     * @param    int        $mask    Filter mask for the variable
+     * @param string $hash to get (POST, GET, FILES, METHOD)
+     * @param int    $mask Filter mask for the variable
      *
-     * @return    mixed    Request hash
+     * @return mixed Request hash
      */
     static function get($hash = 'default', $mask = 0)
     {
@@ -358,15 +361,16 @@ class UserlogRequest
         if (get_magic_quotes_gpc() && ($hash != 'FILES')) {
             $result = UserlogRequest::_stripSlashesRecursive($result);
         }
+
         return $result;
     }
 
     /**
      * Sets a request variable
      *
-     * @param    array   $array       An associative array of key-value pairs
-     * @param    string  $hash        The request variable to set (POST, GET, FILES, METHOD)
-     * @param    boolean $overwrite   If true and an existing key is found, the value is overwritten, otherwise it is ingored
+     * @param array   $array     An associative array of key-value pairs
+     * @param string  $hash      The request variable to set (POST, GET, FILES, METHOD)
+     * @param boolean $overwrite If true and an existing key is found, the value is overwritten, otherwise it is ingored
      */
     static function set($array, $hash = 'default', $overwrite = true)
     {
@@ -379,7 +383,7 @@ class UserlogRequest
      * Cleans the request from script injection.
      *
      * @static
-     * @return    void
+     * @return void
      */
     static function clean()
     {
@@ -424,8 +428,8 @@ class UserlogRequest
      *
      * @access    protected
      *
-     * @param    array    $array       Array to clean
-     * @param    boolean  $globalise   True if the array is to be added to the GLOBALS
+     * @param array   $array     Array to clean
+     * @param boolean $globalise True if the array is to be added to the GLOBALS
      */
     static function _cleanArray(&$array, $globalise = false)
     {
@@ -483,6 +487,7 @@ class UserlogRequest
             }
             $var = $noHtmlFilter->clean($var, $type);
         }
+
         return $var;
     }
 
@@ -491,13 +496,14 @@ class UserlogRequest
      *
      * @access    protected
      *
-     * @param    array    $value        Array of (nested arrays of) strings
+     * @param array $value Array of (nested arrays of) strings
      *
-     * @return    array|string    The input array with stripshlashes applied to it
+     * @return array|string The input array with stripshlashes applied to it
      */
     protected function _stripSlashesRecursive($value)
     {
         $value = is_array($value) ? array_map(array('UserlogRequest', '_stripSlashesRecursive'), $value) : stripslashes($value);
+
         return $value;
     }
 }
@@ -523,11 +529,11 @@ class UserlogFilterInput
      *
      * @access  protected
      *
-     * @param   array   $tagsArray  list of user-defined tags
-     * @param   array   $attrArray  list of user-defined attributes
-     * @param   int     $tagsMethod WhiteList method = 0, BlackList method = 1
-     * @param   int     $attrMethod WhiteList method = 0, BlackList method = 1
-     * @param   int     $xssAuto    Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
+     * @param array $tagsArray  list of user-defined tags
+     * @param array $attrArray  list of user-defined attributes
+     * @param int   $tagsMethod WhiteList method = 0, BlackList method = 1
+     * @param int   $attrMethod WhiteList method = 0, BlackList method = 1
+     * @param int   $xssAuto    Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
      */
     public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
     {
@@ -549,13 +555,13 @@ class UserlogFilterInput
      *
      * @static
      *
-     * @param   array   $tagsArray  list of user-defined tags
-     * @param   array   $attrArray  list of user-defined attributes
-     * @param   int     $tagsMethod WhiteList method = 0, BlackList method = 1
-     * @param   int     $attrMethod WhiteList method = 0, BlackList method = 1
-     * @param   int     $xssAuto    Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
+     * @param array $tagsArray  list of user-defined tags
+     * @param array $attrArray  list of user-defined attributes
+     * @param int   $tagsMethod WhiteList method = 0, BlackList method = 1
+     * @param int   $attrMethod WhiteList method = 0, BlackList method = 1
+     * @param int   $xssAuto    Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
      *
-     * @return  object  The UserlogFilterInput object.
+     * @return object The UserlogFilterInput object.
      * @since   1.5
      */
     public function & getInstance($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
@@ -568,6 +574,7 @@ class UserlogFilterInput
         if (empty ($instances[$sig])) {
             $instances[$sig] = new UserlogFilterInput($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);
         }
+
         return $instances[$sig];
     }
 
@@ -577,10 +584,10 @@ class UserlogFilterInput
      *
      * @access  public
      *
-     * @param   mixed   $source Input string/array-of-string to be 'cleaned'
-     * @param   string  $type   Return type for the variable (INT, FLOAT, BOOLEAN, WORD, ALNUM, CMD, BASE64, STRING, ARRAY, PATH, NONE)
+     * @param mixed  $source Input string/array-of-string to be 'cleaned'
+     * @param string $type   Return type for the variable (INT, FLOAT, BOOLEAN, WORD, ALNUM, CMD, BASE64, STRING, ARRAY, PATH, NONE)
      *
-     * @return  mixed   'Cleaned' version of input parameter
+     * @return mixed 'Cleaned' version of input parameter
      * @static
      */
     public function clean($source, $type = 'string')
@@ -664,6 +671,7 @@ class UserlogFilterInput
                 }
                 break;
         }
+
         return $result;
     }
 
@@ -672,14 +680,15 @@ class UserlogFilterInput
      *
      * @static
      *
-     * @param   array   $attrSubSet A 2 element array for attributes name,value
+     * @param array $attrSubSet A 2 element array for attributes name,value
      *
-     * @return  boolean True if bad code is detected
+     * @return boolean True if bad code is detected
      */
     public function checkAttribute($attrSubSet)
     {
         $attrSubSet[0] = strtolower($attrSubSet[0]);
         $attrSubSet[1] = strtolower($attrSubSet[1]);
+
         return (((strpos($attrSubSet[1], 'expression') !== false) && ($attrSubSet[0]) == 'style') || (strpos($attrSubSet[1], 'javascript:') !== false) || (strpos($attrSubSet[1], 'behaviour:') !== false) || (strpos($attrSubSet[1], 'vbscript:') !== false) || (strpos($attrSubSet[1], 'mocha:') !== false) || (strpos($attrSubSet[1], 'livescript:') !== false));
     }
 
@@ -688,9 +697,9 @@ class UserlogFilterInput
      *
      * @access  protected
      *
-     * @param   string  $source Input string to be 'cleaned'
+     * @param string $source Input string to be 'cleaned'
      *
-     * @return  string  'Cleaned' version of input parameter
+     * @return string 'Cleaned' version of input parameter
      */
     protected function _remove($source)
     {
@@ -700,6 +709,7 @@ class UserlogFilterInput
             $source = $this->_cleanTags($source);
             $loopCounter++;
         }
+
         return $source;
     }
 
@@ -708,9 +718,9 @@ class UserlogFilterInput
      *
      * @access  protected
      *
-     * @param   string  $source Input string to be 'cleaned'
+     * @param string $source Input string to be 'cleaned'
      *
-     * @return  string  'Cleaned' version of input parameter
+     * @return string 'Cleaned' version of input parameter
      */
     protected function _cleanTags($source)
     {
@@ -842,6 +852,7 @@ class UserlogFilterInput
         if ($postTag != '<') {
             $preTag .= $postTag;
         }
+
         return $preTag;
     }
 
@@ -850,9 +861,9 @@ class UserlogFilterInput
      *
      * @access  protected
      *
-     * @param   array   $attrSet    Array of attribute pairs to filter
+     * @param array $attrSet Array of attribute pairs to filter
      *
-     * @return  array   Filtered array of attribute pairs
+     * @return array Filtered array of attribute pairs
      */
     protected function _cleanAttributes($attrSet)
     {
@@ -911,6 +922,7 @@ class UserlogFilterInput
                 }
             }
         }
+
         return $newSet;
     }
 
@@ -919,9 +931,9 @@ class UserlogFilterInput
      *
      * @access  protected
      *
-     * @param   string  $source
+     * @param string $source
      *
-     * @return  string  Plaintext string
+     * @return string Plaintext string
      */
     protected function _decode($source)
     {

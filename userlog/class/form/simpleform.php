@@ -38,7 +38,7 @@ class UserlogSimpleForm extends XoopsForm
     function render()
     {
         $ret = ($this->getTitle() ? "<div class=\" center head \">" . $this->getTitle() . "</div>" : "");
-		$ret.= "<form name='" . $this->getName() . "' id='" . $this->getName() . "' action='" . $this->getAction() . "' method='" . $this->getMethod() . "'" . $this->getExtra() . ">\n";
+        $ret.= "<form name='" . $this->getName() . "' id='" . $this->getName() . "' action='" . $this->getAction() . "' method='" . $this->getMethod() . "'" . $this->getExtra() . ">\n";
         foreach ($this->getElements() as $ele) {
             if (!$ele->isHidden()) {
                 $ret .= "<div class=\"" . $ele->getClass() . "\"><strong>" . $ele->getCaption() . "</strong>" . $ele->render() . "</div>";
@@ -47,6 +47,7 @@ class UserlogSimpleForm extends XoopsForm
             }
         }
         $ret .= "</form>\n";
+
         return $ret;
     }
 }

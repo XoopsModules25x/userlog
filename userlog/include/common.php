@@ -26,7 +26,6 @@ define("USERLOG_URL", XOOPS_URL . '/modules/' . USERLOG_DIRNAME);
 define("USERLOG_ADMIN_URL", USERLOG_URL . '/admin');
 define("USERLOG_ROOT_PATH", XOOPS_ROOT_PATH . '/modules/' . USERLOG_DIRNAME);
 
-
 include_once USERLOG_ROOT_PATH . '/class/userlog.php';
 include_once USERLOG_ROOT_PATH . '/class/request.php';
 include_once USERLOG_ROOT_PATH . '/class/setting.php';

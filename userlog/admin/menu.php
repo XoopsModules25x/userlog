@@ -64,7 +64,7 @@ $adminmenu[$i]["icon"] = '../../' . $pathIcon32 . '/about.png';
 include_once dirname(dirname(__FILE__)) . '/include/common.php'; // after installtion it will included before admin_header.php
 global $xoTheme;
 $Userlog = Userlog::getInstance(false);
-$xoTheme->addScript("modules/" . USERLOG_DIRNAME . "/templates/js/" . USERLOG_DIRNAME . ".js"); 
+$xoTheme->addScript("modules/" . USERLOG_DIRNAME . "/templates/js/" . USERLOG_DIRNAME . ".js");
 $xoTheme->addStylesheet("modules/" . USERLOG_DIRNAME . "/templates/css/style.css");
 $toggle_script="var toggle_cookie=\"" . $Userlog->cookiePrefix . "TOGGLE" . "\";";
 $xoTheme->addScript( null, array ('type' => 'text/javascript'), $toggle_script);
