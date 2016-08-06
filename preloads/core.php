@@ -23,28 +23,31 @@
 defined('XOOPS_ROOT_PATH') or die('Restricted access');
 class UserlogCorePreload extends XoopsPreloadItem
 {
-    // to log main part of modules
-    function eventCoreFooterStart($args)
+	// to log main part of modules
+    static function eventCoreFooterStart($args)
     {
-        include dirname(dirname(__FILE__)) . '/include/log.php';
+		include dirname(dirname(__FILE__)) . '/include/log.php';
     }
 
-    // to log redirects because usually prorammers use exit() after redirect_header function.
-    function eventCoreIncludeFunctionsRedirectheader($args)
+	// to log redirects because usually prorammers use exit() after redirect_header function.
+	static function eventCoreIncludeFunctionsRedirectheader($args)
     {
-        include dirname(dirname(__FILE__)) . '/include/log.php';
-    }
-
-    // in XOOPS255/index.php (homepage) when no module is set for start page there is a bug in XOOPS255/header.php exit() should be commented
-    /*$xoopsPreload->triggerEvent('core.header.checkcache');
+		include dirname(dirname(__FILE__)) . '/include/log.php';
+	}
+    static function eventCoreIncludeCommonEnd($args)
+    {
+		include dirname(dirname(__FILE__)) . '/include/postlog.php';
+	}
+	// in XOOPS255/index.php (homepage) when no module is set for start page there is a bug in XOOPS255/header.php exit() should be commented
+	/*$xoopsPreload->triggerEvent('core.header.checkcache');
     if ($xoTheme->checkCache()) {
-        $xoopsPreload->triggerEvent('core.header.cacheend');
+		$xoopsPreload->triggerEvent('core.header.cacheend');
         //exit();
     } */
 
-    // to log admin part of modules (must use moduleadmin class)
-    function eventSystemClassGuiHeader($args)
+	// to log admin part of modules (must use moduleadmin class)
+	static function eventSystemClassGuiHeader($args)
     {
-        include dirname(dirname(__FILE__)) . '/include/log.php';
+		include dirname(dirname(__FILE__)) . '/include/log.php';
     }
 }

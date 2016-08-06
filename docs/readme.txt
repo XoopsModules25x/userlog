@@ -4,15 +4,69 @@ Requirements:
 =========================
 XOOPS 2.5.5 php 5.3 mysql 5.0
 
+To Install
+=========================
+1- upload the userlog to /modules/userlog (upload the compressed file and decompressed via Cpanel is the best way to insure all files are correctly uploaded)
+2- go to your admin -> system -> modules -> install
+3- change the default settings to your desired in the module preferences.
+
+Important notice: There is a new "ADDITIONAL permission in file for webmasters" addon introduced in userlog module.
+if you want other webmasters dont have access to userlog module this addon is for you.
+for more information go to userlog/admin/addon/perm.php
+If you dont need this addon you just need to remove addon/perm.php
+
+To Upgrade
+==========================
+1- Close your website. (highly recommended) be sure you be logged in.
+2- Get a backup from your old userlog database.(all XOOPSPREFIX_mod_userlog_* tables)
+3- Get a backup from your old XOOPSROOT/modules/userlog folder.
+4- IF EXIST get a backup from your all old userlog custom templates in themes folder located in XOOPSROOT/themes/MY_THEME/modules/userlog. eg: XOOPSROOT/themes/default/modules/userlog
+5- Go to userlog > preferences and set the module log status as Idle.
+6- Delete your old userlog folder located in modules. (Do not rename it. Only delete will work and while you have the backup you should not worry about anything)
+7- IF EXIST delete all old userlog custom templates in themes folder located in XOOPSROOT/themes/MY_THEME/modules/userlog. eg: XOOPSROOT/themes/default/modules/userlog
+8- Upload the most recent version of userlog to XOOPSROOT/modules/userlog (upload the compressed file and decompressed via Cpanel is the best way to insure all files are correctly uploaded)
+9- Go to your admin > system > modules > userlog -> update (important: wait until you see the report page. It is better to save this page for future review)
+10- Go to system > maintenance > clear all caches
+11- Change the default settings to your desired in the module preferences. Do not forget to back the module log status to Active.
+12 - Do not forget to open your website again.
+
+What you should not do in upgrade:
+----------------------------------
+- Do not install the most recent version and import the old database backup and try to update it in admin. (Do not do it in any other xoops module too otherwise it will not work correctly after upgrade)
+  It will not work because Xoops store other information from modules like the module version in some other tables like _modules table and you just import the module tables and not this other information.
+- Do not rename the old userlog folder to something like userlog_old. because xoops system will find any folder inside modules folder and try to take it as a new module.
+- Do not save your old custom template. instead try to implement your changes in templates in the new template.
+
+To Downgrade (To Restore the old version if the upgrade goes wrong)
+===================================================
+1- Close your website. (highly recommended) be sure you be logged in.
+2- IF YOU CAN Go to userlog > preferences and set the module log status as Idle.
+3- Delete the most recent bad working userlog folder located in modules. (Do not rename it.)
+4- Drop the most recent bad working userlog database. (all XOOPSPREFIX_mod_userlog_* tables)
+5- IF EXIST delete all userlog custom templates in themes folder located in XOOPSROOT/themes/MY_THEME/modules/userlog. eg: XOOPSROOT/themes/default/modules/userlog
+6- Upload your previous working version of userlog to XOOPSROOT/modules/userlog (upload the compressed file and decompressed via Cpanel is the best way to insure all files are correctly uploaded)
+7- Import your previous working userlog database. (all XOOPSPREFIX_mod_userlog_* tables)
+8- Go to your admin > system > modules > userlog -> update (important: wait until you see the report page. It is better to save this page for future review)
+9- Go to system > maintenance > clear all caches
+10- Change the default settings to your desired in the module preferences. Do not forget to back the module log status to Active.
+11- Do not forget to open your website again.
+
 Features:
 =========================
 - Log user activities and navigations.
   Examples:
   1- The possibility to list all the IPs used from a certain user, and conversely to list all the users logged from a defined IP to find duplicate users.
   2- Find deleted items from your database.
+		modules/userlog/admin/logs.php?options[referer]=del&options[request_method]=POST
   3- Find admin user activities(webmasters, moderators, ...)
+		modules/userlog/admin/logs.php?options[admin]=1  
   4- Find users who come to your site from Google.
-  
+		modules/userlog/admin/logs.php?options[referer]=google.com
+  5- Find all updated modules: (change op=update to op=install or op=uninstall to see install and uninstall activities)
+		modules/userlog/admin/logs.php?options[referer]=op=update&options[module]=system&options[request_method]=POST
+  6- Find all errors/notices/warnings.
+		modules/userlog/admin/logs.php?options[logger]=errno
+
 - Can log users by getting User ID, User group or visitor IP.
 - Logs can be stored in file, database or both.
 - Any below user information and/or page data can be selected to be logged.
@@ -33,19 +87,8 @@ User ID,Username,Is Admin?(y/n),Groups,User Last Visit,User IP,User agent,URL (R
 - Can be used as a backup/restore tool.
 - Used JSON format to store arrays to database for better performance (instead of xoops core serialize).
 
-
-To Install
+Known bugs/malfunctioning:
 =========================
-1- upload the userlog to /modules/userlog (upload the compressed file and decompressed via Cpanel is the best way to insure all files are correctly uploaded)
-2- go to your admin -> system -> modules -> install
-3- change the default settings to your desired in the module preferences.
-
-Important notice: There is a new "ADDITIONAL permission in file for webmasters" addon introduced in userlog module.
-if you want other webmasters dont have access to userlog module this addon is for you.
-for more information go to userlog/admin/addon/perm.php
-If you dont need this addon you just need to remove addon/perm.php
-
-known bugs/malfunctioning in userlog module:
 1- userlog will not work in XOOPS255/index.php (homepage) when no module is set for start page.
  there is a bug in XOOPS255/header.php
  solution:
@@ -90,3 +133,24 @@ a) go to userlog/class/log.php and change the below indicate lines to your desir
         $this->initVar("referer", XOBJ_DTYPE_TXTBOX, null, true, 500);// change this
 [/code]
 b) go to your database and change 'url' and 'referer' fields in table mod_userlog_log to your desired values.
+
+4- If you have userlog version older than 1.15 and update to the recent version you have this warning:
+[code]
+Warning: Smarty error: unable to read resource: "db:userlog_block_stats_type.html" in file /class/smarty/Smarty.class.php line 1094
+[/code]
+It is a xoops core 2.5.6 bug. find below the bug and its solution:
+https://sourceforge.net/p/xoops/bugs/1269/ block template file will not updated after update the module
+
+5- If you test userlog in local and you be disconnected or your internet connection was low you may have this error:
+[code]
+Fatal error: Call to undefined function phpbrowscap\curl_init() in xoops256\modules\userlog\class\phpbrowscap\Browscap.php on line 793
+[/code]
+or this:
+[code]
+Fatal error: Maximum execution time of 30 seconds exceeded in xoops256\modules\userlog\class\phpbrowscap\Browscap.php on line 749
+[/code]
+userlog need php_browscap.ini to get the browser data from user agent.
+You should go to:
+http://browsers.garykeith.com/stream.asp?PHP_BrowsCapINI
+
+then download php_browscap.ini and copy it to xoops_data/caches/xoops_cache/browscap

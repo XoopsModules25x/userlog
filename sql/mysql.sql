@@ -32,7 +32,7 @@ CREATE TABLE mod_userlog_log (
   header TEXT NOT NULL,
   logger TEXT NOT NULL,
   PRIMARY KEY  (log_id),
-  KEY log_id_uid (log_id, uid),
+  KEY log_time (log_time),
   KEY uid (uid, uname, user_ip),
   KEY views (uid, groups, script, pagetitle(20),pageadmin, module, item_name, item_id)
 ) ENGINE=MyISAM;
@@ -57,5 +57,5 @@ CREATE TABLE mod_userlog_stats (
   stats_period mediumint(8) NOT NULL default 0,
   time_update int(11) unsigned NOT NULL default 0,
   PRIMARY KEY  (stats_id),
-  KEY stats_type_link_period (stats_type, stats_link, stats_period)
+  UNIQUE stats_type_link_period (stats_type, stats_link, stats_period)
 ) ENGINE=MyISAM;

@@ -78,7 +78,7 @@
 		</div>
 		<{foreach item=title key=header from=$headers}>
 			<div title="<{$title}>" class="truncate width<{if $header == "admin" || $header == "pageadmin" || $header == "log_id" || $header == "uid" || $header == "item_name" || $header == "item_id"}>1<{else}><{$widthC}><{/if}> floatleft center">
-				<a class="ui-corner-all tooltip" title="<{$title}>" href="logs.php?limitentry=<{$limitentry}>&amp;sortentry=<{$header}><{if $query_page}>&amp;<{$query_page}><{/if}><{if $sortentry eq $header}>&amp;orderentry=<{if $orderentry eq 'DESC'}>ASC<{else}>DESC<{/if}><{/if}> " alt="<{$title}>"><{if $sortentry eq $header}><img src="<{if $orderentry eq 'DESC'}><{xoModuleIcons16 DESC.png}><{else}><{xoModuleIcons16 ASC.png}><{/if}>"/><{/if}><{$title}></a>
+				<a class="ui-corner-all tooltip <{$orderentry}>" title="<{$title}>" href="logs.php?limitentry=<{$limitentry}>&amp;sortentry=<{$header}><{if $query_page}>&amp;<{$query_page}><{/if}><{if $sortentry eq $header}>&amp;orderentry=<{if $orderentry eq 'DESC'}>ASC<{else}>DESC<{/if}><{/if}> " alt="<{$title}>"><{if $sortentry eq $header}><img src="<{xoModuleIcons16 DESC.png}>"/><{/if}><{$title}></a>
 			</div>
 		<{/foreach}>
 	    <div class="clear"></div>
@@ -92,7 +92,7 @@
 			<input type="checkbox" name="log_id[]" id="log_id[<{$log_id}>]" value="<{$log_id}>" />
 		</div>
 		<{foreach item=title key=header from=$headers}>
-			<div title="<{$log.$header}>" class="truncate width<{if $header == "admin" || $header == "pageadmin" || $header == "log_id" || $header == "uid" || $header == "item_name" || $header == "item_id"}>1<{else}><{$widthC}><{/if}> floatleft center">
+			<div title="<{$log.$header}>" class="edit_col truncate width<{if $header == "admin" || $header == "pageadmin" || $header == "log_id" || $header == "uid" || $header == "item_name" || $header == "item_id"}>1<{else}><{$widthC}><{/if}> floatleft center">
 				<{if $header == "uname"}>
 					<a href="<{$xoops_url}>/userinfo.php?uid=<{$log.uid}>"><{$log.uname}></a>
 				<{elseif $header == "user_ip"}>

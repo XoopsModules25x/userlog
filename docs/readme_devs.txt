@@ -262,7 +262,7 @@ There we have all needed information about items. so i wrote this nice and trick
 [code]
 	public function setItem()
 	{
-	    $not_config =& $this->userlog->getLogModule()->getInfo('notification');
+	    $not_config = $this->userlog->getLogModule()->getInfo('notification');
 		if (!empty($not_config)) {
 			foreach ($not_config['category'] as $category) {
 				// if $item_id != 0 ---> return true

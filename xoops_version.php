@@ -22,26 +22,26 @@
 defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
 $modversion = array();
 $modversion['name']         = _MI_USERLOG_NAME;
-$modversion['dirname']      = 'userlog';
+$modversion['dirname']      = basename(dirname(__FILE__));
 xoops_loadLanguage('admin', $modversion['dirname']);
 $modversion['description']  = _MI_USERLOG_DSC;
-$modversion['version']      = '1.01';
+$modversion['version']      = '1.16';
 $modversion['author']       = 'xoops.org (irmtfan)';
 $modversion['nickname']     = 'irmtfan';
-$modversion['credits']      = 'The XOOPS Project Team, trabis, irmtfan, mamba, tatane, Cesag, zyspec, blackrx';
+$modversion['credits']      = 'The XOOPS Project Team, trabis, irmtfan, mamba, tatane, Cesag, zyspec, blackrx, timgno, chefry';
 $modversion['license']      = 'GNU GPL 2.0';
 $modversion['license_url'] = 'www.gnu.org/licenses/gpl-2.0.html/';
 $modversion['official']     = 0;
 $modversion['help']           = 'page=help';
-$modversion['image']        = 'images/userlog_logo.png';
+$modversion['image']        = 'images/module_logo.png';
 $modversion['onUpdate'] = 'include/module.php';
 $modversion['onUninstall'] = 'include/module.php';
 
 //about
-$modversion['release_date'] = '2013/04/20';
+$modversion['release_date'] = '2013/04/26';
 $modversion['module_website_url'] = 'http://www.xoops.org/';
 $modversion['module_website_name'] = 'XOOPS';
-$modversion['module_status'] = 'Final';
+$modversion['module_status'] = 'ALPHA 2';
 $modversion['min_php'] = '5.3';
 $modversion['min_xoops'] = '2.5.5';
 $modversion['min_db'] = array('mysql' => '5.0.7', 'mysqli' => '5.0.7');
@@ -50,17 +50,18 @@ $modversion['dirmoduleadmin']   = 'Frameworks/moduleclasses';
 $modversion['icons16']          = 'Frameworks/moduleclasses/icons/16';
 $modversion['icons32']          = 'Frameworks/moduleclasses/icons/32';
 
+
 $modversion['sqlfile']['mysql'] = "sql/mysql.sql";
 
 // Tables created by sql file (without prefix!)
 $i = 0;
-$modversion['tables'][$i] = 'mod_userlog_log';
+$modversion['tables'][$i] = 'mod_' . $modversion['dirname'] . '_log';
 
 $i++;
-$modversion['tables'][$i] = 'mod_userlog_set';
+$modversion['tables'][$i] = 'mod_' . $modversion['dirname'] . '_set';
 
 $i++;
-$modversion['tables'][$i] = 'mod_userlog_stats';
+$modversion['tables'][$i] = 'mod_' . $modversion['dirname'] . '_stats';
 
 // Search
 $modversion['hasSearch'] = 0;
@@ -74,22 +75,31 @@ $modversion['hasMain'] = 0;
 
 $modversion['hasComments'] = 0;
 
-// Templates
+// Templates - if you dont define 'type' it will be 'module' | '' -> templates
 $i = 0;
-$modversion['templates'][$i]['file'] = 'userlog_admin_sets.html';
+$modversion['templates'][$i]['file'] = $modversion['dirname'] . '_admin_sets.html';
+$modversion['templates'][$i]['type'] = 'admin'; // $type = 'blocks' -> templates/blocks , 'admin' -> templates/admin , 'module' | '' -> templates
 $modversion['templates'][$i]['description'] = 'list of userlog setting';
 
 $i++;
-$modversion['templates'][$i]['file'] = 'userlog_admin_logs.html';
+$modversion['templates'][$i]['file'] = $modversion['dirname'] . '_admin_logs.html';
+$modversion['templates'][$i]['type'] = 'admin'; // $type = 'blocks' -> templates/blocks , 'admin' -> templates/admin , 'module' | '' -> templates
 $modversion['templates'][$i]['description'] = 'list of userlog logs';
 
 $i++;
-$modversion['templates'][$i]['file'] = 'userlog_admin_file.html';
+$modversion['templates'][$i]['file'] = $modversion['dirname'] . '_admin_file.html';
+$modversion['templates'][$i]['type'] = 'admin'; // $type = 'blocks' -> templates/blocks , 'admin' -> templates/admin , 'module' | '' -> templates
 $modversion['templates'][$i]['description'] = 'File manager';
 
 $i++;
-$modversion['templates'][$i]['file'] = 'userlog_admin_stats.html';
+$modversion['templates'][$i]['file'] = $modversion['dirname'] . '_admin_stats.html';
+$modversion['templates'][$i]['type'] = 'admin'; // $type = 'blocks' -> templates/blocks , 'admin' -> templates/admin , 'module' | '' -> templates
 $modversion['templates'][$i]['description'] = 'Logs Statistics';
+
+$i++;
+$modversion['templates'][$i]['file'] = $modversion['dirname'] . '_admin_stats_moduleadmin.html';
+$modversion['templates'][$i]['type'] = 'admin'; // $type = 'blocks' -> templates/blocks , 'admin' -> templates/admin , 'module' | '' -> templates
+$modversion['templates'][$i]['description'] = 'module admin history';
 
 // Admin things
 $modversion['hasAdmin'] = 1;
@@ -108,17 +118,54 @@ $i = 0;
 $modversion['blocks'][$i]['file'] = "views.php";
 $modversion['blocks'][$i]['name'] = _MI_USERLOG_BLOCK_VIEWS;
 $modversion['blocks'][$i]['description'] = _MI_USERLOG_BLOCK_VIEWS_DSC;
-$modversion['blocks'][$i]['show_func'] = "userlog_views_show";
-$modversion['blocks'][$i]['edit_func'] = "userlog_views_edit";
+$modversion['blocks'][$i]['show_func'] = $modversion['dirname'] . "_views_show";
+$modversion['blocks'][$i]['edit_func'] = $modversion['dirname'] . "_views_edit";
 $modversion['blocks'][$i]['options'] = "10|0|1|-1|0|count|DESC";
-$modversion['blocks'][$i]['template'] = "userlog_views.html";
+$modversion['blocks'][$i]['template'] = $modversion['dirname'] . "_block_views.html";
+
+// options[0] - number of items to show in block. the default is 10
+// options[1] - login or register or both radio select
+// options[2] - failed or successful or both radio select
+// options[3] - inactive or active or both
+// options[4] - never login before or login before or both
+// options[5] - Order - DESC, ASC default: DESC
+$i++;
+$modversion['blocks'][$i]['file'] = "login_reg_history.php";
+$modversion['blocks'][$i]['name'] = _AM_USERLOG_LOGIN_REG_HISTORY;
+$modversion['blocks'][$i]['description'] = _AM_USERLOG_LOGIN_REG_HISTORY;
+$modversion['blocks'][$i]['show_func'] = $modversion['dirname'] . "_login_reg_history_show";
+$modversion['blocks'][$i]['edit_func'] = $modversion['dirname'] . "_login_reg_history_edit";
+$modversion['blocks'][$i]['options'] = "10|0|0|0|0|DESC";
+$modversion['blocks'][$i]['template'] = $modversion['dirname'] . "_block_login_reg_history.html";
+
+// options[0] - number of items to show in block. the default is 10
+// options[1] - stats_type - referral (default), browser, OS
+// options[2] - Sort - stats_link, stats_value (default), time_update
+// options[3] - Order - DESC, ASC default: DESC
+$i++;
+$modversion['blocks'][$i]['file'] = "stats_type.php";
+$modversion['blocks'][$i]['name'] = _AM_USERLOG_STATS_TYPE;
+$modversion['blocks'][$i]['description'] = _AM_USERLOG_STATS_TYPE_DSC;
+$modversion['blocks'][$i]['show_func'] = $modversion['dirname'] . "_stats_type_show";
+$modversion['blocks'][$i]['edit_func'] = $modversion['dirname'] . "_stats_type_edit";
+$modversion['blocks'][$i]['options'] = "10|referral|stats_value|DESC";
+$modversion['blocks'][$i]['template'] = $modversion['dirname'] . "_block_stats_type.html";
 
 // Config categories
 $modversion['configcat']['logfile']['name'] = _MI_USERLOG_CONFCAT_LOGFILE;
 $modversion['configcat']['logfile']['description'] = _MI_USERLOG_CONFCAT_LOGFILE_DSC;
+$modversion['configcat']['format']['name'] = _MI_USERLOG_CONFCAT_FORMAT;
+$modversion['configcat']['format']['description'] = _MI_USERLOG_CONFCAT_FORMAT_DSC;
+$modversion['configcat']['pagenav']['name'] = _MI_USERLOG_CONFCAT_PAGENAV;
+$modversion['configcat']['pagenav']['description'] = _MI_USERLOG_CONFCAT_PAGENAV_DSC;
+$modversion['configcat']['logdb']['name'] = _MI_USERLOG_CONFCAT_LOGDB;
+$modversion['configcat']['logdb']['description'] = _MI_USERLOG_CONFCAT_LOGDB_DSC;
+$modversion['configcat']['prob']['name'] = _MI_USERLOG_CONFCAT_PROB;
+$modversion['configcat']['prob']['description'] = _MI_USERLOG_CONFCAT_PROB_DSC;
 
 // Config Settings (only for modules that need config settings generated automatically)
 ################### Log file ####################
+$modversion['log_paths'] = array("XOOPS_VAR_PATH" => XOOPS_VAR_PATH, "XOOPS_UPLOAD_PATH" => XOOPS_UPLOAD_PATH);
 $i = 0;
 $modversion['config'][$i]['name'] = 'status';
 $modversion['config'][$i]['title'] = '_MI_USERLOG_STATUS';
@@ -129,12 +176,22 @@ $modversion['config'][$i]['default'] = 1;
 $modversion['config'][$i]['options'] = array(_MI_USERLOG_ACTIVE => 1, _MI_USERLOG_IDLE => 0);
 
 $i++;
+$modversion['config'][$i]['name'] = 'postlog';
+$modversion['config'][$i]['title'] = '_MI_USERLOG_POSTLOG';
+$modversion['config'][$i]['description'] = '_MI_USERLOG_POSTLOG_DSC';
+$modversion['config'][$i]['formtype'] = 'yesno';
+$modversion['config'][$i]['valuetype'] = 'int';
+$modversion['config'][$i]['default'] = 1;
+$modversion['config'][$i]['options'] = array();
+
+$i++;
 $modversion['config'][$i]['name'] = 'logfile';
-$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_LOGFILE';
-$modversion['config'][$i]['description'] = '_MI_USERLOG_CONFCAT_LOGFILE_DSC';
+$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_LOGFILE_DSC';
+$modversion['config'][$i]['description'] = '';
 $modversion['config'][$i]['formtype'] = 'line_break';
 $modversion['config'][$i]['valuetype'] = 'textbox';
 $modversion['config'][$i]['default'] = 'odd';
+$modversion['config'][$i]['category'] = 'logfile';
 
 $i++;
 $modversion['config'][$i]['name'] = 'maxlogfilesize';
@@ -152,7 +209,7 @@ $modversion['config'][$i]['description'] = '_MI_USERLOG_LOGFILEPATH_DSC';
 $modversion['config'][$i]['formtype'] = 'select';
 $modversion['config'][$i]['valuetype'] = 'text';
 $modversion['config'][$i]['default'] = XOOPS_VAR_PATH;
-$modversion['config'][$i]['options'] = array("XOOPS_VAR_PATH" => XOOPS_VAR_PATH, "XOOPS_UPLOAD_PATH" => XOOPS_UPLOAD_PATH);
+$modversion['config'][$i]['options'] = $modversion['log_paths'];
 $modversion['config'][$i]['category'] = 'logfile';
 
 $i++;
@@ -166,11 +223,12 @@ $modversion['config'][$i]['category'] = 'logfile';
 
 $i++;
 $modversion['config'][$i]['name'] = 'format';
-$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_FORMAT';
-$modversion['config'][$i]['description'] = '_MI_USERLOG_CONFCAT_FORMAT_DSC';
+$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_FORMAT_DSC';
+$modversion['config'][$i]['description'] = '';
 $modversion['config'][$i]['formtype'] = 'line_break';
 $modversion['config'][$i]['valuetype'] = 'textbox';
 $modversion['config'][$i]['default'] = 'even';
+$modversion['config'][$i]['category'] = 'format';
 
 $i++;
 $modversion['config'][$i]['name'] = 'format_date';
@@ -182,12 +240,22 @@ $modversion['config'][$i]['default'] = 'd-M-Y H:i';
 $modversion['config'][$i]['category'] = 'format';
 
 $i++;
+$modversion['config'][$i]['name'] = 'format_date_history';
+$modversion['config'][$i]['title'] = '_MI_USERLOG_DATEFORMAT_HISTORY';
+$modversion['config'][$i]['description'] = '_MI_USERLOG_DATEFORMAT_DSC';
+$modversion['config'][$i]['formtype'] = 'textbox';
+$modversion['config'][$i]['valuetype'] = 'text';
+$modversion['config'][$i]['default'] = 'elapse';
+$modversion['config'][$i]['category'] = 'format';
+
+$i++;
 $modversion['config'][$i]['name'] = 'pagenav';
-$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_PAGENAV';
-$modversion['config'][$i]['description'] = '_MI_USERLOG_CONFCAT_PAGENAV_DSC';
+$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_PAGENAV_DSC';
+$modversion['config'][$i]['description'] = '';
 $modversion['config'][$i]['formtype'] = 'line_break';
 $modversion['config'][$i]['valuetype'] = 'textbox';
 $modversion['config'][$i]['default'] = 'odd';
+$modversion['config'][$i]['category'] = 'pagenav';
 
 $i++;
 $modversion['config'][$i]['name'] = 'sets_perpage';
@@ -229,11 +297,12 @@ $modversion['config'][$i]['category'] = 'pagenav';
 
 $i++;
 $modversion['config'][$i]['name'] = 'logdb';
-$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_LOGDB';
-$modversion['config'][$i]['description'] = '_MI_USERLOG_CONFCAT_LOGDB_DSC';
+$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_LOGDB_DSC';
+$modversion['config'][$i]['description'] = '';
 $modversion['config'][$i]['formtype'] = 'line_break';
 $modversion['config'][$i]['valuetype'] = 'textbox';
 $modversion['config'][$i]['default'] = 'even';
+$modversion['config'][$i]['category'] = 'logdb';
 
 $i++;
 $modversion['config'][$i]['name'] = 'maxlogs';
@@ -255,11 +324,12 @@ $modversion['config'][$i]['category'] = 'logdb';
 
 $i++;
 $modversion['config'][$i]['name'] = 'prob';
-$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_PROB';
-$modversion['config'][$i]['description'] = '_MI_USERLOG_CONFCAT_PROB_DSC';
+$modversion['config'][$i]['title'] = '_MI_USERLOG_CONFCAT_PROB_DSC';
+$modversion['config'][$i]['description'] = '';
 $modversion['config'][$i]['formtype'] = 'line_break';
 $modversion['config'][$i]['valuetype'] = 'textbox';
 $modversion['config'][$i]['default'] = 'odd';
+$modversion['config'][$i]['category'] = 'prob';
 
 $i++;
 $modversion['config'][$i]['name'] = 'probset';
@@ -291,53 +361,53 @@ $modversion['config'][$i]['default'] = 1;
 $modversion['config'][$i]['options'] = range(0, 100);
 $modversion['config'][$i]['category'] = 'prob';
 
-// START add webmaster permission from file to add additional permission check for all webmasters
+// START add webmaster permission from file to add additional permission check for all webmasters 
 global $xoopsOption, $xoopsModule;
 // effective only in admin side
 if (isset($xoopsOption['pagetype']) && $xoopsOption['pagetype'] == "admin" && is_object($xoopsModule)) {
-    // get dirname
-    $dirname = $xoopsModule->getVar('dirname');
-    // START if dirname is system
-    if($dirname == "system" && isset($_REQUEST['fct'])) {
-        $hModule =& xoops_gethandler('module');
-        // if we are in preferences of modules
-        if($_REQUEST['fct'] == "preferences" && isset($_REQUEST['mod'])) {
-            $mod = intval($_REQUEST['mod']);
-            $module =& $hModule->get($mod);
-            $dirname = $module->getVar('dirname');
-        }
-        // if we are in modules admin - can be done with onuninstall and onupdate???
-        if($_REQUEST['fct'] == "modulesadmin" && isset($_REQUEST['module'])) {
-            $dirname = $_REQUEST['module'];
-        }
-        // if we are in maintenance - now all modules - how to do it for only one module?
-        if($_REQUEST['fct'] == "maintenance") {
-            $dump_modules = isset($_REQUEST['dump_modules']) ? $_REQUEST['dump_modules'] : false;
-            $dump_tables = isset($_REQUEST['dump_tables']) ? $_REQUEST['dump_tables'] : false;
-            if ($dump_tables == true || $dump_modules == true) {
-                $dirname = $modversion['dirname'];
-            }
-        }
-    }
-    // END if dirname is system
-    
-    // now check permission from file
-    if($dirname == $modversion['dirname']) {
-        if (file_exists($permFile = XOOPS_ROOT_PATH . "/modules/" . $modversion['dirname'] . "/admin/addon/perm.php")) {
-            $perm = include $permFile;
-            if (count($perm["super"]["uid"]) > 0 || count($perm["super"]["group"]) > 0) {
-                global $xoopsUser;
-                if (is_object($xoopsUser) &&
-                        !in_array($xoopsUser->getVar("uid"), $perm["super"]["uid"]) &&
-                        count(array_intersect($xoopsUser->getGroups(),$perm["super"]["group"])) == 0
-                    ) {
-                    $modversion['hasAdmin'] = 0;
-                    $modversion['system_menu'] = 0;
-                    $modversion['tables'] = null;
-                    redirect_header(XOOPS_URL . "/modules/system/help.php?mid=" . (!empty($mod) ? $mod : $xoopsModule->getVar("mid", "s")) . "&amp;page=help", 1, sprintf(_MI_USERLOG_WEBMASTER_NOPERM,implode(",", $perm["super"]["uid"]), implode(",", $perm["super"]["group"])) );
-                }
-            }
-        }
-    }
+	// get dirname
+	$dirname = $xoopsModule->getVar('dirname');
+	// START if dirname is system
+	if($dirname == "system" && isset($_REQUEST['fct'])) {
+		$hModule = xoops_gethandler('module');
+		// if we are in preferences of modules
+		if($_REQUEST['fct'] == "preferences" && isset($_REQUEST['mod'])) {
+			$mod = intval($_REQUEST['mod']);
+			$module = $hModule->get($mod);
+			$dirname = $module->getVar('dirname');
+		}
+		// if we are in modules admin - can be done with onuninstall and onupdate???
+		if($_REQUEST['fct'] == "modulesadmin" && isset($_REQUEST['module'])) {
+			$dirname = $_REQUEST['module'];
+		}
+		// if we are in maintenance - now all modules - how to do it for only one module?
+		if($_REQUEST['fct'] == "maintenance") {
+			$dump_modules = isset($_REQUEST['dump_modules']) ? $_REQUEST['dump_modules'] : false;
+			$dump_tables = isset($_REQUEST['dump_tables']) ? $_REQUEST['dump_tables'] : false;
+			if ($dump_tables == true || $dump_modules == true) {
+				$dirname = $modversion['dirname'];
+			}
+		}
+	}
+	// END if dirname is system
+	
+	// now check permission from file
+	if($dirname == $modversion['dirname']) {
+		if (file_exists($permFile = XOOPS_ROOT_PATH . "/modules/" . $modversion['dirname'] . "/admin/addon/perm.php")) {
+			$perm = include $permFile;
+			if (count($perm["super"]["uid"]) > 0 || count($perm["super"]["group"]) > 0) {
+				global $xoopsUser;
+				if (is_object($xoopsUser) && 
+						!in_array($xoopsUser->getVar("uid"), $perm["super"]["uid"]) &&
+						count(array_intersect($xoopsUser->getGroups(),$perm["super"]["group"])) == 0
+					) {
+					$modversion['hasAdmin'] = 0;
+					$modversion['system_menu'] = 0;
+					$modversion['tables'] = null;
+					redirect_header(XOOPS_URL . "/modules/system/help.php?mid=" . (!empty($mod) ? $mod : $xoopsModule->getVar("mid", "s")) . "&amp;page=help", 1, sprintf(_MI_USERLOG_WEBMASTER_NOPERM,implode(",", $perm["super"]["uid"]), implode(",", $perm["super"]["group"])) );
+				}
+			}
+		}
+	}
 }
 // END add webmaster permission from file to add additional permission check for all webmasters

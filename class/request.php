@@ -118,7 +118,7 @@ class UserlogRequest
             if (get_magic_quotes_gpc() && ($var != $default) && ($hash != 'FILES')) {
                 $var = UserlogRequest::_stripSlashesRecursive($var);
             }
-        } else if ($default !== null) {
+        } elseif ($default !== null) {
             // Clean the default value
             $var = UserlogRequest::_cleanVar($default, $mask, $type);
         } else {
@@ -241,7 +241,7 @@ class UserlogRequest
     static function getString($name, $default = '', $hash = 'default', $mask = 0)
     {
         // Cast to string, in case JREQUEST_ALLOWRAW was specified for mask
-        return (string)UserlogRequest::getVar($name, $default, $hash, 'string', $mask);
+        return (string) UserlogRequest::getVar($name, $default, $hash, 'string', $mask);
     }
 
     static function getArray($name, $default = array(), $hash = 'default')
@@ -251,7 +251,7 @@ class UserlogRequest
 
     static function getText($name, $default = '', $hash = 'default')
     {
-        return (string)UserlogRequest::getVar($name, $default, $hash, 'string', Userlog_REQUEST_ALLOWRAW);
+        return (string) UserlogRequest::getVar($name, $default, $hash, 'string', Userlog_REQUEST_ALLOWRAW);
     }
 
     /**
@@ -451,8 +451,8 @@ class UserlogRequest
     /**
      * Clean up an input variable.
      *
-     * @param mixed  $var  The input variable.
-     * @param int    $mask Filter bit mask. 1=no trim: If this flag is cleared and the
+     * @param mixed $var  The input variable.
+     * @param int   $mask Filter bit mask. 1=no trim: If this flag is cleared and the
      *                     input is a string, the string will have leading and trailing whitespace
      *                     trimmed. 2=allow_raw: If set, no more filtering is performed, higher bits
      *                     are ignored. 4=allow_html: HTML is allowed, but passed through a safe
@@ -474,7 +474,7 @@ class UserlogRequest
         // Now we handle input filtering
         if ($mask & 2) {
             // If the allow raw flag is set, do not modify the variable
-        } else if ($mask & 4) {
+        } elseif ($mask & 4) {
             // If the allow html flag is set, apply a safe html filter to the variable
             if (is_null($safeHtmlFilter)) {
                 $safeHtmlFilter = UserlogFilterInput::getInstance(null, null, 1, 1);
@@ -538,8 +538,8 @@ class UserlogFilterInput
     public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
     {
         // Make sure user defined arrays are in lowercase
-        $tagsArray = array_map('strtolower', (array)$tagsArray);
-        $attrArray = array_map('strtolower', (array)$attrArray);
+        $tagsArray = array_map('strtolower', (array) $tagsArray);
+        $attrArray = array_map('strtolower', (array) $attrArray);
         // Assign member variables
         $this->tagsArray = $tagsArray;
         $this->attrArray = $attrArray;
@@ -597,31 +597,31 @@ class UserlogFilterInput
             case 'INT' :
             case 'INTEGER' :
                 // Only use the first integer value
-                preg_match('/-?[0-9]+/', (string)$source, $matches);
-                $result = @ (int)$matches[0];
+                preg_match('/-?[0-9]+/', (string) $source, $matches);
+                $result = @ (int) $matches[0];
                 break;
             case 'FLOAT' :
             case 'DOUBLE' :
                 // Only use the first floating point value
-                preg_match('/-?[0-9]+(\.[0-9]+)?/', (string)$source, $matches);
-                $result = @ (float)$matches[0];
+                preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source, $matches);
+                $result = @ (float) $matches[0];
                 break;
             case 'BOOL' :
             case 'BOOLEAN' :
-                $result = (bool)$source;
+                $result = (bool) $source;
                 break;
             case 'WORD' :
-                $result = (string)preg_replace('/[^A-Z_]/i', '', $source);
+                $result = (string) preg_replace('/[^A-Z_]/i', '', $source);
                 break;
             case 'ALNUM' :
-                $result = (string)preg_replace('/[^A-Z0-9]/i', '', $source);
+                $result = (string) preg_replace('/[^A-Z0-9]/i', '', $source);
                 break;
             case 'CMD' :
-                $result = (string)preg_replace('/[^A-Z0-9_\.-]/i', '', $source);
+                $result = (string) preg_replace('/[^A-Z0-9_\.-]/i', '', $source);
                 $result = ltrim($result, '.');
                 break;
             case 'BASE64' :
-                $result = (string)preg_replace('/[^A-Z0-9\/+=]/i', '', $source);
+                $result = (string) preg_replace('/[^A-Z0-9\/+=]/i', '', $source);
                 break;
             case 'STRING' :
                 // Check for static usage and assign $filter the proper variable
@@ -630,18 +630,18 @@ class UserlogFilterInput
                 } else {
                     $filter = UserlogFilterInput::getInstance();
                 }
-                $result = (string)$filter->_remove($filter->_decode((string)$source));
+                $result = (string) $filter->_remove($filter->_decode((string) $source));
                 break;
             case 'ARRAY' :
-                $result = (array)$source;
+                $result = (array) $source;
                 break;
             case 'PATH' :
                 $pattern = '/^[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-                preg_match($pattern, (string)$source, $matches);
-                $result = @ (string)$matches[0];
+                preg_match($pattern, (string) $source, $matches);
+                $result = @ (string) $matches[0];
                 break;
             case 'USERNAME' :
-                $result = (string)preg_replace('/[\x00-\x1F\x7F<>"\'%&]/', '', $source);
+                $result = (string) preg_replace('/[\x00-\x1F\x7F<>"\'%&]/', '', $source);
                 break;
             default :
                 // Check for static usage and assign $filter the proper variable
@@ -944,9 +944,16 @@ class UserlogFilterInput
         }
         $source = strtr($source, $ttr);
         // convert decimal
-        $source = preg_replace('/&#(\d+);/me', "chr(\\1)", $source); // decimal notation
+        //$source = preg_replace('/&#(\d+);/me', "chr(\\1)", $source); // decimal notation
+        //TODO swich to this once we have PHP 5.3 as minimum
+//        $source = preg_replace_callback('/&#(\d+);/m', function($m) {return chr($m[1]);}, $source); // decimal notation
+        $source = preg_replace_callback('/&#(\d+);/m', create_function('$matches', "return  chr(\$matches[1]);"),$source); // decimal notation
         // convert hex
-        $source = preg_replace('/&#x([a-f0-9]+);/mei', "chr(0x\\1)", $source); // hex notation
+        //$source = preg_replace('/&#x([a-f0-9]+);/mei', "chr(0x\\1)", $source); // hex notation
+        //TODO swich to this once we have PHP 5.3 as minimum
+//        $source = preg_replace_callback('/&#x([a-f0-9]+);/mi', function($m) {return chr(hexdec($m[1]));}, $source); // hex notation
+        $source = preg_replace_callback('/&#x([a-f0-9]+);/mi', create_function('$matches', "return  chr('0x'.\$matches[1]);"),$source);   // hex notation
+
         return $source;
     }
 }

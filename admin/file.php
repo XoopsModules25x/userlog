@@ -36,71 +36,71 @@ $confirm = UserlogRequest::getString('confirm',0, 'post');
 $file = $loglogObj->parseFiles($file);
 $totalFiles = count($file);
 if(!empty($opentry) && ($confirm == 0 || $totalFiles == 0)) {
-    redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,""));
+	redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,""));
 }
 switch ($opentry) {
-    case "del":
-        if ($deleteFiles = $loglogObj->deleteFiles($file)) {
-            $msgDel = sprintf(_AM_USERLOG_FILE_DELETE_SUCCESS, $deleteFiles) . "<br\>" . implode("<br\>",$loglogObj->getErrors());
-            redirect_header("file.php", 5, $msgDel);
-        }
-        redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
+	case "del":
+		if ($deleteFiles = $loglogObj->deleteFiles($file)) {
+			$msgDel = sprintf(_AM_USERLOG_FILE_DELETE_SUCCESS, $deleteFiles) . "<br\>" . implode("<br\>",$loglogObj->getErrors());
+			redirect_header("file.php", 5, $msgDel);
+		}
+		redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
         break;
-    case "rename":
-        // only one file. 0 file or more than one file => error
-        if ($totalFiles != 1) {
-            redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,_AM_USERLOG_FILE_SELECT_ONE));
-        }
-        if ($newFile = $loglogObj->renameFile($file[0], $filename)) {
-            redirect_header("file.php", 5, sprintf(_AM_USERLOG_FILE_RENAME_SUCCESS,$file[0], $newFile));
-        }
-        redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
+	case "rename":
+		// only one file. 0 file or more than one file => error
+		if ($totalFiles != 1) {
+			redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,_AM_USERLOG_FILE_SELECT_ONE));
+		}
+		if ($newFile = $loglogObj->renameFile($file[0], $filename)) {
+			redirect_header("file.php", 5, sprintf(_AM_USERLOG_FILE_RENAME_SUCCESS,$file[0], $newFile));
+		}
+		redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
         break;
-    case "copy":
-        // only one file. 0 file or more than one file => error
-        if ($totalFiles != 1) {
-            redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,_AM_USERLOG_FILE_SELECT_ONE));
-        }
-        if ($newFile = $loglogObj->copyFile($file[0], $filename)) {
-            redirect_header("file.php", 5, sprintf(_AM_USERLOG_FILE_COPY_SUCCESS,$file[0], $newFile));
-        }
-        redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
+	case "copy":
+		// only one file. 0 file or more than one file => error
+		if ($totalFiles != 1) {
+			redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,_AM_USERLOG_FILE_SELECT_ONE));
+		}
+		if ($newFile = $loglogObj->copyFile($file[0], $filename)) {
+			redirect_header("file.php", 5, sprintf(_AM_USERLOG_FILE_COPY_SUCCESS,$file[0], $newFile));
+		}
+		redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
         break;
-    case "merge":
-        if ($mergeFile = $loglogObj->mergeFiles($file, $filename)) {
-            redirect_header("file.php", 5, sprintf(_AM_USERLOG_FILE_MERGE_SUCCESS, $totalFiles,$mergeFile));
-        }
-        redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
+	case "merge":
+		if ($mergeFile = $loglogObj->mergeFiles($file, $filename)) {
+			redirect_header("file.php", 5, sprintf(_AM_USERLOG_FILE_MERGE_SUCCESS, $totalFiles,$mergeFile));
+		}
+		redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR,implode("<br\>",$loglogObj->getErrors())));
         break;
-    case "zip":
-        if ($zipFile = $loglogObj->zipFiles($file, $filename)) {
-            $msgZip = sprintf(_AM_USERLOG_FILE_ZIP_SUCCESS,$totalFiles, $zipFile ) . "<br\>" . implode("<br\>",$loglogObj->getErrors());
-            redirect_header("file.php", 5, $msgZip);
-        }
-        redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>",$loglogObj->getErrors())));
+	case "zip":
+		if ($zipFile = $loglogObj->zipFiles($file, $filename)) {
+			$msgZip = sprintf(_AM_USERLOG_FILE_ZIP_SUCCESS,$totalFiles, $zipFile ) . "<br\>" . implode("<br\>",$loglogObj->getErrors());
+			redirect_header("file.php", 5, $msgZip);
+		}
+		redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>",$loglogObj->getErrors())));
         break;
-    case "export-csv":
-        $logsetObj = UserlogSetting::getInstance();
-        $headers = $logsetObj->getOptions("","title");
-        unset($headers["store_db"], $headers["store_file"], $headers["views"]);
-        if($csvFile = $loglogObj->exportFilesToCsv($file, $headers, $filename,";")) {
-            $msgCsv = sprintf(_AM_USERLOG_FILE_EXOPORT_SUCCESS,$totalFiles, $csvFile );
-            redirect_header("file.php", 5, $msgCsv);
-        }
-        redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>",$loglogObj->getErrors())));
+	case "export-csv":
+		$logsetObj = UserlogSetting::getInstance();
+		$headers = $logsetObj->getOptions("","title");
+		unset($headers["store_db"], $headers["store_file"], $headers["views"]);
+		if($csvFile = $loglogObj->exportFilesToCsv($file, $headers, $filename,";")) {
+			$msgCsv = sprintf(_AM_USERLOG_FILE_EXOPORT_SUCCESS,$totalFiles, $csvFile );
+			redirect_header("file.php", 5, $msgCsv);
+		}
+		redirect_header("file.php", 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>",$loglogObj->getErrors())));
         break;
 }
 $form = new XoopsThemeForm(_AM_USERLOG_ADMENU_FILE,'filemanager','file.php', 'post');
 $fileEl = $loglogObj->buildFileSelectEle($file, true, 10);// multiselect = true, size=10
 $form->addElement($fileEl);
 $actionEl = new XoopsFormSelect(_AM_USERLOG_FILE_ACTION,"op", $opentry);
-$actions = array(    "zip" =>_AM_USERLOG_FILE_ZIP,
-                    "del"=>_DELETE,
-                    "rename"=>_AM_USERLOG_FILE_RENAME,
-                    "copy"=>_AM_USERLOG_FILE_COPY,
-                    "merge"=>_AM_USERLOG_FILE_MERGE,
-                    "export-csv"=>_AM_USERLOG_FILE_EXPORT_CSV
-                );
+$actions = array(	"zip" =>_AM_USERLOG_FILE_ZIP,
+					"del"=>_DELETE,
+					"rename"=>_AM_USERLOG_FILE_RENAME,
+					"copy"=>_AM_USERLOG_FILE_COPY,
+					"merge"=>_AM_USERLOG_FILE_MERGE,
+					"export-csv"=>_AM_USERLOG_FILE_EXPORT_CSV
+				);
 $actionEl->addOptionArray($actions);
 $actionEl->setExtra("onchange=\"var el = document.forms.filemanager.filename.parentElement.parentElement; el.className = ''; if(this.value == 'del') { el.className = 'hidden'}\"");
 $form->addElement($actionEl);
@@ -115,7 +115,7 @@ $form->addElement($confirmEl);
 $GLOBALS['xoopsTpl']->assign('form', $form->render());
 $GLOBALS['xoopsTpl']->assign('logo',$indexAdmin->addNavigation('file.php'));
 // template
-$template_main = "userlog_admin_file.html";
+$template_main = USERLOG_DIRNAME . "_admin_file.html";
 if ( !empty($template_main)  ) {
     $GLOBALS['xoopsTpl']->display("db:{$template_main}");
 }

@@ -1,8 +1,100 @@
 Userlog
 Changelog:
+VERSION 1.16:
+- Standard norms updated and fixed typos for the English folder (Cesag) (2013/10/04)
+- Adding PHP 5.5.x implementation for preg_replace_callback (Mamba) (2013/09/23)
+- bug fix: persian translations turned to utf-8 without BOM in language/persian/*.* (2013/05/20) 
+- improve: if empty($subscribe_from) item() will return $script_arr["item_name"] name of the item = array("subscribe_from1", "subscribe_from2") Name of the script
+   in class/log.php ,class/plugin/newbb.php , modules/newbb/class/plugin/userlog.php (2013/05/20) 
+- improve: use item($subscribe_from) in class/log.php, class/plugin/interface.php, class/plugin/newbb.php , modules/newbb/class/plugin/userlog.php(2013/05/15)
+- improve: improve xoops 2.6.0 plugin system. ability to add plugin of other modules in the module itself. 
+	change: class/plugin/plugin.php
+	add: class/plugin/newbb.php
+- improve: only setItem when there is a notification in that script page. in include/log.php and class/log.php setItem function(2013/05/14)
+- add: itemId($item_name) plugin: any module can define a plugin to get its itemId based on item_name. now newbb:
+		In very rare occasions like newbb the item_id is not in the URL $_REQUEST.
+		in class/log.php setItem function, modules/newbb/class/plugin/userlog.php (2013/05/14)
+- add: UserlogPlugin same as xoops 2.6.0 to make possible for other modules to change the userlog functionality. add: class/plugin/plugin.php, class/plugin/Abstract.php, class/plugin/interface.php (2013/05/14)
+- add: 2 known issue added in docs/readme.txt (2013/05/13)
+- bug fix: only show moduleadmin when there is 'op=' in class/query.php (2013/05/13)
+- bug fix: return fakse instead of '' in class/query.php (2013/05/13)
+- improve: use Browscap.php from https://github.com/GaretJax/phpbrowscap/ instead of php get_browser.php  
+			to use the php_browscap.ini without the needs to configure the php.ini (2013/05/13)
+			change: in class/helper.php, class/stats.php and class/log.php
+			add: class/phpbrowscap/Browscap.php
+- add: module admin history to show install, update, uninstall activities. in class/query.php and admin/stats.php and templates/admin/userlog_admin_stats_moduleadmin.html (2013/05/11)
+- fix: remove patch login/register history when pass and user = empty in class/patch/patch_login_history.php  (2013/05/11)
+- add: Delete expired statistics function in class stats for types when time_update < expire time. in class/stats.php  (2013/05/11) 
+- improve: add a query class to unify all query actions.  (2013/05/11)
+	change: admin/stats.php, blocks/login_reg_history.php, blocks/stats_type.php
+	add: class/query.php
+- enhance: rename logo file to images/module_logo.png  (2013/05/11)
+- enhance: rename js file to remove $dirname. change: admin/menu.php add: templates/js/scripts.js remove: templates/js/userlog.js  (2013/05/11)
+- enhance: rephrase all templates and remove $dirname from php files.  (2013/05/11)
+	change: admin/file.php, admin/logs.php, admin/setting.php, admin/stats.php
+	add: templates/blocks/userlog_block_login_reg_history.html, templates/blocks/userlog_block_stats_type.html, templates/blocks/userlog_block_views.html
+			templates/admin/userlog_admin_file.html, templates/admin/userlog_admin_logs.html, templates/admin/userlog_admin_sets.html, templates/admin/userlog_admin_stats.html
+	remove: templates/blocks/userlog_login_reg_history.html, templates/blocks/userlog_stats_type.html, templates/blocks/userlog_views.html
+			templates/userlog_admin_file.html, templates/userlog_admin_logs.html, templates/userlog_admin_sets.html, templates/userlog_admin_stats.html
+	
+- change version to 1.16 ALPHA 2 (2013/05/11)
+VERSION 1.15:
+- change version to 1.15 ALPHA 2 (2013/05/05)
+- add: recognize bots and crawlers with get_browser in statistics in class/log.php and class/stats.php (2013/05/06)
+- improve: drop 'log_id_uid' index and add 'log_time' index in '_log' table (for DELETE logs older than feature ...) in include/module.php and sql/mysql.php (2013/05/05)
+- improve: change 'stats_type_link_period' index to unique in '_stats' table in include/module.php and sql/mysql.php (very important)(2013/05/05)
+- improve: add insertUpdate function to enhance the 'insert' XOOPS core function and use "ON DUPLICATE KEY UPDATE" to update (increment) any stats type (log, logdel, set, file, referral, browser, OS, ...) in class/stats.php (2013/05/05)
+- enhance: add more comments for alter/show functions in class/log.php (2013/05/05)
+
+VERSION 1.14:
+- enhance: rename hard-code class/userlog.php to class/helper.php in include/common.php (2013/05/04)
+- enhance: remove hard-code dirname in admin/menu.php (2013/05/03)
+- improve: add index_type to addIndex function in class/log.php (2013/05/03)
+- enhance: define a new log_paths var to get/set all paths without hard-code in xoops_version.php (2013/05/03)
+- enhance: remove all hard-coded tables in files to show an example of ready-for-cloning for other modules. in xoops_version.php and class/log.php, class/setting.php and class/stats.php (2013/05/03)
+- add: Upgrade and Downgrade instructions in docs/readme.txt. (2013/05/01)
+- add: required functions like "show" "change" "drop" "add" to work with "table", "table field" and "table index" in class/log.php (2013/04/30)
+- add: some css enhancements DESC ASC hover templates/css/style.css and templates/userlog_admin_logs.html (2013/04/30)
+- improve: remove all hard-code /userlog/ paths in templates. use definitions in help for simplicity. in templates/blocks/userlog_login_reg_history.html and language/english/help/help.html (2013/04/28)
+- change version to 1.14 ALPHA 2 (2013/04/27)
+- update all settings in database with new options ",active,inside,outside,unset_pass" in upgrade in include/module.php (2013/04/27)
+- add: Ability to Log visitors come from inside/outside your site (referrals) in in class/setting.php and include/log.php and language/english/admin.php (2013/04/27)
+- add: possibility to dont log passwords in class/setting.php and class/helper.php and include/log.php and language/english/admin.php (2013/04/27)
+- add: can set a single setting as active or idle in class/setting.php and admin/setting.php and include/log.php and templates/userlog_admin_sets.html and templates/css/style.css and language/english/admin.php (2013/04/27)
+- security improve: unset passwords information in blocks for more security in blocks/login_reg_history.php (2013/04/27)
+- improve: possibility to log methods when user dont set to log request_method itself in class/log.php (2013/04/27)
+
+VERSION 1.12:
+- improve: check if all values are empty and do not log if all values are empty in class/setting.php and include/log.php (2013/04/26)
+- change version to 1.12 ALPHA 1 (2013/04/24)
+- add language and config for elapsed times in xoops_version.php and language/english/admin.php and admin/stats.php and blocks/login_reg_history.php(2013/04/24)
+- add stats_type block (referral, browser, OS) (2013/04/24)
+
+VERSION 1.11:
+- change version to 1.11 ALPHA 1 (2013/04/24)
+- add languages for failed and successful in language/english/admin.php and admin/stats.php (2013/04/24)
+- add: login / register history block in xoops_version.php and blocks/login_reg_history.php and templates/blocks/userlog_login_reg_history.html (2013/04/24)
+
+VERSION 1.1:
+- improve performance: patch login/register $_POST before store to database in class/helper.php and class/setting.php and class/log.php and admin/stats.php and class/patch/patch_login_history.php (2013/04/24)
+- add: login / register history in admin/stats.php(2013/04/23)
+- improve performance: only get needed stats from getAll($type) function in class/stats.php and admin/stats.php and admin/index.php (2013/04/23)
+- improve performance: dont need to getAll($type) before update($type) (2013/04/23)
+- add: add browser and OS to stats table to show browsers and Operating system in class/stats.php and class/log.php and admin/stats.php(2013/04/23)
+- change version to 1.1 ALPHA 1 (2013/04/21)
+- fix: prevent to select if no module with item is installed in blocks/views.php and templates/js/userlog.js (2013/04/21)
+- add: check $_POST before load log module in preloads/core.php and xoops_version.php and include/postlog.php and language/english/modinfo.php and class/helper.php(2013/04/21)
+- add: show time update in admin/index.php and admin/stats.php (2013/04/22)
+- add: add referral to stats table to show outside referer websites in class/stats.php and admin/stats.php(2013/04/22)
+- improve: update referral in stats table when the log contain it (2013/04/22)
 
 VERSION 1.01:
-- improve: check if all values are empty and do not log if all values are empty in class/setting.php and include/log.php (2013/04/26)
+- improve: remove all get() functions in userlog classes to be more compatible with xoops26 in class/setting.php and class/log.php and class/stats.php (2013/04/17)
+- improve: use "XoopsLocale" instead of "XoopsLocal" in xoops26 in class/helper.php (2013/04/17)
+- improve: add "static" to functions to be more compatible with xoops26 in preloads/core.php (2013/04/17)
+- improve: make getGroupby() function compatible with xoops26 in class/log.php (2013/04/17)
+- improve: add missing configcat in xoops_version.php to be more compatible with xoops26 in xoops_version.php and language/LANG/modinfo.php (2013/04/17)
+- improve: replace all '->XoopsFileHandler' with  '->__construct' to be more compatible with xoops26 in class/log.php(2013/04/17)
 - change version to 1.01 Final (2013/04/17)
 - fix and improve: add eventCoreIncludeFunctionsRedirectheader to log redirects because usually prorammers use exit() after redirect_header function. in include/log.php and preloads/core.php(2013/04/17)
 - fix: empty smarty variables cause some errors in templates. in admin/logs.php (2013/04/16)

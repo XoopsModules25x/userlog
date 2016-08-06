@@ -25,6 +25,8 @@ include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
 
 $Userlog = Userlog::getInstance(false);
+$queryObj = UserlogQuery::getInstance();
+
 // Where do we start ?
 $startentry = UserlogRequest::getInt('startentry',0);
 $limitentry = UserlogRequest::getInt('limitentry',10);
@@ -41,47 +43,49 @@ $statsObj = UserlogStats::getInstance();
 $statsObj->updateAll("log", 100); // prob = 100
 $statsObj->updateAll("set", 100); // prob = 100
 $statsObj->updateAll("file", 100); // prob = 100
+$statsObj->updateAll("referral", $Userlog->getConfig("probstats"));
+$statsObj->updateAll("browser", $Userlog->getConfig("probstats")); // or $statsObj->updateAll("OS", $Userlog->getConfig("probstats"));
 
-$stats = $statsObj->getAll();
+$stats = $statsObj->getAll(array("log","logdel","set","file"));
 $indexAdmin = new ModuleAdmin();
 $indexAdmin->addInfoBox(_AM_USERLOG_STATS_ABSTRACT);
 $periods = array_flip($statsObj->_period);
 $types = $statsObj->_type;
 foreach($stats as $type=>$arr) {
-    if(strlen($type) > 10) continue;
-    foreach($arr as $period=>$arr2) {
-        // use sprintf in moduleadmin: sprintf($text, "<span style='color : " . $color . "; font-weight : bold;'>" . $value . "</span>")
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_STATS_ABSTRACT,
-                sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%s\1", $types[$type], constant("_AM_USERLOG_" . strtoupper($periods[$period]))),
-                $arr2["value"],
-                $arr2["value"] ? 'GREEN' : 'RED');
-    }
+	if(strlen($type) > 10) continue;
+	foreach($arr as $period=>$arr2) {
+		// use sprintf in moduleadmin: sprintf($text, "<span style='color : " . $color . "; font-weight : bold;'>" . $value . "</span>")
+		$indexAdmin->addInfoBoxLine(_AM_USERLOG_STATS_ABSTRACT,
+				sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%1\$s", $types[$type], constant("_AM_USERLOG_" . strtoupper($periods[$period]))) . " " . _AM_USERLOG_STATS_TIME_UPDATE . " " . $arr2["time_update"],
+				$arr2["value"],
+				$arr2["value"] ? 'GREEN' : 'RED');
+	}
 }
 $criteria = new CriteriaCompo();
 $criteria->setGroupby("module");
 $moduleViews = $Userlog->getHandler('log')->getCounts($criteria);
 $dirNames = $Userlog->getModules();
 if (!empty($moduleViews)) {
-    $indexAdmin->addInfoBox(_AM_USERLOG_VIEW_MODULE);
-    foreach($moduleViews as $mDir=>$views) {
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_MODULE,
-                                    $dirNames[$mDir] . ": %s",
-                                    $views,
-                                    $views? 'GREEN' : 'RED');
-    }
+	$indexAdmin->addInfoBox(_AM_USERLOG_VIEW_MODULE);
+	foreach($moduleViews as $mDir=>$views) {
+		$indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_MODULE,
+									$dirNames[$mDir] . ": %s",
+									$views,
+									$views? 'GREEN' : 'RED');
+	}
 }
 $criteria = new CriteriaCompo();
 $criteria->setGroupby("uid");
 $criteria->setLimit(10);
 $userViews = $Userlog->getHandler('log')->getCounts($criteria);
 if (!empty($userViews)) {
-    $indexAdmin->addInfoBox(_AM_USERLOG_VIEW_USER);
-    foreach($userViews as $uid=>$views) {
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_USER,
-                                    (($uid) ? "<a href=\"" . XOOPS_URL . "/userinfo.php?uid=" . $uid . "\">" . XoopsUserUtility::getUnameFromId($uid) . "</a>" : XoopsUserUtility::getUnameFromId(0)) . ": %s",
-                                    $views,
-                                    $views? 'GREEN' : 'RED');
-    }
+	$indexAdmin->addInfoBox(_AM_USERLOG_VIEW_USER);
+	foreach($userViews as $uid=>$views) {
+		$indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_USER,
+									(($uid) ? "<a href=\"" . XOOPS_URL . "/userinfo.php?uid=" . $uid . "\">" . XoopsUserUtility::getUnameFromId($uid) . "</a>" : XoopsUserUtility::getUnameFromId(0)) . ": %s",
+									$views,
+									$views? 'GREEN' : 'RED');
+	}
 }
 $criteria = new CriteriaCompo();
 $criteria->add(new Criteria("groups", "%g%", "LIKE")); // Why cannot use this?: $criteria->add(new Criteria("groups", "", "!="))
@@ -89,43 +93,84 @@ $criteria->setGroupby("groups");
 $criteria->setLimit(10);
 $groupViews = $Userlog->getHandler('log')->getCounts($criteria);
 if (!empty($groupViews)) {
-    $indexAdmin->addInfoBox(_AM_USERLOG_VIEW_GROUP);
-    foreach($groupViews as $gids=>$views) {
-        $groupArr = explode("g", substr($gids, 1)); // remove the first "g" from string
-        $groupArr = array_unique($groupArr);
-        foreach($groupArr as $group) {
-            if(isset($gidViews[$group])) {
-                $gidViews[$group] += $views;
-            } else {
-                $gidViews[$group] = $views;
-            }
-        }
-    }
-    $groupNames = $Userlog->getGroupList();
-    foreach($gidViews as $gid=>$views) {
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_GROUP,
-                                    $groupNames[$gid] . ": %s",
-                                    $views,
-                                    $views? 'GREEN' : 'RED');
-    }
+	$indexAdmin->addInfoBox(_AM_USERLOG_VIEW_GROUP);
+	foreach($groupViews as $gids=>$views) {
+		$groupArr = explode("g", substr($gids, 1)); // remove the first "g" from string
+		$groupArr = array_unique($groupArr);
+		foreach($groupArr as $group) {
+			if(isset($gidViews[$group])) {
+				$gidViews[$group] += $views;
+			} else {
+				$gidViews[$group] = $views;
+			}
+		}
+	}
+	$groupNames = $Userlog->getGroupList();
+	foreach($gidViews as $gid=>$views) {
+		$indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_GROUP,
+									$groupNames[$gid] . ": %s",
+									$views,
+									$views? 'GREEN' : 'RED');
+	}
 }
+// START add stats_type 
+// options[0] - number of items to show in block. the default is 10
+// options[1] - stats_type - referral (default), browser, OS
+// options[2] - Sort - stats_link, stats_value (default), time_update
+// options[3] - Order - DESC, ASC default: DESC
+$refViews = $queryObj->stats_typeShow(array(10,"referral","stats_value","DESC"));
+$GLOBALS['xoopsTpl']->assign('refViews',$refViews);
+
+$browserViews = $queryObj->stats_typeShow(array(10,"browser","stats_value","DESC"));
+$GLOBALS['xoopsTpl']->assign('browserViews',$browserViews);
+
+$OSViews = $queryObj->stats_typeShow(array(10,"OS","stats_value","DESC"));
+$GLOBALS['xoopsTpl']->assign('OSViews',$OSViews);
+// END add stats_type 
+
+// START Login / Register Patch
+$patchLoginFilePatch = USERLOG_ROOT_PATH . "/class/patch/patch_login_history.php";
+if ( file_exists($patchLoginFilePatch)){
+	include $patchLoginFilePatch;
+}
+// END Login / Register Patch
+
+// START add login/register history - TODO: in block
+// options[0] - number of items to show in block. the default is 10
+// options[1] - login or register or both radio select
+// options[2] - failed or successful or both radio select
+// options[3] - inactive or active or both
+// options[4] - never login before or login before or both
+// options[5] - Order - DESC, ASC default: DESC
+
+$loginsHistory = $queryObj->loginregHistoryShow(array(10,0,0,0,0,"DESC"));
+$GLOBALS['xoopsTpl']->assign('loginsHistory',$loginsHistory);
+// END add login/register history - TODO: in block
+
+// START add module admin history
+// args[0] - number of items to show in block. the default is 10
+// args[1] - module dirname - 0 or empty = all modules
+$moduleAdmin = $queryObj->modulesadminShow(array(10));
+$GLOBALS['xoopsTpl']->assign('moduleAdmin',$moduleAdmin);
+
+// END add module admin history
 
 // START module - script - item
 $module=array();
 // items
 foreach ($moduleScriptItem as $key=>$item) {
-    $module_script_item = explode('-', $item); // news:article.php-storyid news:index.php-storytopic => $module["news"]=array("storyid","storytopic");
-    $module_script = explode(':', $module_script_item[0]); // 	news:article.php => $module_script = array(news,article.php);
-    if (!isset($module[$module_script[0]])) {
-        $module[$module_script[0]]["item_name"] = array();
-        $module[$module_script[0]]["script"] = array_slice($module_script,1);
-    }
-    $module[$module_script[0]]["script"] = array_unique(array_merge($module[$module_script[0]]["script"], array_slice($module_script,1)));
-    $module[$module_script[0]]["item_name"][] = $module_script_item[1];
+	$module_script_item = explode('-', $item); // news:article.php-storyid news:index.php-storytopic => $module["news"]=array("storyid","storytopic");
+	$module_script = explode(':', $module_script_item[0]); // 	news:article.php => $module_script = array(news,article.php);
+	if (!isset($module[$module_script[0]])) {
+		$module[$module_script[0]]["item_name"] = array();
+		$module[$module_script[0]]["script"] = array_slice($module_script,1);
+	}
+	$module[$module_script[0]]["script"] = array_unique(array_merge($module[$module_script[0]]["script"], array_slice($module_script,1)));
+	$module[$module_script[0]]["item_name"][] = $module_script_item[1];
 }
 // add modules dont have item_name
 foreach($modules as $dir) {
-    if(!isset($module[$dir])) $module[$dir] = null;
+	if(!isset($module[$dir])) $module[$dir] = null;
 }
 // END module - script - item
 $loglogObj = UserlogLog::getInstance();
@@ -140,11 +185,11 @@ $form = new XoopsThemeForm(_AM_USERLOG_VIEW,'views','stats.php', 'post');
 $limitEl = new XoopsFormText(_AM_USERLOG_ITEMS_NUM, "limitentry", 10, 255, $limitentry);
 $sortEl = new XoopsFormSelect(_AM_USERLOG_SORT,"sortentry", $sortentry);
 $sortEl->addOptionArray(array(
-                            "count"=>_AM_USERLOG_VIEW,
-                            "module"=>_AM_USERLOG_MODULE,
-                            "module_name"=>_AM_USERLOG_MODULE_NAME,
-                            "module_count"=>_AM_USERLOG_VIEW_MODULE
-                            ));
+							"count"=>_AM_USERLOG_VIEW,
+							"module"=>_AM_USERLOG_MODULE,
+							"module_name"=>_AM_USERLOG_MODULE_NAME,
+							"module_count"=>_AM_USERLOG_VIEW_MODULE
+							));
 $sortEl->setDescription(_AM_USERLOG_SORT_DSC);
 $orderEl = new XoopsFormSelect(_AM_USERLOG_ORDER,"orderentry", $orderentry);
 $orderEl->addOption("DESC", _DESCENDING);
@@ -154,23 +199,23 @@ $orderEl->setDescription(_AM_USERLOG_ORDER_DSC);
 $moduleObjs = $Userlog->getModules(array(), null, true);
 $itemLinks = array();
 foreach ($moduleObjs as $mObj) {
-    $dirNames[$mObj->dirname()] = $mObj->name();
-    $not_config = $mObj->getInfo('notification');
-    if (!empty($not_config['category'])) {
-        foreach ($not_config['category'] as $category) {
-            if (!empty($category['item_name'])) {
-                $script = is_array($category["subscribe_from"]) ? implode(":", $category["subscribe_from"]) : $category["subscribe_from"];
-                $itemLinks[$mObj->dirname(). ":" . $script . "-" . $category['item_name']] = $mObj->dirname()."/" . $script ."?".$category['item_name']."=ITEM_ID";
-            }
-        }
-    }
+	$dirNames[$mObj->dirname()] = $mObj->name();
+	$not_config = $mObj->getInfo('notification');
+	if (!empty($not_config['category'])) {
+		foreach ($not_config['category'] as $category) {
+			if (!empty($category['item_name'])) {
+				$script = is_array($category["subscribe_from"]) ? implode(":", $category["subscribe_from"]) : $category["subscribe_from"];
+				$itemLinks[$mObj->dirname(). ":" . $script . "-" . $category['item_name']] = $mObj->dirname()."/" . $script ."?".$category['item_name']."=ITEM_ID";
+			}
+		}
+	}
 }
 $moduleEl = new XoopsFormSelect(_AM_USERLOG_MODULES,"modules",$modules,5, true);
 $moduleEl->addOptionArray($dirNames);
 $itemsEl = new XoopsFormSelect(_AM_USERLOG_ITEMS,"moduleScriptItem",$moduleScriptItem,5, true);
 $itemsEl->addOptionArray($itemLinks);
 $itemsEl->setDescription(_AM_USERLOG_ITEMS_DSC);
-    
+	
 $timeEl = new XoopsFormText(_AM_USERLOG_LOG_TIMEGT, "log_timeGT", 10, 255, $log_timeGT);
 $timeEl->setDescription(_AM_USERLOG_LOG_TIMEGT_FORM);
 
@@ -203,7 +248,7 @@ $GLOBALS['xoopsTpl']->assign('form',$form->render());
 $GLOBALS['xoopsTpl']->assign('stats_abstract',$indexAdmin->renderInfoBox());
 $GLOBALS['xoopsTpl']->assign('logo',$indexAdmin->addNavigation('stats.php'));
 // template
-$template_main = "userlog_admin_stats.html";
+$template_main = USERLOG_DIRNAME . "_admin_stats.html";
 if ( !empty($template_main)  ) {
     $GLOBALS['xoopsTpl']->display("db:{$template_main}");
 }

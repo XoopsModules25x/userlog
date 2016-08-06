@@ -42,3 +42,30 @@
 .string{
 	text-overflow: "...PPK";
 }
+
+.deactive {
+	border: 2px outset ButtonFace;
+	color: GrayText;
+	font-weight: normal;
+	font-style: normal;  
+}
+.ASC img:hover  {
+    -moz-transform: scaleY(1);
+    -o-transform: scaleY(1);
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+.DESC img:hover , .ASC img{
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+
+.outer div.odd:hover, .outer div.even:hover {
+	background-color: #b6c6d7;
+}

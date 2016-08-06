@@ -25,6 +25,8 @@ include_once dirname(dirname(__FILE__)) . '/include/common.php';
 include_once XOOPS_ROOT_PATH . '/include/cp_header.php';
 xoops_load('XoopsFormLoader');
 xoops_loadLanguage('modinfo', USERLOG_DIRNAME);
+xoops_loadLanguage('user');
+xoops_loadLanguage('findusers');
 if ( file_exists($GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php'))){
     include_once $GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
 }else{

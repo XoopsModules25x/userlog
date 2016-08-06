@@ -2,6 +2,65 @@ LANGUAGE DIFFERENCES
 =====================
 
 Below are language differences from a version to next version.
+
+Version 1.14
+----------------
+admin.php
+----------
+add:
+define("_AM_USERLOG_SET_ACTIVE","Setting is active?");
+define("_AM_USERLOG_INSIDE","Log visitors come from inside your site?");
+define("_AM_USERLOG_OUTSIDE","Log visitors come from outside your site?");
+define("_AM_USERLOG_UNSET_PASS","Do not log passwords?");
+
+edit:
+define("_AM_USERLOG_SET_OPTIONS_DSC","Log which user/page data?<br />
+	<b>Notice:</b><br />
+	- Selecting no option means all options.<br />
+	- Uncheck 'Setting is active?' means make this setting idle.<br />
+	- Selecting 'Log visitors come from inside/outside your site?' means log visitor whos referral is inside/outside your website domain.<br />
+	- Selecting 'Do not log passwords?' means inputted passwords in login/register will not be stored.<br />
+	- Selecting no store option (File and/or Database) means Database.<br />
+	- Selecting views means store uid, groups, script name, pagetitle,pageadmin, module dirname, module name, item name, item id in Database
+	");
+
+Version 1.12
+----------------
+admin.php
+----------
+add:
+define("_AM_USERLOG_STATS_TYPE","Types to get stats");
+
+modinfo.php
+----------
+add:
+define("_MI_USERLOG_DATEFORMAT_HISTORY","Date format for historical times. eg: 1 day ago");
+
+Version 1.11
+----------------
+admin.php
+----------
+add:
+define("_AM_USERLOG_FAIL","failed");
+define("_AM_USERLOG_SUCCESS","successful");
+
+Version 1.1
+----------------
+admin.php
+----------
+add:
+define("_AM_USERLOG_STATS_REFERRAL","Referrals");
+define("_AM_USERLOG_STATS_BROWSER","Browser");
+define("_AM_USERLOG_STATS_OS","Operating System");
+define("_AM_USERLOG_STATS_TIME_UPDATE","Last update time:");
+define("_AM_USERLOG_LOGIN_REG_HISTORY","Login/Register History");
+
+modinfo.php
+----------
+add:
+define("_MI_USERLOG_POSTLOG","Log any POST method?");
+define("_MI_USERLOG_POSTLOG_DSC","In some weird situations (eg: send a pm, custom forms, hacks, ported modules like mediawiki, ...), there is no redirect message after submit. If you want to log any POST method regradless of redirect message set it to yes.");
+
 Version 1.01
 ----------------
 admin.php
@@ -12,3 +71,19 @@ define("_AM_USERLOG_ITEMS_NUM","Number of items to display.");
 add:
 define("_AM_USERLOG_CONFIG_CHMOD_ERROR","Could not create any folder inside '%1\$s' because its chmod is under %2\$d.");
 define("_AM_USERLOG_CONFIG_CREATE_FOLDER","If you need to store logs in file, you should create folder '%1\$s' and set chmod = %2\$d manually using Cpanel.");
+
+modinfo.php
+----------
+edit:
+// config categories
+define("_MI_USERLOG_CONFCAT_LOGFILE","Log file settings");
+define("_MI_USERLOG_CONFCAT_LOGFILE_DSC","Log file (Set it if you need to store logs in a file, otherwise ignore it)");
+define("_MI_USERLOG_CONFCAT_FORMAT","Format");
+define("_MI_USERLOG_CONFCAT_FORMAT_DSC","Format settings");
+define("_MI_USERLOG_CONFCAT_PAGENAV","Page navigation");
+define("_MI_USERLOG_CONFCAT_PAGENAV_DSC","Page navigation settings");
+define("_MI_USERLOG_CONFCAT_LOGDB","Log database settings");
+define("_MI_USERLOG_CONFCAT_LOGDB_DSC","Log database (Set it if you need to store logs in database, otherwise ignore it)");
+define("_MI_USERLOG_CONFCAT_PROB","Probability settings");
+define("_MI_USERLOG_CONFCAT_PROB_DSC","Probability to work on database.(These default numbers are recommended for a high traffic website. e.g.: more than 30,000 hits per day)");
+

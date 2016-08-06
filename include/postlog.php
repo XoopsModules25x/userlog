@@ -13,20 +13,16 @@
  *
  * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
- * @package         userlog admin
- * @since           1
+ * @package         userlog include
+ * @since           1.1
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          The XOOPS Project <www.xoops.org> <www.xoops.ir>
- * @version         $Id: about.php 1 2013-02-26 16:25:04Z irmtfan $
+ * @version         $Id: postlog.php 1.1 2013-04-26 16:25:04Z irmtfan $
  */
+defined('XOOPS_ROOT_PATH') or die('Restricted access');
+require_once dirname(__FILE__) . '/common.php';
+$Userlog = Userlog::getInstance(false);
 
-include_once dirname(__FILE__) . '/admin_header.php';
-
-xoops_cp_header();
-
-$aboutAdmin = new ModuleAdmin();
-
-echo $aboutAdmin->addNavigation('about.php');
-echo $aboutAdmin->renderabout('6KJ7RW5DR3VTJ', false);
-
-xoops_cp_footer();
+if(!empty($_POST) && $Userlog->getConfig("postlog")) {
+	include dirname(__FILE__) . '/log.php';
+}

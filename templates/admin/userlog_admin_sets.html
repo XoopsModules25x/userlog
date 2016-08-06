@@ -2,7 +2,8 @@
 <{if $sets}>
 <div class="outer">
     <div class="head border x-small">
-		<div class="width5 floatleft center"><{$smarty.const._AM_USERLOG_SET_ID}></div>
+		<div class="width1 floatleft center"><{$smarty.const._AM_USERLOG_SET_ID}></div>
+		<div class="width5 floatleft center"><{$smarty.const._AM_USERLOG_SET_ACTIVE}></div>
 		<div class="width10 floatleft center"><{$smarty.const._AM_USERLOG_SET_NAME}></div>
 		<div class="width5 floatleft center"><{$smarty.const._AM_USERLOG_SET_LOGBY}></div>
 		<div class="width5 floatleft center"><{$smarty.const._AM_USERLOG_SET_UNIQUE_ID}></div>
@@ -12,8 +13,9 @@
 	    <div class="clear"></div>
 	</div>
     <{foreach item=set from=$sets}>
-    <div class="<{cycle values='even,odd'}> border">
-		<div class="width5 floatleft center"><{$set.set_id}></div>
+    <div class="<{cycle values='even,odd'}> <{if $set.active eq 0}> deactive <{/if}> bold border">
+		<div class="width1 floatleft center"><{$set.set_id}></div>
+		<div class="width5 floatleft center"><{if $set.active eq 0}><{$smarty.const._MI_USERLOG_IDLE}><{else}><{$smarty.const._MI_USERLOG_ACTIVE}><{/if}></div>		
 		<div class="width10 floatleft center"><{$set.name}></div>
 		<div class="width5 floatleft center"><{$set.logby}></div>
 		<div class="width5 floatleft center"><{$set.unique_id}></div>

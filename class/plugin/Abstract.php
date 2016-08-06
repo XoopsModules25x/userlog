@@ -7,15 +7,24 @@
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*/
-/**
- *  userlog module
- *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
- * @package         userlog language
- * @since           1
- * @author          irmtfan (irmtfan@yahoo.com)
- * @author          The XOOPS Project <www.xoops.org> <www.xoops.ir>
- * @version         $Id: blocks.php 1 2013-02-26 16:25:04Z irmtfan $
  */
+
+/**
+ * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @license         http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @author          trabis <lusopoemas@gmail.com>
+ * @version         $Id: Abstract.php 10605 2012-12-29 14:19:09Z trabis $
+ */
+
+class Userlog_Module_Plugin_Abstract
+{
+    /**
+     * @param string $dirname
+     */
+    public function __construct($dirname)
+    {
+        //$xoops = Xoops::getInstance();
+		xoops_loadLanguage("modinfo",$dirname);
+        //$xoops->loadLanguage('modinfo', $dirname);
+    }
+}
