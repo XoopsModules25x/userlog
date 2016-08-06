@@ -20,17 +20,6 @@
  */
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 require_once __DIR__ . '/common.php';
-/**
- * @param $module
- *
- * @return int
- */
-function xoops_module_uninstall_userlog(&$module)
-{
-    $logsetObj = UserlogSetting::getInstance();
-
-    return $logsetObj->cleanCache(); // delete all settings caches
-}
 
 /**
  * @param      $module

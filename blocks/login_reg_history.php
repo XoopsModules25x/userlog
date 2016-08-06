@@ -11,21 +11,22 @@
 /**
  *  userlog module
  *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (http://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog blocks
  * @since           1.11
  * @author          irmtfan (irmtfan@yahoo.com)
- * @author          The XOOPS Project <www.xoops.org> <www.xoops.ir>
- * @version         $Id: login_reg_history.php 1.11 2013-04-26 16:25:04Z irmtfan $
+ * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') or die('Restricted access');
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+include_once dirname(__DIR__) . '/include/common.php';
 
-if (defined('USERLOG_BLOCK_LOGIN_REG_HISTORY_DEFINED')) return;
-define('USERLOG_BLOCK_LOGIN_REG_HISTORY_DEFINED',true);
-xoops_loadLanguage("admin",USERLOG_DIRNAME);
+if (defined('USERLOG_BLOCK_LOGIN_REG_HISTORY_DEFINED')) {
+    return;
+}
+define('USERLOG_BLOCK_LOGIN_REG_HISTORY_DEFINED', true);
+xoops_loadLanguage('admin', USERLOG_DIRNAME);
 // options[0] - number of items to show in block. the default is 10
 // options[1] - login or register or both radio select
 // options[2] - failed or successful or both radio select
@@ -33,14 +34,26 @@ xoops_loadLanguage("admin",USERLOG_DIRNAME);
 // options[4] - never login before or login before or both
 // options[5] - Order - DESC, ASC default: DESC
 
+/**
+ * @param $options
+ *
+ * @return array
+ */
 function userlog_login_reg_history_show($options)
 {
-	$queryObj = UserlogQuery::getInstance();
-	return $queryObj->loginregHistoryShow($options);
+    $queryObj = UserlogQuery::getInstance();
+
+    return $queryObj->loginregHistoryShow($options);
 }
 
+/**
+ * @param $options
+ *
+ * @return string
+ */
 function userlog_login_reg_history_edit($options)
 {
-	$queryObj = UserlogQuery::getInstance();
-	return $queryObj->loginregHistoryForm($options);
+    $queryObj = UserlogQuery::getInstance();
+
+    return $queryObj->loginregHistoryForm($options);
 }

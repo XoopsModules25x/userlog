@@ -32,9 +32,9 @@ To Upgrade
 
 What you should not do in upgrade:
 ----------------------------------
-- Do not install the most recent version and import the old database backup and try to update it in admin. (Do not do it in any other xoops module too otherwise it will not work correctly after upgrade)
-  It will not work because Xoops store other information from modules like the module version in some other tables like _modules table and you just import the module tables and not this other information.
-- Do not rename the old userlog folder to something like userlog_old. because xoops system will find any folder inside modules folder and try to take it as a new module.
+- Do not install the most recent version and import the old database backup and try to update it in admin. (Do not do it in any other XOOPS module too otherwise it will not work correctly after upgrade)
+  It will not work because XOOPS store other information from modules like the module version in some other tables like _modules table and you just import the module tables and not this other information.
+- Do not rename the old userlog folder to something like userlog_old. because XOOPS system will find any folder inside modules folder and try to take it as a new module.
 - Do not save your old custom template. instead try to implement your changes in templates in the new template.
 
 To Downgrade (To Restore the old version if the upgrade goes wrong)
@@ -57,15 +57,15 @@ Features:
   Examples:
   1- The possibility to list all the IPs used from a certain user, and conversely to list all the users logged from a defined IP to find duplicate users.
   2- Find deleted items from your database.
-		modules/userlog/admin/logs.php?options[referer]=del&options[request_method]=POST
+        modules/userlog/admin/logs.php?options[referer]=del&options[request_method]=POST
   3- Find admin user activities(webmasters, moderators, ...)
-		modules/userlog/admin/logs.php?options[admin]=1  
+        modules/userlog/admin/logs.php?options[admin]=1
   4- Find users who come to your site from Google.
-		modules/userlog/admin/logs.php?options[referer]=google.com
+        modules/userlog/admin/logs.php?options[referer]=google.com
   5- Find all updated modules: (change op=update to op=install or op=uninstall to see install and uninstall activities)
-		modules/userlog/admin/logs.php?options[referer]=op=update&options[module]=system&options[request_method]=POST
+        modules/userlog/admin/logs.php?options[referer]=op=update&options[module]=system&options[request_method]=POST
   6- Find all errors/notices/warnings.
-		modules/userlog/admin/logs.php?options[logger]=errno
+        modules/userlog/admin/logs.php?options[logger]=errno
 
 - Can log users by getting User ID, User group or visitor IP.
 - Logs can be stored in file, database or both.
@@ -85,7 +85,7 @@ User ID,Username,Is Admin?(y/n),Groups,User Last Visit,User IP,User agent,URL (R
 - If you need to store logs in a file, you can set the working path, working file size, working file name, ... in preferences.
 - If you need to store logs in database, you can set the maximum logs thresholds (maximum number of logs and maximum time that logs are stored in the database) in preferences.
 - Can be used as a backup/restore tool.
-- Used JSON format to store arrays to database for better performance (instead of xoops core serialize).
+- Used JSON format to store arrays to database for better performance (instead of XOOPS core serialize).
 
 Known bugs/malfunctioning:
 =========================
@@ -96,14 +96,14 @@ in XOOPS255/header.php exit() should be commented.
 [code]
 $xoopsPreload->triggerEvent('core.header.checkcache');
     if ($xoTheme->checkCache()) {
-		$xoopsPreload->triggerEvent('core.header.cacheend');
+        $xoopsPreload->triggerEvent('core.header.cacheend');
         //exit(); // irmtfan comment this
     }
 [/code]
  more information here: http://sourceforge.net/p/xoops/bugs/1261/
- 
+
 2- You cannot select many items in userlog > blocks > views block.
-It is because of a length limitation in options field in newblocks table in xoops 255 and xoops 26.
+It is because of a length limitation in options field in newblocks table in XOOPS 255 and XOOPS 26.
 solution:
 in XOOPS255/kernel/block.php and XOOPS26/kernel/block.php
 line 40:
@@ -138,7 +138,7 @@ b) go to your database and change 'url' and 'referer' fields in table mod_userlo
 [code]
 Warning: Smarty error: unable to read resource: "db:userlog_block_stats_type.html" in file /class/smarty/Smarty.class.php line 1094
 [/code]
-It is a xoops core 2.5.6 bug. find below the bug and its solution:
+It is a XOOPS core 2.5.6 bug. find below the bug and its solution:
 https://sourceforge.net/p/xoops/bugs/1269/ block template file will not updated after update the module
 
 5- If you test userlog in local and you be disconnected or your internet connection was low you may have this error:

@@ -1,9 +1,9 @@
 To do list
 ================================
-These are some wishes that may be added to userlog module. They will be added if we be sure that we really need them and we have time and skills to add them.
+These are some wishes that may be added to UserLog module. They will be added if we be sure that we really need them and we have time and skills to add them.
 
 1- add keywords statistics.
 2- add more facilities (extra abilities) to a setting.
 3- better daily and weekly and maybe monthly statistics.
 4- cron job functionality.
-5- bind with protector and logger module in xoops 2.6 (or better merge/add protector/logger functionality in userlog with the help of the core team)
+5- bind with protector and logger module in xoops 2.6 (or better merge/add protector/logger functionality in UserLog with the help of the core team)

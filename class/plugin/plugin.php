@@ -10,10 +10,9 @@
  */
 
 /**
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (http://xoops.org)
  * @license         http://www.fsf.org/copyleft/gpl.html GNU public license
  * @author          trabis <lusopoemas@gmail.com>
- * @version         $Id: Plugin.php 10605 2012-12-29 14:19:09Z trabis $
  */
 // irmtfan copy from xoops26 xoops_lib/Xoops/Module/plugin.php class
 // change XoopsLoad -> self
@@ -25,11 +24,11 @@ class Userlog_Module_Plugin
     /**
      * @param string $dirname
      * @param string $pluginName
-     * @param bool $force
+     * @param bool   $force
      *
      * @return bool|Xoops_Module_Plugin_Abstract false if plugin does not exist
      */
-    static function getPlugin($dirname, $pluginName = 'system', $force = false)
+    public static function getPlugin($dirname, $pluginName = 'system', $force = false)
     {
         $inactiveModules = false;
         if ($force) {
@@ -39,16 +38,17 @@ class Userlog_Module_Plugin
         if (!in_array($dirname, array_keys($available))) {
             return false;
         }
+
         return $available[$dirname];
     }
 
     /**
-     * @param string $pluginName
+     * @param string     $pluginName
      * @param array|bool $inactiveModules
      *
      * @return mixed
      */
-    static function getPlugins($pluginName = 'system', $inactiveModules = false)
+    public static function getPlugins($pluginName = 'system', $inactiveModules = false)
     {
         static $plugins = array();
         if (!isset($plugins[$pluginName])) {
@@ -65,19 +65,29 @@ class Userlog_Module_Plugin
                 $dirnames = array_merge($dirnames, $inactiveModules);
             }
             foreach ($dirnames as $dirname) {
-                if (self::loadFile($GLOBALS['xoops']->path("modules/{$dirname}/class/plugin/{$pluginName}.php")) ||
-					self::loadFile($GLOBALS['xoops']->path("modules/{$pluginName}/class/plugin/{$dirname}.php"))) {
+                if (self::loadFile($GLOBALS['xoops']->path("modules/{$dirname}/class/plugin/{$pluginName}.php"))
+                    || self::loadFile($GLOBALS['xoops']->path("modules/{$pluginName}/class/plugin/{$dirname}.php"))
+                ) {
                     $className = ucfirst($dirname) . ucfirst($pluginName) . 'Plugin';
                     $interface = ucfirst($pluginName) . 'PluginInterface';
-                    $class = new $className($dirname);
+                    $class     = new $className($dirname);
                     if ($class instanceof Userlog_Module_Plugin_Abstract && $class instanceof $interface) {
                         $plugins[$pluginName][$dirname] = $class;
                     }
                 }
             }
         }
+
         return $plugins[$pluginName];
     }
+
+    /**
+     * @param      $file
+     * @param bool $once
+     *
+     * @return bool
+     */
+
     public static function loadFile($file, $once = true)
     {
         self::_securityCheck($file);
@@ -87,18 +97,32 @@ class Userlog_Module_Plugin
             } else {
                 include $file;
             }
+
             return true;
         }
+
         return false;
     }
-	public static function fileExists($file)
+
+    /**
+     * @param $file
+     *
+     * @return mixed
+     */
+
+    public static function fileExists($file)
     {
         static $included = array();
         if (!isset($included[$file])) {
             $included[$file] = file_exists($file);
         }
+
         return $included[$file];
     }
+
+    /**
+     * @param $filename
+     */
     protected static function _securityCheck($filename)
     {
         /**

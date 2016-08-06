@@ -8,23 +8,22 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (http://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog class plugin
  * @since           1.16
  * @author          irmtfan (irmtfan@yahoo.com)
- * @author          The XOOPS Project <www.xoops.org> <www.xoops.ir>
- * @version         $Id: interface.php 1.16 2013/05/08 16:25:04Z irmtfan $
+ * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
-
 interface UserlogPluginInterface
 {
     /**
      * @param string $subscribe_from Name of the script
-	 *
+     *
      * 'name' => 'thread';
      * 'title' => _MI_NEWBB_THREAD_NOTIFY;
      * 'description' => _MI_NEWBB_THREAD_NOTIFYDSC;
@@ -36,4 +35,3 @@ interface UserlogPluginInterface
      */
     public function item($subscribe_from);
 }
-

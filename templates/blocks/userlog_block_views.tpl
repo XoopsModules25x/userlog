@@ -1,0 +1,16 @@
+<div class="outer">
+    <{foreach from=$block.items key=link item=item_content}>
+        <{if $block.sort eq "module" || $block.sort eq "module_name" || $block.sort eq "module_count"}>
+            <{if $lastmodule neq $item_content.module}>
+                <h1><{$item_content.module_name}>(<{$smarty.const._AM_USERLOG_VIEW_MODULE}>
+                    :<{$item_content.module_count}>)</h1>
+            <{/if}>
+            <{assign var=lastmodule value=$item_content.module}>
+        <{/if}>
+        <div class="<{cycle values="even,odd"}> border">
+            <a href="<{$xoops_url}>/<{$link}>"
+               title="<{$item_content.pagetitle}>(<{$smarty.const._AM_USERLOG_VIEW}>:<{$item_content.count}>)">[<{$item_content.module_name}>
+                ]&nbsp;<{$item_content.pagetitle}>(<{$smarty.const._AM_USERLOG_VIEW}>:<{$item_content.count}>)</a>
+        </div>
+    <{/foreach}>
+</div>

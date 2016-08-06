@@ -11,24 +11,20 @@
 /**
  *  userlog module
  *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (http://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog admin
  * @since           1
  * @author          irmtfan (irmtfan@yahoo.com)
- * @author          The XOOPS Project <www.xoops.org> <www.xoops.ir>
- * @version         $Id: admin_header.php 1 2013-02-26 16:25:04Z irmtfan $
+ * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-include_once dirname(dirname(dirname(dirname(__FILE__)))) . '/mainfile.php';
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
+include_once dirname(__DIR__) . '/include/common.php';
 include_once XOOPS_ROOT_PATH . '/include/cp_header.php';
 xoops_load('XoopsFormLoader');
 xoops_loadLanguage('modinfo', USERLOG_DIRNAME);
 xoops_loadLanguage('user');
 xoops_loadLanguage('findusers');
-if ( file_exists($GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php'))){
-    include_once $GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
-}else{
-    echo xoops_error('/Frameworks/moduleclasses/moduleadmin/ is required!!!');
-}
+
+include_once $GLOBALS['xoops']->path('Frameworks/moduleclasses/moduleadmin/moduleadmin.php');

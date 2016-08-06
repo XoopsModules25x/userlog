@@ -10,12 +10,10 @@
  */
 
 /**
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (http://xoops.org)
  * @license         http://www.fsf.org/copyleft/gpl.html GNU public license
  * @author          trabis <lusopoemas@gmail.com>
- * @version         $Id: Abstract.php 10605 2012-12-29 14:19:09Z trabis $
  */
-
 class Userlog_Module_Plugin_Abstract
 {
     /**
@@ -24,7 +22,7 @@ class Userlog_Module_Plugin_Abstract
     public function __construct($dirname)
     {
         //$xoops = Xoops::getInstance();
-		xoops_loadLanguage("modinfo",$dirname);
+        xoops_loadLanguage('modinfo', $dirname);
         //$xoops->loadLanguage('modinfo', $dirname);
     }
 }

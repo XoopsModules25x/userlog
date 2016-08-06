@@ -11,43 +11,59 @@
 /**
  *  userlog module
  *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (http://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog preloads
  * @since           1
  * @author          irmtfan (irmtfan@yahoo.com)
- * @author          The XOOPS Project <www.xoops.org> <www.xoops.ir>
- * @version         $Id: core.php 1 2013-02-26 16:25:04Z irmtfan $
+ * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') or die('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
+/**
+ * Class UserlogCorePreload
+ */
 class UserlogCorePreload extends XoopsPreloadItem
 {
-	// to log main part of modules
-    static function eventCoreFooterStart($args)
+    // to log main part of modules
+    /**
+     * @param $args
+     */
+    public static function eventCoreFooterStart($args)
     {
-		include dirname(dirname(__FILE__)) . '/include/log.php';
+        include dirname(__DIR__) . '/include/log.php';
     }
 
-	// to log redirects because usually prorammers use exit() after redirect_header function.
-	static function eventCoreIncludeFunctionsRedirectheader($args)
+    // to log redirects because usually prorammers use exit() after redirect_header function.
+    /**
+     * @param $args
+     */
+    public static function eventCoreIncludeFunctionsRedirectheader($args)
     {
-		include dirname(dirname(__FILE__)) . '/include/log.php';
-	}
-    static function eventCoreIncludeCommonEnd($args)
+        include dirname(__DIR__) . '/include/log.php';
+    }
+
+    /**
+     * @param $args
+     */
+    public static function eventCoreIncludeCommonEnd($args)
     {
-		include dirname(dirname(__FILE__)) . '/include/postlog.php';
-	}
-	// in XOOPS255/index.php (homepage) when no module is set for start page there is a bug in XOOPS255/header.php exit() should be commented
-	/*$xoopsPreload->triggerEvent('core.header.checkcache');
+        include dirname(__DIR__) . '/include/postlog.php';
+    }
+    // in XOOPS255/index.php (homepage) when no module is set for start page there is a bug in XOOPS255/header.php exit() should be commented
+    /*$xoopsPreload->triggerEvent('core.header.checkcache');
     if ($xoTheme->checkCache()) {
-		$xoopsPreload->triggerEvent('core.header.cacheend');
+        $xoopsPreload->triggerEvent('core.header.cacheend');
         //exit();
     } */
 
-	// to log admin part of modules (must use moduleadmin class)
-	static function eventSystemClassGuiHeader($args)
+    // to log admin part of modules (must use moduleadmin class)
+    /**
+     * @param $args
+     */
+    public static function eventSystemClassGuiHeader($args)
     {
-		include dirname(dirname(__FILE__)) . '/include/log.php';
+        include dirname(__DIR__) . '/include/log.php';
     }
 }

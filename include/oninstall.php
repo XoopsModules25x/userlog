@@ -13,19 +13,10 @@
  *
  * @copyright       XOOPS Project (http://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
- * @package         userlog admin
+ * @package         userlog include
  * @since           1
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
-
-include_once __DIR__ . '/admin_header.php';
-
-xoops_cp_header();
-
-$aboutAdmin = new ModuleAdmin();
-
-echo $aboutAdmin->addNavigation(basename(__FILE__));
-//echo $aboutAdmin->renderAbout('6KJ7RW5DR3VTJ', false);
-
-xoops_cp_footer();
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+require_once __DIR__ . '/common.php';

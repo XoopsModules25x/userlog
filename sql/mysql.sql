@@ -2,7 +2,7 @@
 # version 1
 # irmtfan irmtfan@yahoo.com
 # --------------------------------------------------------
-CREATE TABLE mod_userlog_log (
+CREATE TABLE userlog_log (
   log_id mediumint(8) unsigned NOT NULL auto_increment,
   log_time int(11) unsigned NOT NULL default 0,
   uid mediumint(8) unsigned NOT NULL default 0,
@@ -22,7 +22,7 @@ CREATE TABLE mod_userlog_log (
   item_name varchar(10) NOT NULL default '',
   item_id int(11) unsigned NOT NULL default 0,
   request_method varchar(20) NOT NULL default '',
-  get TEXT NOT NULL,
+  zget TEXT NOT NULL,
   post LONGTEXT NOT NULL,
   request TEXT NOT NULL,
   files TEXT NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE mod_userlog_log (
 ) ENGINE=MyISAM;
 # --------------------------------------------------------
 
-CREATE TABLE mod_userlog_set (
+CREATE TABLE userlog_set (
   set_id mediumint(8) unsigned NOT NULL auto_increment,
   name varchar(100) NOT NULL default '',
   logby varchar(10) NOT NULL default '',
@@ -49,7 +49,7 @@ CREATE TABLE mod_userlog_set (
   UNIQUE logby_id (logby, unique_id)
 ) ENGINE=MyISAM;
 
-CREATE TABLE mod_userlog_stats (
+CREATE TABLE userlog_stats (
   stats_id mediumint(8) unsigned NOT NULL auto_increment,
   stats_type varchar(10) NOT NULL default '',
   stats_link varchar(255) NOT NULL default '',
