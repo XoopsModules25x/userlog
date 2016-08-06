@@ -2,9 +2,9 @@
 ##userlog module for  [XOOPS CMS 2.5.8+](https://xoops.org)
 [![Software License](https://img.shields.io/badge/license-GPL-brightgreen.svg?style=flat)](LICENSE)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/XoopsModules25x/userlog.svg?style=flat)](https://scrutinizer-ci.com/g/XoopsModules25x/userlog/?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/95b12220e0ac4056b9af52af708379c9)](https://www.codacy.com/app/mambax7/userlog_2)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e325f88b845b44768a268fb36099ff19)](https://www.codacy.com/app/mambax7/userlog_2)
 [![Code Climate](https://img.shields.io/codeclimate/github/XoopsModules25x/userlog.svg?style=flat)](https://codeclimate.com/github/XoopsModules25x/userlog)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/68207475-07ff-4567-a282-6e2f119077d2/mini.png)](https://insight.sensiolabs.com/projects/68207475-07ff-4567-a282-6e2f119077d2)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/676a37bb-ff83-4824-ba0f-00aa09eec533/mini.png)](https://insight.sensiolabs.com/projects/676a37bb-ff83-4824-ba0f-00aa09eec533)
 [![Latest Pre-Release](https://img.shields.io/github/tag/XoopsModules25x/userlog.svg?style=flat)](https://github.com/XoopsModules25x/userlog/tags/)
 [![Latest Version](https://img.shields.io/github/release/XoopsModules25x/userlog.svg?style=flat)](https://github.com/XoopsModules25x/userlog/releases/)
 
