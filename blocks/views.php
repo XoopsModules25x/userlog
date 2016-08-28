@@ -91,8 +91,7 @@ function userlog_views_edit($options)
         $not_config = $module->getInfo('notification');
         foreach ($not_config['category'] as $category) {
             if (!empty($category['item_name'])) {
-                $script                                                                      = is_array($category['subscribe_from']) ? implode(':',
-                                                                                                                                               $category['subscribe_from']) : $category['subscribe_from'];
+                $script                                                                      = is_array($category['subscribe_from']) ? implode(':', $category['subscribe_from']) : $category['subscribe_from'];
                 $hasviews[$module->dirname() . ':' . $script . '-' . $category['item_name']] = $module->dirname() . '/' . $script . '?' . $category['item_name'] . '=ITEM_ID';
             }
         }
@@ -110,8 +109,7 @@ function userlog_views_edit($options)
     if (!empty($hasviews)) {
         $viewsEle->addOptionArray($hasviews);
         $viewsEle->setExtra("onchange = \"validate('options[{$i}][]','checkbox', true)\""); // prevent user select no option
-        $check_all = _ALL
-                     . ": <input type=\"checkbox\" name=\"item_check\" id=\"item_check\" value=\"1\" onclick=\"xoopsCheckGroup('blockform', 'item_check','options[{$i}][]');\" />"; // blockform is the main form
+        $check_all = _ALL . ": <input type=\"checkbox\" name=\"item_check\" id=\"item_check\" value=\"1\" onclick=\"xoopsCheckGroup('blockform', 'item_check','options[{$i}][]');\" />"; // blockform is the main form
         $viewsEle  = new XoopsFormLabel(_AM_USERLOG_ITEMS, $check_all . "<br\>" . $viewsEle->render());
     } else {
         // prevent to select

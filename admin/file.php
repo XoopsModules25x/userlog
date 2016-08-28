@@ -39,7 +39,7 @@ if (!empty($opentry) && ($confirm == 0 || $totalFiles == 0)) {
 }
 switch ($opentry) {
     case 'del':
-        if ($deleteFiles == $loglogObj->deleteFiles($file)) {
+        if ($deleteFiles = $loglogObj->deleteFiles($file)) {
             $msgDel = sprintf(_AM_USERLOG_FILE_DELETE_SUCCESS, $deleteFiles) . "<br\>" . implode("<br\>", $loglogObj->getErrors());
             redirect_header('file.php', 5, $msgDel);
         }
@@ -50,7 +50,7 @@ switch ($opentry) {
         if ($totalFiles != 1) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, _AM_USERLOG_FILE_SELECT_ONE));
         }
-        if ($newFile == $loglogObj->renameFile($file[0], $filename)) {
+        if ($newFile = $loglogObj->renameFile($file[0], $filename)) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_FILE_RENAME_SUCCESS, $file[0], $newFile));
         }
         redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>", $loglogObj->getErrors())));
@@ -60,19 +60,19 @@ switch ($opentry) {
         if ($totalFiles != 1) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, _AM_USERLOG_FILE_SELECT_ONE));
         }
-        if ($newFile == $loglogObj->copyFile($file[0], $filename)) {
+        if ($newFile = $loglogObj->copyFile($file[0], $filename)) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_FILE_COPY_SUCCESS, $file[0], $newFile));
         }
         redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>", $loglogObj->getErrors())));
         break;
     case 'merge':
-        if ($mergeFile == $loglogObj->mergeFiles($file, $filename)) {
+        if ($mergeFile = $loglogObj->mergeFiles($file, $filename)) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_FILE_MERGE_SUCCESS, $totalFiles, $mergeFile));
         }
         redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>", $loglogObj->getErrors())));
         break;
     case 'zip':
-        if ($zipFile == $loglogObj->zipFiles($file, $filename)) {
+        if ($zipFile = $loglogObj->zipFiles($file, $filename)) {
             $msgZip = sprintf(_AM_USERLOG_FILE_ZIP_SUCCESS, $totalFiles, $zipFile) . "<br\>" . implode("<br\>", $loglogObj->getErrors());
             redirect_header('file.php', 5, $msgZip);
         }
@@ -82,7 +82,7 @@ switch ($opentry) {
         $logsetObj = UserlogSetting::getInstance();
         $headers   = $logsetObj->getOptions('', 'title');
         unset($headers['store_db'], $headers['store_file'], $headers['views']);
-        if ($csvFile == $loglogObj->exportFilesToCsv($file, $headers, $filename, ';')) {
+        if ($csvFile = $loglogObj->exportFilesToCsv($file, $headers, $filename, ';')) {
             $msgCsv = sprintf(_AM_USERLOG_FILE_EXOPORT_SUCCESS, $totalFiles, $csvFile);
             redirect_header('file.php', 5, $msgCsv);
         }
@@ -110,8 +110,7 @@ $form->addElement($filenameEl);
 $submitEl = new XoopsFormButton(_SUBMIT, 'submitfilemanager', _SUBMIT, 'submit');
 $form->addElement($submitEl);
 $confirmEl                         = new XoopsFormHidden('confirm', 0);
-$confirmEl->customValidationCode[] = "if (confirm('" . _AM_USERLOG_FILE_CONFIRM . " ' + myform.op.options[myform.op.selectedIndex].innerHTML + '\\n " . _AM_USERLOG_FILE
-                                     . ": ' + myform.file.value)) {myform.confirm.value = 1;} else {return false;};";
+$confirmEl->customValidationCode[] = "if (confirm('" . _AM_USERLOG_FILE_CONFIRM . " ' + myform.op.options[myform.op.selectedIndex].innerHTML + '\\n " . _AM_USERLOG_FILE . ": ' + myform.file.value)) {myform.confirm.value = 1;} else {return false;};";
 $form->addElement($confirmEl);
 $GLOBALS['xoopsTpl']->assign('form', $form->render());
 $GLOBALS['xoopsTpl']->assign('logo', $indexAdmin->addNavigation(basename(__FILE__)));

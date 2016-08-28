@@ -78,8 +78,7 @@ define('_AM_USERLOG_SET_ID', 'ID');
 define('_AM_USERLOG_SET_NAME', 'Setting name');
 define('_AM_USERLOG_SET_NAME_DSC', 'Type a name for this setting in your own language');
 define('_AM_USERLOG_SET_LOGBY', 'Log by');
-define('_AM_USERLOG_SET_LOGBY_DSC',
-       "Log user activities by fetching this value from users table in database? priority: IF exist uid log it ELSEIF exist gid log it ELSEIf exist ip log it ELSE if Unique id = 0 log all users ELSE don't log");
+define('_AM_USERLOG_SET_LOGBY_DSC', "Log user activities by fetching this value from users table in database? priority: IF exist uid log it ELSEIF exist gid log it ELSEIf exist ip log it ELSE if Unique id = 0 log all users ELSE don't log");
 define('_AM_USERLOG_SET_UNIQUE_ID', 'Unique ID');
 define('_AM_USERLOG_SET_UNIQUE_ID_DSC', 'Unique id, e.g.: uid=1, gid=3 (anonymous), ip=66.249.66.1, 0=all users');
 define('_AM_USERLOG_SET_GID', 'Group ID');
@@ -93,8 +92,7 @@ define('_AM_USERLOG_SET_SCOPE_DSC', 'Log users activities in which modules? Sele
 define('_AM_USERLOG_SET_ERROR', "Error. You've entered wrong data!");
 define('_AM_USERLOG_SET_CREATE', "Setting %1\$s created successfully.");
 define('_AM_USERLOG_SET_EDIT', "Setting %1\$s edited successfully.");
-define('_AM_USERLOG_SET_UPDATE',
-       "Caution! Your new submitted setting is not created because setting %1\$s has been in database with the same Log by and Unique ID. But it updated with your new options successfully.");
+define('_AM_USERLOG_SET_UPDATE', "Caution! Your new submitted setting is not created because setting %1\$s has been in database with the same Log by and Unique ID. But it updated with your new options successfully.");
 define('_AM_USERLOG_SET_CANCEL', 'Cancel');
 // setting.php delete
 define('_AM_USERLOG_SET_DELETE_CONFIRM', "Are you sure to delete setting %1\$s?");
@@ -255,8 +253,7 @@ define('_AM_USERLOG_FILE_ZIP', 'Compress (Zip)');
 define('_AM_USERLOG_FILE_MERGE', 'Merge');
 define('_AM_USERLOG_FILE_EXPORT_CSV', 'Export to CSV');
 define('_AM_USERLOG_FILE_FILENAME', 'Enter the result file name, e.g.: myfile');
-define('_AM_USERLOG_FILE_FILENAME_DSC',
-       'Advise: Leave it empty to auto generate by using the current criteria and date. If you enter an already existed file name for zip file, new files will be added/overwritten in old archive file.');
+define('_AM_USERLOG_FILE_FILENAME_DSC', 'Advise: Leave it empty to auto generate by using the current criteria and date. If you enter an already existed file name for zip file, new files will be added/overwritten in old archive file.');
 define('_AM_USERLOG_FILE_MERGE_SUCCESS', "%1\$d files merged successfully into %2\$s");
 define('_AM_USERLOG_FILE_DELETE_SUCCESS', "%1\$d files deleted successfully.");
 define('_AM_USERLOG_FILE_RENAME_SUCCESS', "file %1\$s renamed successfully into %2\$s");

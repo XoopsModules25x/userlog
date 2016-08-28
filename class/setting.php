@@ -114,24 +114,24 @@ class UserlogSetting extends XoopsObject
         $options = '';
         // if uid setting exist in File
         $unique_uid = $this->userlog->getUser() ? $this->userlog->getUser()->getVar('uid') : 0;
-        if ($options == $this->getFile('uid', $unique_uid)) {
+        if ($options = $this->getFile('uid', $unique_uid)) {
             return $options;
         }
 
         // if gid setting exist in File
         $unique_gid = $this->userlog->getUser() ? $this->userlog->getUser()->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
         foreach ($unique_gid as $gid) {
-            if ($options == $this->getFile('gid', $gid)) {
+            if ($options = $this->getFile('gid', $gid)) {
                 return $options;
             }
         }
         // if ip setting exist in File
         $unique_ip = XoopsUserUtility::getIP(); // ip as int
-        if ($options == $this->getFile('ip', $unique_ip)) {
+        if ($options = $this->getFile('ip', $unique_ip)) {
             return $options;
         }
         // if all exist in File
-        if ($options == $this->getFile('all', 0)) {
+        if ($options = $this->getFile('all', 0)) {
             return $options;
         }
         ///////////////////////////////////////////////////////////
@@ -299,6 +299,7 @@ class UserlogSetting extends XoopsObject
             $admin      = 0;
             $groups     = 'g' . XOOPS_GROUP_ANONYMOUS; // g3
         }
+        $tempUserLog = explode('/', $_SERVER['PHP_SELF']);
         $options = array(
             'log_id'         => array(
                 'type'  => 'int',
@@ -353,7 +354,7 @@ class UserlogSetting extends XoopsObject
             'script'         => array(
                 'type'  => 'text',
                 'title' => _AM_USERLOG_SCRIPT,
-                'value' => end(explode('/', $_SERVER['PHP_SELF']))
+                'value' => end($tempUserLog)
             ),
             'referer'        => array(
                 'type'  => 'text',

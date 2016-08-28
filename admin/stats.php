@@ -57,8 +57,8 @@ foreach ($stats as $type => $arr) {
     foreach ($arr as $period => $arr2) {
         // use sprintf in moduleadmin: sprintf($text, "<span style='color : " . $color . "; font-weight : bold;'>" . $value . "</span>")
         $indexAdmin->addInfoBoxLine(_AM_USERLOG_STATS_ABSTRACT,
-                                    sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%1\$s", $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' '
-                                    . $arr2['time_update'], $arr2['value'], $arr2['value'] ? 'GREEN' : 'RED');
+                                    sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%1\$s", $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'], $arr2['value'],
+                                    $arr2['value'] ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -78,9 +78,8 @@ $userViews = $Userlog->getHandler('log')->getCounts($criteria);
 if (!empty($userViews)) {
     $indexAdmin->addInfoBox(_AM_USERLOG_VIEW_USER);
     foreach ($userViews as $uid => $views) {
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_USER,
-                                    ($uid ? "<a href=\"" . XOOPS_URL . '/userinfo.php?uid=' . $uid . "\">" . XoopsUserUtility::getUnameFromId($uid) . '</a>' : XoopsUserUtility::getUnameFromId(0))
-                                    . ': %s', $views, $views ? 'GREEN' : 'RED');
+        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_USER, ($uid ? "<a href=\"" . XOOPS_URL . '/userinfo.php?uid=' . $uid . "\">" . XoopsUserUtility::getUnameFromId($uid) . '</a>' : XoopsUserUtility::getUnameFromId(0)) . ': %s', $views,
+                                    $views ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -199,8 +198,7 @@ foreach ($moduleObjs as $mObj) {
     if (!empty($not_config['category'])) {
         foreach ($not_config['category'] as $category) {
             if (!empty($category['item_name'])) {
-                $script                                                                     = is_array($category['subscribe_from']) ? implode(':',
-                                                                                                                                              $category['subscribe_from']) : $category['subscribe_from'];
+                $script                                                                     = is_array($category['subscribe_from']) ? implode(':', $category['subscribe_from']) : $category['subscribe_from'];
                 $itemLinks[$mObj->dirname() . ':' . $script . '-' . $category['item_name']] = $mObj->dirname() . '/' . $script . '?' . $category['item_name'] . '=ITEM_ID';
             }
         }

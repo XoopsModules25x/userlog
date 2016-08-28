@@ -70,8 +70,7 @@ define('_MI_USERLOG_MAXLOGSPERIOD', 'Maximum time that logs are stored in the da
 define('_MI_USERLOG_MAXLOGSPERIOD_DSC', 'Logs older than this period will be deleted from database. Positive for days and negative for hours. Advise: use a large number');
 // config probability
 define('_MI_USERLOG_PROBSET', 'Probability to check database for a match setting');
-define('_MI_USERLOG_PROBSET_DSC',
-       'Probability percentage to check database ONLY if it didnt find any setting in cache files for the current visitor/user. 20 means in one of each 5 hits it will check.');
+define('_MI_USERLOG_PROBSET_DSC', 'Probability percentage to check database ONLY if it didnt find any setting in cache files for the current visitor/user. 20 means in one of each 5 hits it will check.');
 define('_MI_USERLOG_PROBSTATS', 'Probability to update statistics in database when the visitor is logged.');
 define('_MI_USERLOG_PROBSTATS_DSC',
        'Probability percentage to update database logs. 10 means in 1 of each 10 visits of a visitor who have a match setting, it will update statistics. 0 means no update so you should manually update by visiting userlog > admin > home.');
@@ -82,5 +81,4 @@ define('_MI_USERLOG_PROBSTATSALLHIT_DSC',
 define('_MI_USERLOG_BLOCK_VIEWS', 'All views in site');
 define('_MI_USERLOG_BLOCK_VIEWS_DSC', 'Show views in the whole site');
 // webmaster permission
-define('_MI_USERLOG_WEBMASTER_NOPERM',
-       "You are one of the webmasters but don't have permission to access this area. Please contact webmasters with %1\$s UID or webmasters belong to %2\$s admin groups for more information.");
+define('_MI_USERLOG_WEBMASTER_NOPERM', "You are one of the webmasters but don't have permission to access this area. Please contact webmasters with %1\$s UID or webmasters belong to %2\$s admin groups for more information.");

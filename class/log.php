@@ -312,8 +312,7 @@ class UserlogLog extends XoopsObject
                     case 'user_agent':
                         $statsObj   = UserlogStats::getInstance();
                         $browserArr = $this->userlog->getBrowsCap()->getBrowser($logvalue, true);
-                        $statsObj->update('browser', 0, 1, true,
-                                          !empty($browserArr['Parent']) ? (!empty($browserArr['Crawler']) ? 'crawler: ' : '') . $browserArr['Parent'] : 'unknown'); // auto increment 1
+                        $statsObj->update('browser', 0, 1, true, !empty($browserArr['Parent']) ? (!empty($browserArr['Crawler']) ? 'crawler: ' : '') . $browserArr['Parent'] : 'unknown'); // auto increment 1
                         $statsObj->update('OS', 0, 1, true, $browserArr['Platform']); // auto increment 1
                         break;
                 }
@@ -998,7 +997,7 @@ class UserlogLog extends XoopsObject
         // In very rare occasions like newbb the item_id is not in the URL $_REQUEST
         include_once __DIR__ . '/plugin/plugin.php';
         include_once __DIR__ . '/plugin/Abstract.php';
-        if ($plugin == Userlog_Module_Plugin::getPlugin($this->userlog->getLogModule()->getVar('dirname'), USERLOG_DIRNAME, true)) {
+        if ($plugin = Userlog_Module_Plugin::getPlugin($this->userlog->getLogModule()->getVar('dirname'), USERLOG_DIRNAME, true)) {
             /*
             // get all module scripts can accept an item_name to check if this script is exist
             $scripts = $plugin->item();
@@ -1115,10 +1114,10 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
         $sql   = "SELECT {$select}, COUNT(*) AS count FROM {$this->table}";
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql .= ' ' . $criteria->renderWhere();
-            if ($groupby == $criteria->getGroupby()) {
+            if ($groupby = $criteria->getGroupby()) {
                 $sql .= !strpos($groupby, 'GROUP BY') ? " GROUP BY {$groupby}" : $groupby;
             }
-            if ($sort == $criteria->getSort()) {
+            if ($sort = $criteria->getSort()) {
                 $sql .= " ORDER BY {$sort} " . $criteria->getOrder();
             }
             $limit = $criteria->getLimit();
@@ -1226,7 +1225,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             return false;
         }
         $ret = array();
-        while ($myrow == $this->db->fetchArray($result)) {
+        while ($myrow = $this->db->fetchArray($result)) {
             $ret[$myrow['Field']] = $myrow;
         }
 
@@ -1312,7 +1311,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             return false;
         }
         $ret = array();
-        while ($myrow == $this->db->fetchArray($result)) {
+        while ($myrow = $this->db->fetchArray($result)) {
             $ret[] = $myrow;
         }
 

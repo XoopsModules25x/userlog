@@ -66,7 +66,7 @@ class Userlog
         return $instance;
     }
 
-    public function &getModule()
+    public function getModule()
     {
         if ($this->module == null) {
             $this->initModule();
@@ -91,7 +91,7 @@ class Userlog
      *
      * @return mixed
      */
-    public function &getModules($dirnames = array(), $otherCriteria = null, $asObj = false)
+    public function getModules($dirnames = array(), $otherCriteria = null, $asObj = false)
     {
         // get all dirnames
         $moduleHandler = xoops_getHandler('module');
@@ -135,7 +135,7 @@ class Userlog
         return $this->groupList;
     }
 
-    public function &getBrowsCap()
+    public function getBrowsCap()
     {
         if ($this->browscap == null) {
             $this->initBrowsCap();
@@ -287,8 +287,7 @@ class Userlog
         }
         xoops_load('XoopsLocal');
 
-        return class_exists('XoopsLocal') ? XoopsLocal::formatTimestamp($intTime, $dateFormat, $timeoffset) : XoopsLocale::formatTimestamp($intTime, $dateFormat,
-                                                                                                                                           $timeoffset); // use XoopsLocale in xoops26
+        return class_exists('XoopsLocal') ? XoopsLocal::formatTimestamp($intTime, $dateFormat, $timeoffset) : XoopsLocale::formatTimestamp($intTime, $dateFormat, $timeoffset); // use XoopsLocale in xoops26
     }
 
     /**

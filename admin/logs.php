@@ -179,12 +179,11 @@ if (substr($opentry, 0, 6) === 'export') {
     $totalLogsExport = count($logs);
     switch ($export) {
         case 'csv':
-            if ($csvFile == $loglogObj->exportLogsToCsv($logs, $headers, 'engine_' . $engine . '_total_' . $totalLogsExport, ';')) {
-                redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry='
-                                . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 7, sprintf(_AM_USERLOG_LOG_EXPORT_SUCCESS, $totalLogsExport, $csvFile));
+            if ($csvFile = $loglogObj->exportLogsToCsv($logs, $headers, 'engine_' . $engine . '_total_' . $totalLogsExport, ';')) {
+                redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 7,
+                                sprintf(_AM_USERLOG_LOG_EXPORT_SUCCESS, $totalLogsExport, $csvFile));
             }
-            redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry='
-                            . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 1, _AM_USERLOG_LOG_EXPORT_ERROR);
+            redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 1, _AM_USERLOG_LOG_EXPORT_ERROR);
             break;
         default :
             break;

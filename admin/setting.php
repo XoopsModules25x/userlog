@@ -121,7 +121,7 @@ switch ($op) {
 
     case 'cleanCash':
         // delete all settings caches
-        if ($numfiles == $logsetObj->cleanCache()) {
+        if ($numfiles = $logsetObj->cleanCache()) {
             redirect_header('setting.php', 1, sprintf(_AM_USERLOG_SET_CLEANCACHE_SUCCESS, $numfiles));
         } else {
             redirect_header('setting.php', 1, _AM_USERLOG_SET_CLEANCACHE_NOFILE);
