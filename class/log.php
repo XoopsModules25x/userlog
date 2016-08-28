@@ -412,12 +412,12 @@ class UserlogLog extends XoopsObject
             $data = "\n";
         }
         $data .= json_encode($tolog, (phpversion() > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
-        if ($fileHandler->open('a') == false) {
+        if ($fileHandler->open('a') === false) {
             $this->setErrors("Cannot open file ({$log_file})");
 
             return false;
         }
-        if ($fileHandler->write($data) == false) {
+        if ($fileHandler->write($data) === false) {
             $this->setErrors("Cannot write to file ({$log_file})");
 
             return false;
@@ -472,7 +472,7 @@ class UserlogLog extends XoopsObject
             $fileHandler->__construct($csvFile, true); // create file and folder
             $this->setErrors("File was not exist create file ({$csvFile})");
         }
-        if ($fileHandler->open('a') == false) {
+        if ($fileHandler->open('a') === false) {
             $this->setErrors("Cannot open file ({$csvFile})");
 
             return false;
@@ -693,12 +693,12 @@ class UserlogLog extends XoopsObject
             return false;
         }
         $fileHandler->__construct($mergeFile, true); // create file and folder
-        if ($fileHandler->open('a') == false) {
+        if ($fileHandler->open('a') === false) {
             $this->setErrors("Cannot open file ({$mergeFile})");
 
             return false;
         }
-        if ($fileHandler->write($data) == false) {
+        if ($fileHandler->write($data) === false) {
             $this->setErrors("Cannot write to file ({$mergeFile})");
 
             return false;
@@ -728,7 +728,7 @@ class UserlogLog extends XoopsObject
             return array();
         }
 
-        if (($data = $fileHandler->read()) == false) {
+        if (($data = $fileHandler->read()) === false) {
             $this->setErrors("Cannot read file ({$log_file})");
 
             return array();
@@ -761,7 +761,7 @@ class UserlogLog extends XoopsObject
                 $this->setErrors("({$file}) is a folder or is not exist");
                 continue;
             }
-            if (($ret = $fileHandler->delete()) == false) {
+            if (($ret = $fileHandler->delete()) === false) {
                 $this->setErrors("Cannot delete ({$file})");
                 continue;
             }
@@ -1127,7 +1127,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
         $ret      = array();
         $retCount = array();
         if ($asObject) {
-            while (($myrow = $this->db->fetchArray($result)) != false) {
+            while (($myrow = $this->db->fetchArray($result)) !== false) {
                 if ($id_as_key) {
                     $retCount[$myrow[$this->keyName]] = array_pop($myrow);
                 } else {
@@ -1144,7 +1144,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             }
         } else {
             $object = $this->create(false);
-            while (($myrow = $this->db->fetchArray($result)) != false) {
+            while (($myrow = $this->db->fetchArray($result)) !== false) {
                 if ($id_as_key) {
                     $retCount[$myrow[$this->keyName]] = array_pop($myrow);
                 } else {

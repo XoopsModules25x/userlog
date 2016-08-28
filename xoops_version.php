@@ -440,7 +440,7 @@ if (isset($xoopsOption['pagetype']) && $xoopsOption['pagetype'] === 'admin' && i
         if ($_REQUEST['fct'] === 'maintenance') {
             $dump_modules = isset($_REQUEST['dump_modules']) ? $_REQUEST['dump_modules'] : false;
             $dump_tables  = isset($_REQUEST['dump_tables']) ? $_REQUEST['dump_tables'] : false;
-            if ($dump_tables == true || $dump_modules == true) {
+            if ($dump_tables === true || $dump_modules === true) {
                 $dirname = $modversion['dirname'];
             }
         }

@@ -468,7 +468,7 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
             return false;
         }
         $ret = array();
-        while (($myrow = $this->db->fetchArray($result)) != false) {
+        while (($myrow = $this->db->fetchArray($result)) !== false) {
             $ret[] = $myrow;
         }
 
