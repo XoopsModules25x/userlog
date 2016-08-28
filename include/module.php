@@ -21,11 +21,11 @@
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 require_once __DIR__ . '/common.php';
 /**
- * @param $module
+ * @param XoopsModule $module
  *
  * @return int
  */
-function xoops_module_uninstall_userlog(&$module)
+function xoops_module_uninstall_userlog(XoopsModule $module)
 {
     $logsetObj = UserlogSetting::getInstance();
 
@@ -33,13 +33,13 @@ function xoops_module_uninstall_userlog(&$module)
 }
 
 /**
- * @param      $module
+ * @param XoopsModule $module
  * @param null $prev_version
  *
  * @return bool|mixed
  */
 
-function xoops_module_update_userlog(&$module, $prev_version = null)
+function xoops_module_update_userlog(XoopsModule $module, $prev_version = null)
 {
     if ($prev_version == round($module->getInfo('version') * 100, 2)) {
         $module->setErrors('You have the latest ' . $module->getInfo('name') . ' module (' . $module->getInfo('dirname') . ' version ' . $module->getInfo('version') . ') and update is not necessary');
@@ -72,11 +72,11 @@ function xoops_module_update_userlog(&$module, $prev_version = null)
 // update database from v1 to 1.01 (Beta1 to RC1)
 // module_name VARCHAR(25) change to VARCHAR(50)
 /**
- * @param $module
+ * @param XoopsModule $module
  *
  * @return bool
  */
-function update_userlog_v100(&$module)
+function update_userlog_v100(XoopsModule $module)
 {
     $field   = 'module_name';
     $Userlog = Userlog::getInstance();
@@ -95,11 +95,11 @@ function update_userlog_v100(&$module)
 
 // add ",active,inside,outside,unset_pass" to all settings
 /**
- * @param $module
+ * @param XoopsModule $module
  *
  * @return bool
  */
-function update_userlog_v114(&$module)
+function update_userlog_v114(XoopsModule $module)
 {
     $Userlog    = Userlog::getInstance();
     $logsetsObj = $Userlog->getHandler('setting')->getAll();
@@ -119,11 +119,11 @@ function update_userlog_v114(&$module)
 }
 
 /**
- * @param $module
+ * @param XoopsModule $module
  *
  * @return mixed
  */
-function update_userlog_v115(&$module)
+function update_userlog_v115(XoopsModule $module)
 {
     $Userlog = Userlog::getInstance();
     // Only change the field from INDEX to UNIQUE if it is not unique
@@ -145,11 +145,11 @@ function update_userlog_v115(&$module)
 }
 
 /**
- * @param $module
+ * @param XoopsModule $module
  *
  * @return bool
  */
-function update_userlog_v116(&$module)
+function update_userlog_v116(XoopsModule $module)
 {
     // remove old html template files
     $template_directory = XOOPS_ROOT_PATH . '/modules/' . $module->getVar('dirname', 'n') . '/templates/';

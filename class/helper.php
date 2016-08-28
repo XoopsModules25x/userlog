@@ -68,7 +68,7 @@ class Userlog
 
     public function getModule()
     {
-        if ($this->module == null) {
+        if ($this->module === null) {
             $this->initModule();
         }
 
@@ -77,7 +77,7 @@ class Userlog
 
     public function &getLogModule()
     {
-        if ($this->logmodule == null) {
+        if ($this->logmodule === null) {
             $this->initLogModule();
         }
 
@@ -119,7 +119,7 @@ class Userlog
 
     public function &getUser()
     {
-        if ($this->user == null) {
+        if ($this->user === null) {
             $this->initUser();
         }
 
@@ -128,7 +128,7 @@ class Userlog
 
     public function &getGroupList()
     {
-        if ($this->groupList == null) {
+        if ($this->groupList === null) {
             $this->initGroupList();
         }
 
@@ -137,7 +137,7 @@ class Userlog
 
     public function getBrowsCap()
     {
-        if ($this->browscap == null) {
+        if ($this->browscap === null) {
             $this->initBrowsCap();
         }
 
@@ -151,7 +151,7 @@ class Userlog
      */
     public function getConfig($name = null)
     {
-        if ($this->config == null) {
+        if ($this->config === null) {
             $this->initConfig();
         }
         if (!$name) {
@@ -177,7 +177,7 @@ class Userlog
      */
     public function setConfig($name = null, $value = null)
     {
-        if ($this->config == null) {
+        if ($this->config === null) {
             $this->initConfig();
         }
         $this->config[$name] = $value;
