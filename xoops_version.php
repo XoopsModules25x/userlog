@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog
  * @since           1
@@ -30,7 +30,7 @@ $modversion = array(
     'author'              => 'xoops.org (irmtfan)',
     'nickname'            => 'irmtfan',
     'author_mail'         => 'author-email',
-    'author_website_url'  => 'http://xoops.org',
+    'author_website_url'  => 'https://xoops.org',
     'author_website_name' => 'XOOPS',
     'credits'             => 'XOOPS Project Team, trabis, irmtfan, mamba, tatane, cesagonchu, zyspec, blackrx, timgno, chefry',
     'license'             => 'GPL 2.0 or later',
@@ -63,9 +63,9 @@ $modversion = array(
     'module_status'       => 'ALPHA 2',
     'release_date'        => '2016/08/28', //yyyy/mm/dd
     //    'release'             => '2015-04-04',
-    'demo_site_url'       => 'http://xoops.org',
+    'demo_site_url'       => 'https://xoops.org',
     'demo_site_name'      => 'XOOPS Demo Site',
-    'support_url'         => 'http://xoops.org/modules/newbb/viewforum.php?forum=28/',
+    'support_url'         => 'https://xoops.org/modules/newbb/viewforum.php?forum=28/',
     'support_name'        => 'Support Forum',
     'module_website_url'  => 'www.xoops.org',
     'module_website_name' => 'XOOPS Project',

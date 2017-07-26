@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog admin
  * @since           1
@@ -89,7 +89,7 @@ switch ($opentry) {
         redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>", $loglogObj->getErrors())));
         break;
 }
-$form   = new XoopsThemeForm(_AM_USERLOG_ADMENU_FILE, 'filemanager', 'file.php', 'post');
+$form   = new XoopsThemeForm(_AM_USERLOG_ADMENU_FILE, 'filemanager', 'file.php', 'post', true);
 $fileEl = $loglogObj->buildFileSelectEle($file, true, 10);// multiselect = true, size=10
 $form->addElement($fileEl);
 $actionEl = new XoopsFormSelect(_AM_USERLOG_FILE_ACTION, 'op', $opentry);

@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog admin
  * @since           1
@@ -174,7 +174,7 @@ $items = $loglogObj->getViews($limitentry, $startentry, $sortentry, $orderentry,
 $GLOBALS['xoopsTpl']->assign('sortentry', $sortentry);
 $GLOBALS['xoopsTpl']->assign('items', $items);
 // SRART form
-$form = new XoopsThemeForm(_AM_USERLOG_VIEW, 'views', 'stats.php', 'post');
+$form = new XoopsThemeForm(_AM_USERLOG_VIEW, 'views', 'stats.php', 'post', true);
 // number of items to display element
 $limitEl = new XoopsFormText(_AM_USERLOG_ITEMS_NUM, 'limitentry', 10, 255, $limitentry);
 $sortEl  = new XoopsFormSelect(_AM_USERLOG_SORT, 'sortentry', $sortentry);

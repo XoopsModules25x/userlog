@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog admin
  * @since           1
@@ -174,7 +174,7 @@ switch ($op) {
         // template
         $template_main = USERLOG_DIRNAME . '_admin_sets.tpl';
         // form
-        $form    = new XoopsThemeForm($set_id ? _EDIT . ' ' . $logsetObj->name() : _AM_USERLOG_SET_ADD, 'setting', 'setting.php?op=addsetting', 'post');
+        $form    = new XoopsThemeForm($set_id ? _EDIT . ' ' . $logsetObj->name() : _AM_USERLOG_SET_ADD, 'setting', 'setting.php?op=addsetting', 'post', true);
         $nameEle = new XoopsFormText(_AM_USERLOG_SET_NAME, 'name', 10, 20, $logsetObj->name());
         $nameEle->setDescription(_AM_USERLOG_SET_NAME_DSC);
 
