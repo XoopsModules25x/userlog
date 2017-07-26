@@ -11,7 +11,7 @@
             <a class="ui-corner-all tooltip" title="<{$smarty.const._RESET}>"
                href="logs.php?op=<{if $query_entry}><{$query_entry}><{/if}>">
                 <img src="<{xoModuleIcons16 on.png}>" alt="<{$smarty.const._RESET}>"
-                     title="<{$smarty.const._RESET}>"/><{$smarty.const._RESET}>
+                     title="<{$smarty.const._RESET}>"><{$smarty.const._RESET}>
             </a>
         </span>
         <{/if}>
@@ -20,7 +20,7 @@
             <img id="<{$formHeadToggle.icon}>"
                  src="<{if $formHeadToggle.icon == 'green'}><{xoModuleIcons16 green.gif}><{else}><{xoModuleIcons16 green_off.gif}><{/if}>"
                  alt="<{$formHeadToggle.alt}>"
-                 title="<{$formHeadToggle.alt}>"/><span id="formheadtext"><{$formHeadToggle.alt}></span>
+                 title="<{$formHeadToggle.alt}>"><span id="formheadtext"><{$formHeadToggle.alt}></span>
         </div>
     </div>
     <div class="floatright left"><{$formNav}></div>
@@ -48,13 +48,12 @@
     <{assign var=widthC value=5}>
     <div class="outer">
         <{if $pages gt 1}>
-            <form name="bulk"
-                  action="logs.php?op=<{if $query_page}>&amp;<{$query_page}><{/if}><{if $query_entry}><{$query_entry}><{/if}>"
-                  method="POST"
+            <form name="bulk" action="logs.php?op=<{if $query_page}>&amp;<{$query_page}><{/if}><{if $query_entry}><{$query_entry}><{/if}>" method="POST"
                   onsubmit="if(window.document.bulk.op.value =='') {return false;} else if (window.document.bulk.op.value =='del') {return deleteSubmitValid();} else {window.document.bulk.limitentry.value = 0};">
-                <input type="hidden" name="confirm" value="1"/>
-                <input type="hidden" name="log_id" value="bulk"/>
-                <input type="hidden" name="limitentry" value="<{$limitentry}>"/>
+                <{securityToken}><{*//mb*}>
+                <input type="hidden" name="confirm" value="1">
+                <input type="hidden" name="log_id" value="bulk">
+                <input type="hidden" name="limitentry" value="<{$limitentry}>">
                 <div class="floatright xo-buttons">
                     <select name="op">
                         <option value=""><{$smarty.const._AM_USERLOG_LOG_SELECT_BULK}></option>
@@ -62,7 +61,7 @@
                         <option value="export-csv"><{$smarty.const._AM_USERLOG_LOG_EXPORT_CSV_ALL}></option>
                     </select>
                     <input class="formButton" type="submit" name="submitbulk" value="<{$smarty.const._SUBMIT}>"
-                           title="<{$smarty.const._SUBMIT}>"/>
+                           title="<{$smarty.const._SUBMIT}>">
                 </div>
             </form>
         <{/if}>
@@ -70,17 +69,17 @@
               action="logs.php?op=<{if $query_page}>&amp;<{$query_page}><{/if}><{if $query_entry}><{$query_entry}><{/if}>"
               method="POST"
               onsubmit="if(window.document.select.op.value =='') {return false;} else if (window.document.select.op.value =='del') {return deleteSubmitValid('log_id[]');} else if (isOneChecked('log_id[]')) {return true;} else {alert('<{$smarty.const._AM_USERLOG_LOG_ERRORSELECT}>'); return false;};">
-            <input type="hidden" name="confirm" value="1"/>
+            <input type="hidden" name="confirm" value="1">
             <div class="floatleft">
                 <a href="#submitDown"><img src="<{xoModuleIcons16 down.png}>" alt="<{$smarty.const._AM_USERLOG_DOWN}>"
-                                           title="<{$smarty.const._AM_USERLOG_DOWN}>"/></a>
+                                           title="<{$smarty.const._AM_USERLOG_DOWN}>"></a>
                 <select name="op">
                     <option value=""><{$smarty.const._AM_USERLOG_LOG_SELECT}></option>
                     <option value="del"><{$smarty.const._AM_USERLOG_LOG_DELETE_SELECT}></option>
                     <option value="export-csv"><{$smarty.const._AM_USERLOG_LOG_EXPORT_CSV_SELECT}></option>
                 </select>
                 <input id="submitUp" class="formButton" type="submit" name="submitselect"
-                       value="<{$smarty.const._SUBMIT}>" title="<{$smarty.const._SUBMIT}>"/>
+                       value="<{$smarty.const._SUBMIT}>" title="<{$smarty.const._SUBMIT}>">
             </div>
             <{$pagenav}>
             <div class="clear"></div>
@@ -90,7 +89,7 @@
                 </div>
                 <div class="width1 floatleft center">
                     <input title="<{$smarty.const._ALL}>" type="checkbox" name="id_check" id="id_check" value="1"
-                           onclick="xoopsCheckAll('select', 'id_check');"/>
+                           onclick="xoopsCheckAll('select', 'id_check');">
                 </div>
                 <{foreach item=title key=header from=$headers}>
                     <div title="<{$title}>"
@@ -98,7 +97,7 @@
                         <a class="ui-corner-all tooltip <{$orderentry}>" title="<{$title}>"
                            href="logs.php?limitentry=<{$limitentry}>&amp;sortentry=<{$header}><{if $query_page}>&amp;<{$query_page}><{/if}><{if $sortentry eq $header}>&amp;orderentry=<{if $orderentry eq 'DESC'}>ASC<{else}>DESC<{/if}><{/if}> "
                            alt="<{$title}>"><{if $sortentry eq $header}><img
-                                src="<{xoModuleIcons16 DESC.png}>"/><{/if}><{$title}></a>
+                                src="<{xoModuleIcons16 DESC.png}>"><{/if}><{$title}></a>
                     </div>
                 <{/foreach}>
                 <div class="clear"></div>
@@ -108,10 +107,10 @@
                     <div class="width1 floatleft center">
                         <input type="image" src="<{xoModuleIcons16 delete.png}>" alt="<{$smarty.const._DELETE}>"
                                title="<{$smarty.const._DELETE}>"
-                               onclick="window.document.select.op.value ='del';window.document.getElementById('log_id[<{$log_id}>]').checked = true; window.document.forms.select.click();"/>
+                               onclick="window.document.select.op.value ='del';window.document.getElementById('log_id[<{$log_id}>]').checked = true; window.document.forms.select.click();">
                     </div>
                     <div class="width1 floatleft center">
-                        <input type="checkbox" name="log_id[]" id="log_id[<{$log_id}>]" value="<{$log_id}>"/>
+                        <input type="checkbox" name="log_id[]" id="log_id[<{$log_id}>]" value="<{$log_id}>">
                     </div>
                     <{foreach item=title key=header from=$headers}>
                         <div title="<{$log.$header}>"
@@ -138,7 +137,7 @@
         <div class="floatleft">
             <a id="submitDown" href="#submitUp"><img src="<{xoModuleIcons16 up.png}>"
                                                      alt="<{$smarty.const._AM_USERLOG_UP}>"
-                                                     title="<{$smarty.const._AM_USERLOG_UP}>"/></a>
+                                                     title="<{$smarty.const._AM_USERLOG_UP}>"></a>
         </div>
         <{$pagenav}>
         <div class="clear"></div>

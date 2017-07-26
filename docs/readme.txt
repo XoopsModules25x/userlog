@@ -136,7 +136,7 @@ b) go to your database and change 'url' and 'referer' fields in table mod_userlo
 
 4- If you have userlog version older than 1.15 and update to the recent version you have this warning:
 [code]
-Warning: Smarty error: unable to read resource: "db:userlog_block_stats_type.html" in file /class/smarty/Smarty.class.php line 1094
+Warning: Smarty error: unable to read resource: "db:userlog_block_stats_type.tpl" in file /class/smarty/Smarty.class.php line 1094
 [/code]
 It is a XOOPS core 2.5.6 bug. find below the bug and its solution:
 https://sourceforge.net/p/xoops/bugs/1269/ block template file will not updated after update the module

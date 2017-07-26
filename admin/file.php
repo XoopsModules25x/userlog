@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -19,19 +20,21 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-include_once __DIR__ . '/admin_header.php';
-include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+use Xmf\Request;
+
+require_once __DIR__ . '/admin_header.php';
+require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
 $Userlog   = Userlog::getInstance(false);
 $loglogObj = UserlogLog::getInstance();
 
-$indexAdmin = new ModuleAdmin();
+$adminObject = \Xmf\Module\Admin::getInstance();
 
 // Where do we start ?
-$opentry    = XoopsRequest::getString('op', '');
-$file       = XoopsRequest::getArray('file', !empty($opentry) ? '' : $Userlog->getConfig('file'));
-$filename   = XoopsRequest::getString('filename', '');
-$confirm    = XoopsRequest::getString('confirm', 0, 'post');
+$opentry    = Request::getString('op', '');
+$file       = Request::getArray('file', !empty($opentry) ? '' : $Userlog->getConfig('file'));
+$filename   = Request::getString('filename', '');
+$confirm    = Request::getString('confirm', 0, 'post');
 $file       = $loglogObj->parseFiles($file);
 $totalFiles = count($file);
 if (!empty($opentry) && ($confirm == 0 || $totalFiles == 0)) {
@@ -113,7 +116,7 @@ $confirmEl                         = new XoopsFormHidden('confirm', 0);
 $confirmEl->customValidationCode[] = "if (confirm('" . _AM_USERLOG_FILE_CONFIRM . " ' + myform.op.options[myform.op.selectedIndex].innerHTML + '\\n " . _AM_USERLOG_FILE . ": ' + myform.file.value)) {myform.confirm.value = 1;} else {return false;};";
 $form->addElement($confirmEl);
 $GLOBALS['xoopsTpl']->assign('form', $form->render());
-$GLOBALS['xoopsTpl']->assign('logo', $indexAdmin->addNavigation(basename(__FILE__)));
+$GLOBALS['xoopsTpl']->assign('logo', $adminObject->displayNavigation(basename(__FILE__)));
 // template
 $template_main = USERLOG_DIRNAME . '_admin_file.tpl';
 if (!empty($template_main)) {

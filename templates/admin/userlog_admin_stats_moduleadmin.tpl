@@ -11,7 +11,7 @@
                                 <{if $modulesadmin.op eq install}><{xoAdminIcons install.png}>
                                 <{elseif $modulesadmin.op eq update}><{xoAdminIcons reload.png}>
                                 <{elseif $modulesadmin.op eq uninstall}><{xoAdminIcons uninstall.png}>
-                                <{/if}>" alt="<{$modulesadmin.op_lang}>" title="<{$modulesadmin.op_lang}>"/>
+                                <{/if}>" alt="<{$modulesadmin.op_lang}>" title="<{$modulesadmin.op_lang}>">
                 <{$modulesadmin.op_lang}>
             </span>
             :&nbsp;

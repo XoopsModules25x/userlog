@@ -29,8 +29,7 @@ define('_MI_USERLOG_STATUS_DSC', 'Active: Module will do its job. Idle: The modu
 define('_MI_USERLOG_ACTIVE', 'Active');
 define('_MI_USERLOG_IDLE', 'Idle');
 define('_MI_USERLOG_POSTLOG', 'Log any POST method?');
-define('_MI_USERLOG_POSTLOG_DSC',
-       'In some weird situations (e.g.: send a pm, custom forms, hacks, ported modules like mediawiki, ...), there is no redirect message after submit. If you want to log any POST method regardless of redirect message set it to yes.');
+define('_MI_USERLOG_POSTLOG_DSC', 'In some weird situations (e.g.: send a pm, custom forms, hacks, ported modules like mediawiki, ...), there is no redirect message after submit. If you want to log any POST method regardless of redirect message set it to yes.');
 // config categories
 define('_MI_USERLOG_CONFCAT_LOGFILE', 'Log file settings');
 define('_MI_USERLOG_CONFCAT_LOGFILE_DSC', 'Log file (Set it if you need to store logs in a file, otherwise ignore it)');
@@ -72,11 +71,9 @@ define('_MI_USERLOG_MAXLOGSPERIOD_DSC', 'Logs older than this period will be del
 define('_MI_USERLOG_PROBSET', 'Probability to check database for a match setting');
 define('_MI_USERLOG_PROBSET_DSC', 'Probability percentage to check database ONLY if it didnt find any setting in cache files for the current visitor/user. 20 means in one of each 5 hits it will check.');
 define('_MI_USERLOG_PROBSTATS', 'Probability to update statistics in database when the visitor is logged.');
-define('_MI_USERLOG_PROBSTATS_DSC',
-       'Probability percentage to update database logs. 10 means in 1 of each 10 visits of a visitor who have a match setting, it will update statistics. 0 means no update so you should manually update by visiting userlog > admin > home.');
+define('_MI_USERLOG_PROBSTATS_DSC', 'Probability percentage to update database logs. 10 means in 1 of each 10 visits of a visitor who have a match setting, it will update statistics. 0 means no update so you should manually update by visiting userlog > admin > home.');
 define('_MI_USERLOG_PROBSTATSALLHIT', 'Probability to update statistics in database in each hit.');
-define('_MI_USERLOG_PROBSTATSALLHIT_DSC',
-       'Probability percentage to update database logs. 1 means in 1 of each 100 hits it will update statistics.0 means no update so you should manually update by visiting userlog > admin > home. Advise: set a low percentage based on your website traffic.');
+define('_MI_USERLOG_PROBSTATSALLHIT_DSC', 'Probability percentage to update database logs. 1 means in 1 of each 100 hits it will update statistics.0 means no update so you should manually update by visiting userlog > admin > home. Advise: set a low percentage based on your website traffic.');
 // blocks
 define('_MI_USERLOG_BLOCK_VIEWS', 'All views in site');
 define('_MI_USERLOG_BLOCK_VIEWS_DSC', 'Show views in the whole site');

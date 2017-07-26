@@ -148,13 +148,12 @@ define('_AM_USERLOG_ITEM_IDGT_FORM', _AM_USERLOG_INTGT_FORM);
 define('_AM_USERLOG_ITEM_IDLT', sprintf(_AM_USERLOG_INTLT, _AM_USERLOG_ITEM_ID));
 define('_AM_USERLOG_ITEM_IDLT_FORM', _AM_USERLOG_INTLT_FORM);
 // END DO NOT TOUCH
-define('_AM_USERLOG_ADMIN_FORM', 'Select Yes to show all logs from Admins');
+define('_AM_USERLOG_ADMIN_FORM', 'SELECT Yes TO SHOW ALL LOGS FROM Admins');
 define('_AM_USERLOG_PAGEADMIN_FORM', 'Select Yes to show all pages in admin side of modules');
 define('_AM_USERLOG_GROUPS_FORM',
        "Enter one group with 'g' prefix (or several groups separated with comma) to show logs for all users belonging to those groups. Enter '!g' prefix to show logs for users not in those groups, e.g.: g1, g2, !g4 means all users belonging to group 1 OR group 2 AND not belong to group 4.");
 // for all other text logs use just one definition
-define('_AM_USERLOG_TEXT_FORM',
-       "Enter one exact '%1\$s' or part of '%2\$s' to show all logs for users have that (with prefix '!' have not that). You can enter several separated with comma, e.g.: TERM1, !TERM2, TERM3 means all logs have TERM1 and TERM3, but have not TERM2.");
+define('_AM_USERLOG_TEXT_FORM', "Enter one exact '%1\$s' or part of '%2\$s' to show all logs for users have that (with prefix '!' have not that). You can enter several separated with comma, e.g.: TERM1, !TERM2, TERM3 means all logs have TERM1 and TERM3, but have not TERM2.");
 // Translators: do not touch below for now
 // START DO NOT TOUCH
 define('_AM_USERLOG_UNAME_FORM', _AM_USERLOG_TEXT_FORM);

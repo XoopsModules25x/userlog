@@ -153,7 +153,7 @@ function update_userlog_v116(XoopsModule $module)
 {
     // remove old html template files
     $template_directory = XOOPS_ROOT_PATH . '/modules/' . $module->getVar('dirname', 'n') . '/templates/';
-    $template_list      = array_diff(scandir($template_directory), array('..', '.'));
+    $template_list      = array_diff(scandir($template_directory, SCANDIR_SORT_NONE), array('..', '.'));
     foreach ($template_list as $k => $v) {
         $fileinfo = new SplFileInfo($template_directory . $v);
         if ($fileinfo->getExtension() === 'html' && $fileinfo->getFilename() !== 'index.html') {

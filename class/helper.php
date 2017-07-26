@@ -18,6 +18,9 @@
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
+
+use Xmf\Request;
+
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 require_once __DIR__ . '/phpbrowscap/Browscap.php';
 // The Browscap class is in the phpbrowscap namespace, so import it
@@ -94,6 +97,7 @@ class Userlog
     public function getModules($dirnames = array(), $otherCriteria = null, $asObj = false)
     {
         // get all dirnames
+        /** @var XoopsModuleHandler $moduleHandler */
         $moduleHandler = xoops_getHandler('module');
         $criteria      = new CriteriaCompo();
         if (count($dirnames) > 0) {
@@ -297,7 +301,7 @@ class Userlog
      */
     public function getCookie($name = 'TOGGLE')
     {
-        $toggles = XoopsRequest::getString($this->cookiePrefix . $name, null, 'cookie');
+        $toggles = Request::getString($this->cookiePrefix . $name, null, 'cookie');
 
         return explode(',', $toggles);
     }

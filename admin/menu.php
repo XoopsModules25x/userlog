@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -19,12 +20,29 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
-include_once dirname(__DIR__) . '/include/common.php'; // after installtion it will included before admin_header.php
-$Userlog    = Userlog::getInstance();
-$pathIcon32 = $Userlog->getModule()->getInfo('icons32');
+use Xmf\Module\Admin;
+use Xmf\Module\Helper;
 
-xoops_loadLanguage('admin', USERLOG_DIRNAME);
+// defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
+//$path = dirname(dirname(dirname(__DIR__)));
+//require_once $path . '/mainfile.php';
+require_once __DIR__ . '/../include/common.php'; // after installation it will be included before admin_header.php
+$Userlog    = Userlog::getInstance();
+//$pathIcon32 = $Userlog->getModule()->getInfo('icons32');
+
+$moduleDirName = basename(dirname(__DIR__));
+
+if (false !== ($moduleHelper = Helper::getHelper($moduleDirName))) {
+} else {
+    $moduleHelper = Helper::getHelper('system');
+}
+$pathIcon32    = Admin::menuIconPath('');
+$pathModIcon32 = $moduleHelper->getModule()->getInfo('modicons32');
+
+xoops_loadLanguage('modinfo', $moduleDirName);
+xoops_loadLanguage('admin', $moduleDirName);
+// xoops_loadLanguage('admin', USERLOG_DIRNAME);
 
 $i = 0;
 

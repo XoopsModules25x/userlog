@@ -66,8 +66,7 @@ class Userlog_Module_Plugin
             }
             foreach ($dirnames as $dirname) {
                 if (self::loadFile($GLOBALS['xoops']->path("modules/{$dirname}/class/plugin/{$pluginName}.php"))
-                    || self::loadFile($GLOBALS['xoops']->path("modules/{$pluginName}/class/plugin/{$dirname}.php"))
-                ) {
+                    || self::loadFile($GLOBALS['xoops']->path("modules/{$pluginName}/class/plugin/{$dirname}.php"))) {
                     $className = ucfirst($dirname) . ucfirst($pluginName) . 'Plugin';
                     $interface = ucfirst($pluginName) . 'PluginInterface';
                     $class     = new $className($dirname);
@@ -93,7 +92,7 @@ class Userlog_Module_Plugin
         self::_securityCheck($file);
         if (self::fileExists($file)) {
             if ($once) {
-                include_once $file;
+                require_once $file;
             } else {
                 include $file;
             }

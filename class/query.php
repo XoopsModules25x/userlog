@@ -21,7 +21,7 @@
 // Important note: use $eleNamePrefix = "options" because it is hard-coded in XOOPS CORE > BLOCKS
 
 defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-include_once dirname(__DIR__) . '/include/common.php';
+require_once __DIR__ . '/../include/common.php';
 
 xoops_loadLanguage('admin', USERLOG_DIRNAME);
 xoops_load('XoopsFormLoader');
@@ -103,26 +103,26 @@ class UserlogQuery
             if (!empty($block[$log_id]['success'])) {
                 $block[$log_id]['msg'] = _AM_USERLOG_SUCCESS . ' ';
                 if (empty($block[$log_id]['level'])) {
-                    $block[$log_id]['msg'] .= _MA_USER_LEVEL_INACTIVE;
+                    $block[$log_id]['msg']   .= _MA_USER_LEVEL_INACTIVE;
                     $block[$log_id]['color'] = 'YELLOW';
                 } else {
-                    $block[$log_id]['msg'] .= _MA_USER_LEVEL_ACTIVE;
+                    $block[$log_id]['msg']   .= _MA_USER_LEVEL_ACTIVE;
                     $block[$log_id]['color'] = 'GREEN';
                 }
                 if (empty($block[$log_id]['last_visit'])) {
                     if ($block[$log_id]['loginOrRegister'] === 'register') {
-                        $block[$log_id]['msg'] .= ' ' . sprintf(_US_HASJUSTREG, $block[$log_id]['uname']);
+                        $block[$log_id]['msg']   .= ' ' . sprintf(_US_HASJUSTREG, $block[$log_id]['uname']);
                         $block[$log_id]['color'] = 'GREEN';
                     } else {
-                        $block[$log_id]['msg'] .= ' ' . sprintf(_US_CONFMAIL, $block[$log_id]['uname']);
+                        $block[$log_id]['msg']   .= ' ' . sprintf(_US_CONFMAIL, $block[$log_id]['uname']);
                         $block[$log_id]['color'] = 'BROWN';
                     }
                 }
             } else {
                 $block[$log_id]['success'] = 0;
                 $block[$log_id]['msg']     = _AM_USERLOG_FAIL . ' ';
-                $block[$log_id]['msg'] .= ($block[$log_id]['loginOrRegister'] === 'register') ? _ERRORS : _US_INCORRECTLOGIN;
-                $block[$log_id]['color'] = 'RED';
+                $block[$log_id]['msg']     .= ($block[$log_id]['loginOrRegister'] === 'register') ? _ERRORS : _US_INCORRECTLOGIN;
+                $block[$log_id]['color']   = 'RED';
             }
             $this->userlog->setConfig('format_date', $this->userlog->getConfig('format_date_history'));
             $block[$log_id]['log_time'] = $loginObj->log_time();
@@ -140,7 +140,7 @@ class UserlogQuery
      */
     public function loginregHistoryForm($args, $eleNamePrefix = 'options')
     {
-        // include_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
+        // require_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
         xoops_load('XoopsFormLoader');
         // $form = new XoopsBlockForm(); //reserve for 2.6
         $form = new XoopsThemeForm(_AM_USERLOG_LOGIN_REG_HISTORY, 'login_reg_history', '');
@@ -220,7 +220,7 @@ class UserlogQuery
      */
     public function stats_typeForm($args, $eleNamePrefix = 'options')
     {
-        // include_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
+        // require_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
         xoops_load('XoopsFormLoader');
         // $form = new XoopsBlockForm(); //reserve for 2.6
         $form = new XoopsThemeForm(_AM_USERLOG_STATS_TYPE, 'stats_type', '');

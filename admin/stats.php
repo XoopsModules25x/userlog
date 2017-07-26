@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -19,23 +20,25 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-include_once __DIR__ . '/admin_header.php';
-include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+use Xmf\Request;
+
+require_once __DIR__ . '/admin_header.php';
+require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
 
 $Userlog  = Userlog::getInstance(false);
 $queryObj = UserlogQuery::getInstance();
 
 // Where do we start ?
-$startentry       = XoopsRequest::getInt('startentry', 0);
-$limitentry       = XoopsRequest::getInt('limitentry', 10);
-$sortentry        = XoopsRequest::getString('sortentry', 'count');
-$orderentry       = XoopsRequest::getString('orderentry', 'DESC');
-$modules          = XoopsRequest::getArray('modules');
-$moduleScriptItem = XoopsRequest::getArray('moduleScriptItem');
-$log_timeGT       = XoopsRequest::getInt('log_timeGT', 1);
-$users            = XoopsRequest::getArray('users', -1);
-$groups           = XoopsRequest::getArray('groups', 0);
+$startentry       = Request::getInt('startentry', 0);
+$limitentry       = Request::getInt('limitentry', 10);
+$sortentry        = Request::getString('sortentry', 'count');
+$orderentry       = Request::getString('orderentry', 'DESC');
+$modules          = Request::getArray('modules');
+$moduleScriptItem = Request::getArray('moduleScriptItem');
+$log_timeGT       = Request::getInt('log_timeGT', 1);
+$users            = Request::getArray('users', -1);
+$groups           = Request::getArray('groups', 0);
 
 // update all time stats
 $statsObj = UserlogStats::getInstance();
@@ -45,9 +48,9 @@ $statsObj->updateAll('file', 100); // prob = 100
 $statsObj->updateAll('referral', $Userlog->getConfig('probstats'));
 $statsObj->updateAll('browser', $Userlog->getConfig('probstats')); // or $statsObj->updateAll("OS", $Userlog->getConfig("probstats"));
 
-$stats      = $statsObj->getAll(array('log', 'logdel', 'set', 'file'));
-$indexAdmin = new ModuleAdmin();
-$indexAdmin->addInfoBox(_AM_USERLOG_STATS_ABSTRACT);
+$stats       = $statsObj->getAll(array('log', 'logdel', 'set', 'file'));
+$adminObject = \Xmf\Module\Admin::getInstance();
+$adminObject->addInfoBox(_AM_USERLOG_STATS_ABSTRACT);
 $periods = array_flip($statsObj->period);
 $types   = $statsObj->type;
 foreach ($stats as $type => $arr) {
@@ -56,9 +59,8 @@ foreach ($stats as $type => $arr) {
     }
     foreach ($arr as $period => $arr2) {
         // use sprintf in moduleadmin: sprintf($text, "<span style='color : " . $color . "; font-weight : bold;'>" . $value . "</span>")
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_STATS_ABSTRACT,
-                                    sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%1\$s", $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'], $arr2['value'],
-                                    $arr2['value'] ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(_AM_USERLOG_STATS_ABSTRACT, sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%1\$s", $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'], $arr2['value'],
+                                     $arr2['value'] ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -66,9 +68,9 @@ $criteria->setGroupBy('module');
 $moduleViews = $Userlog->getHandler('log')->getCounts($criteria);
 $dirNames    = $Userlog->getModules();
 if (!empty($moduleViews)) {
-    $indexAdmin->addInfoBox(_AM_USERLOG_VIEW_MODULE);
+    $adminObject->addInfoBox(_AM_USERLOG_VIEW_MODULE);
     foreach ($moduleViews as $mDir => $views) {
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_MODULE, $dirNames[$mDir] . ': %s', $views, $views ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(_AM_USERLOG_VIEW_MODULE, $dirNames[$mDir] . ': %s', $views, $views ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -76,10 +78,9 @@ $criteria->setGroupBy('uid');
 $criteria->setLimit(10);
 $userViews = $Userlog->getHandler('log')->getCounts($criteria);
 if (!empty($userViews)) {
-    $indexAdmin->addInfoBox(_AM_USERLOG_VIEW_USER);
+    $adminObject->addInfoBox(_AM_USERLOG_VIEW_USER);
     foreach ($userViews as $uid => $views) {
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_USER, ($uid ? "<a href=\"" . XOOPS_URL . '/userinfo.php?uid=' . $uid . "\">" . XoopsUserUtility::getUnameFromId($uid) . '</a>' : XoopsUserUtility::getUnameFromId(0)) . ': %s', $views,
-                                    $views ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(_AM_USERLOG_VIEW_USER, ($uid ? "<a href=\"" . XOOPS_URL . '/userinfo.php?uid=' . $uid . "\">" . XoopsUserUtility::getUnameFromId($uid) . '</a>' : XoopsUserUtility::getUnameFromId(0)) . ': %s', $views, $views ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -88,7 +89,7 @@ $criteria->setGroupBy('groups');
 $criteria->setLimit(10);
 $groupViews = $Userlog->getHandler('log')->getCounts($criteria);
 if (!empty($groupViews)) {
-    $indexAdmin->addInfoBox(_AM_USERLOG_VIEW_GROUP);
+    $adminObject->addInfoBox(_AM_USERLOG_VIEW_GROUP);
     foreach ($groupViews as $gids => $views) {
         $groupArr = explode('g', substr($gids, 1)); // remove the first "g" from string
         $groupArr = array_unique($groupArr);
@@ -102,7 +103,7 @@ if (!empty($groupViews)) {
     }
     $groupNames = $Userlog->getGroupList();
     foreach ($gidViews as $gid => $views) {
-        $indexAdmin->addInfoBoxLine(_AM_USERLOG_VIEW_GROUP, $groupNames[$gid] . ': %s', $views, $views ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(_AM_USERLOG_VIEW_GROUP, $groupNames[$gid] . ': %s', $views, $views ? 'GREEN' : 'RED');
     }
 }
 // START add stats_type
@@ -239,8 +240,8 @@ $form->addElement($sortEl);
 $form->addElement($orderEl);
 $form->addElement($submitEl);
 $GLOBALS['xoopsTpl']->assign('form', $form->render());
-$GLOBALS['xoopsTpl']->assign('stats_abstract', $indexAdmin->renderInfoBox());
-$GLOBALS['xoopsTpl']->assign('logo', $indexAdmin->addNavigation(basename(__FILE__)));
+$GLOBALS['xoopsTpl']->assign('stats_abstract', $adminObject->renderInfoBox());
+$GLOBALS['xoopsTpl']->assign('logo', $adminObject->displayNavigation(basename(__FILE__)));
 // template
 $template_main = USERLOG_DIRNAME . '_admin_stats.tpl';
 if (!empty($template_main)) {

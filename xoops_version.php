@@ -24,6 +24,9 @@ $moduleDirName = basename(__DIR__);
 
 // ------------------- Informations ------------------- //
 $modversion = array(
+    'version'             => 1.17,
+    'module_status'       => 'ALPHA 2',
+    'release_date'        => '2017/07/20', //yyyy/mm/dd
     'name'                => _MI_USERLOG_NAME,
     'description'         => _MI_USERLOG_DSC,
     'official'            => 0, //1 indicates supported by XOOPS Dev Team, 0 means 3rd party supported
@@ -43,25 +46,18 @@ $modversion = array(
     'manual'              => 'link to manual file',
     'manual_file'         => XOOPS_URL . '/modules/{$moduleDirName}/docs/install.txt',
     'min_php'             => '5.5',
-    'min_xoops'           => '2.5.8',
+    'min_xoops'           => '2.5.9',
     'min_admin'           => '1.2',
-    'min_db'              => array('mysql' => '5.0.7', 'mysqli' => '5.0.7'),
+    'min_db'              => array('mysql' => '5.5'),
     // images
     'image'               => 'assets/images/logoModule.png',
     'iconsmall'           => 'assets/images/iconsmall.png',
     'iconbig'             => 'assets/images/iconbig.png',
     'dirname'             => "{$moduleDirName}",
-    //Frameworks
-    'dirmoduleadmin'      => 'Frameworks/moduleclasses/moduleadmin',
-    'sysicons16'          => 'Frameworks/moduleclasses/icons/16',
-    'sysicons32'          => 'Frameworks/moduleclasses/icons/32',
     // Local path icons
     'modicons16'          => 'assets/images/icons/16',
     'modicons32'          => 'assets/images/icons/32',
     //About
-    'version'             => 1.17,
-    'module_status'       => 'ALPHA 2',
-    'release_date'        => '2016/08/28', //yyyy/mm/dd
     //    'release'             => '2015-04-04',
     'demo_site_url'       => 'https://xoops.org',
     'demo_site_name'      => 'XOOPS Demo Site',
@@ -454,13 +450,11 @@ if (isset($xoopsOption['pagetype']) && $xoopsOption['pagetype'] === 'admin' && i
             if (count($perm['super']['uid']) > 0 || count($perm['super']['group']) > 0) {
                 global $xoopsUser;
                 if (is_object($xoopsUser) && !in_array($xoopsUser->getVar('uid'), $perm['super']['uid'])
-                    && count(array_intersect($xoopsUser->getGroups(), $perm['super']['group'])) == 0
-                ) {
+                    && count(array_intersect($xoopsUser->getGroups(), $perm['super']['group'])) == 0) {
                     $modversion['hasAdmin']    = 0;
                     $modversion['system_menu'] = 0;
                     $modversion['tables']      = null;
-                    redirect_header(XOOPS_URL . '/modules/system/help.php?mid=' . (!empty($mod) ? $mod : $xoopsModule->getVar('mid', 's')) . '&amp;page=help', 1,
-                                    sprintf(_MI_USERLOG_WEBMASTER_NOPERM, implode(',', $perm['super']['uid']), implode(',', $perm['super']['group'])));
+                    redirect_header(XOOPS_URL . '/modules/system/help.php?mid=' . (!empty($mod) ? $mod : $xoopsModule->getVar('mid', 's')) . '&amp;page=help', 1, sprintf(_MI_USERLOG_WEBMASTER_NOPERM, implode(',', $perm['super']['uid']), implode(',', $perm['super']['group'])));
                 }
             }
         }

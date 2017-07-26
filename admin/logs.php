@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -19,22 +20,24 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-include_once __DIR__ . '/admin_header.php';
-include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+use Xmf\Request;
+
+require_once __DIR__ . '/admin_header.php';
+require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
 
 $Userlog = Userlog::getInstance(false);
 // Where do we start ?
-$startentry = XoopsRequest::getInt('startentry', 0);
-$limitentry = XoopsRequest::getInt('limitentry', $Userlog->getConfig('logs_perpage'));
-$sortentry  = XoopsRequest::getString('sortentry', 'log_id');
-$orderentry = XoopsRequest::getString('orderentry', 'DESC');
+$startentry = Request::getInt('startentry', 0);
+$limitentry = Request::getInt('limitentry', $Userlog->getConfig('logs_perpage'));
+$sortentry  = Request::getString('sortentry', 'log_id');
+$orderentry = Request::getString('orderentry', 'DESC');
 
-$options   = XoopsRequest::getArray('options');
-$engine    = XoopsRequest::getString('engine', $Userlog->getConfig('engine'));
-$file      = XoopsRequest::getArray('file', $Userlog->getConfig('file'));
-$opentry   = XoopsRequest::getString('op', '', 'post');
-$log_id    = XoopsRequest::getArray('log_id', 0, 'post');
+$options   = Request::getArray('options');
+$engine    = Request::getString('engine', $Userlog->getConfig('engine'));
+$file      = Request::getArray('file', $Userlog->getConfig('file'));
+$opentry   = Request::getString('op', '', 'post');
+$log_id    = Request::getArray('log_id', 0, 'post');
 $logsetObj = UserlogSetting::getInstance();
 // START build Criteria for database
 // get var types int, text, bool , ...
@@ -103,7 +106,7 @@ if ($engine === 'file') {
 }
 
 // START delete/purge
-$confirm = XoopsRequest::getString('confirm', 0, 'post');
+$confirm = Request::getString('confirm', 0, 'post');
 if ($opentry === 'del' && !empty($confirm)) {
     if ($engine === 'db') {
         // delete logs in database
@@ -180,12 +183,11 @@ if (substr($opentry, 0, 6) === 'export') {
     switch ($export) {
         case 'csv':
             if ($csvFile = $loglogObj->exportLogsToCsv($logs, $headers, 'engine_' . $engine . '_total_' . $totalLogsExport, ';')) {
-                redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 7,
-                                sprintf(_AM_USERLOG_LOG_EXPORT_SUCCESS, $totalLogsExport, $csvFile));
+                redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 7, sprintf(_AM_USERLOG_LOG_EXPORT_SUCCESS, $totalLogsExport, $csvFile));
             }
             redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 1, _AM_USERLOG_LOG_EXPORT_ERROR);
             break;
-        default :
+        default:
             break;
     }
 }
@@ -226,7 +228,7 @@ $GLOBALS['xoopsTpl']->assign('form', $form->render());
 // END main form
 // START form navigation
 // formNav in the upper section
-include_once USERLOG_ROOT_PATH . '/class/form/simpleform.php';
+require_once USERLOG_ROOT_PATH . '/class/form/simpleform.php';
 $formNav = new UserlogSimpleForm('', 'logsnav', 'logs.php', 'get');
 foreach ($elements as $key => $ele) {
     $ele->setClass('hidden');
@@ -282,8 +284,8 @@ $formHead->setExtra("onsubmit=\"preventSubmitEmptyInput('options[');\"");
 $GLOBALS['xoopsTpl']->assign('formHead', $formHead->render());
 // END form head
 
-$indexAdmin = new ModuleAdmin(); // add this just to include the css file to template
-$GLOBALS['xoopsTpl']->assign('logo', $indexAdmin->addNavigation(basename(__FILE__)));
+$adminObject = \Xmf\Module\Admin::getInstance(); // add this just to include the css file to template
+$GLOBALS['xoopsTpl']->assign('logo', $adminObject->displayNavigation(basename(__FILE__)));
 
 //headers skip then to template
 foreach ($skips as $option) {

@@ -20,7 +20,7 @@
  */
 
 defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-include_once dirname(__DIR__) . '/include/common.php';
+require_once __DIR__ . '/../include/common.php';
 
 if (defined('USERLOG_BLOCK_VIEWS_DEFINED')) {
     return;
@@ -76,11 +76,12 @@ function userlog_views_show($options)
  */
 function userlog_views_edit($options)
 {
-    // include_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
+    // require_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
     xoops_load('XoopsFormLoader');
     // $form = new XoopsBlockForm(); //reserve for 2.6
     $form = new XoopsThemeForm(_AM_USERLOG_VIEW, 'views', '');
 
+    /** @var XoopsModuleHandler $moduleHandler */
     $moduleHandler = xoops_getHandler('module');
     $criteria      = new CriteriaCompo();
     $criteria->add(new Criteria('hasnotification', 1));
@@ -109,7 +110,7 @@ function userlog_views_edit($options)
     if (!empty($hasviews)) {
         $viewsEle->addOptionArray($hasviews);
         $viewsEle->setExtra("onchange = \"validate('options[{$i}][]','checkbox', true)\""); // prevent user select no option
-        $check_all = _ALL . ": <input type=\"checkbox\" name=\"item_check\" id=\"item_check\" value=\"1\" onclick=\"xoopsCheckGroup('blockform', 'item_check','options[{$i}][]');\" />"; // blockform is the main form
+        $check_all = _ALL . ": <input type=\"checkbox\" name=\"item_check\" id=\"item_check\" value=\"1\" onclick=\"xoopsCheckGroup('blockform', 'item_check','options[{$i}][]');\">"; // blockform is the main form
         $viewsEle  = new XoopsFormLabel(_AM_USERLOG_ITEMS, $check_all . "<br\>" . $viewsEle->render());
     } else {
         // prevent to select

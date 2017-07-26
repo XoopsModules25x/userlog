@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -19,8 +20,10 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
+use Xmf\Request;
+
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
-include_once dirname(__DIR__) . '/include/common.php';
+require_once __DIR__ . '/../include/common.php';
 
 /**
  * Class UserlogLog
@@ -298,7 +301,7 @@ class UserlogLog extends XoopsObject
             if (!empty($logvalue)) {
                 // value array to string. use json_encode
                 if (is_array($logvalue) && count($logvalue) > 0) {
-                    $logvalue = json_encode($logvalue, (phpversion() > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
+                    $logvalue = json_encode($logvalue, (PHP_VERSION > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
                 }
                 switch ($option) {
                     // update referral in stats table
@@ -411,7 +414,7 @@ class UserlogLog extends XoopsObject
         } else {
             $data = "\n";
         }
-        $data .= json_encode($tolog, (phpversion() > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
+        $data .= json_encode($tolog, (PHP_VERSION > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
         if ($fileHandler->open('a') === false) {
             $this->setErrors("Cannot open file ({$log_file})");
 
@@ -549,7 +552,7 @@ class UserlogLog extends XoopsObject
             if (!empty($val_arr[0]) && (int)$val_arr[0] == 0) {
                 foreach ($logs as $id => $log) {
                     if (is_array($log[$op])) {
-                        $log[$op] = json_encode($log[$op], (phpversion() > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
+                        $log[$op] = json_encode($log[$op], (PHP_VERSION > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
                     }
                     foreach ($val_arr as $qry) {
                         // if !QUERY eg: !logs.php,views.php
@@ -995,8 +998,8 @@ class UserlogLog extends XoopsObject
     public function setItem()
     {
         // In very rare occasions like newbb the item_id is not in the URL $_REQUEST
-        include_once __DIR__ . '/plugin/plugin.php';
-        include_once __DIR__ . '/plugin/Abstract.php';
+        require_once __DIR__ . '/plugin/plugin.php';
+        require_once __DIR__ . '/plugin/Abstract.php';
         if ($plugin = Userlog_Module_Plugin::getPlugin($this->userlog->getLogModule()->getVar('dirname'), USERLOG_DIRNAME, true)) {
             /*
             // get all module scripts can accept an item_name to check if this script is exist
@@ -1026,8 +1029,7 @@ class UserlogLog extends XoopsObject
                 // if $item_id != 0 ---> return true
                 if (!empty($category['item_name'])
                     && in_array($this->script(), is_array($category['subscribe_from']) ? $category['subscribe_from'] : array($category['subscribe_from']))
-                    && $item_id = XoopsRequest::getInt($category['item_name'], 0)
-                ) {
+                    && $item_id = Request::getInt($category['item_name'], 0)) {
                     $this->setVar('item_name', $category['item_name']);
                     $this->setVar('item_id', $item_id);
 

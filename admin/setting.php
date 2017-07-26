@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -19,39 +20,41 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-include_once __DIR__ . '/admin_header.php';
-include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+use Xmf\Request;
+
+require_once __DIR__ . '/admin_header.php';
+require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 
 xoops_cp_header();
 
 $Userlog = Userlog::getInstance(false);
-$op      = XoopsRequest::getString('op');
+$op      = Request::getString('op');
 // Where do we start ?
-$set_id    = XoopsRequest::getInt('set_id', 0);
+$set_id    = Request::getInt('set_id', 0);
 $logsetObj = $set_id ? $Userlog->getHandler('setting')->get($set_id) : UserlogSetting::getInstance();
 if ($set_id && !is_object($logsetObj)) {
     redirect_header('setting.php', 1, _AM_USERLOG_SET_ERROR);
 }
-$name  = XoopsRequest::getString('name', '', 'post');
-$logby = XoopsRequest::getString('logby', '', 'post');
+$name  = Request::getString('name', '', 'post');
+$logby = Request::getString('logby', '', 'post');
 if ($logby === 'ip') {
-    $unique_id = XoopsRequest::getString('unique_id', -1, 'post');
+    $unique_id = Request::getString('unique_id', -1, 'post');
     $unique_id = ip2long($unique_id);
 } else {
-    $unique_id = XoopsRequest::getInt('unique_id', -1, 'post');
+    $unique_id = Request::getInt('unique_id', -1, 'post');
 }
-$option = XoopsRequest::getArray('option', '', 'post');
+$option = Request::getArray('option', '', 'post');
 
-$scope = XoopsRequest::getArray('scope', '', 'post');
+$scope = Request::getArray('scope', '', 'post');
 
-$startentry = XoopsRequest::getInt('startentry', 0);
+$startentry = Request::getInt('startentry', 0);
 
 switch ($op) {
     case 'del':
         if (empty($set_id)) {
             redirect_header('setting.php', 1, _AM_USERLOG_SET_ERROR);
         }
-        $confirm = XoopsRequest::getString('confirm', 0, 'post');
+        $confirm = Request::getString('confirm', 0, 'post');
         if ($confirm) {
             if ($logsetObj->deleteFile($logsetObj->logby(), $logsetObj->getVar('unique_id'))) { //use getVar to get IP long
                 $msgDel = _AM_USERLOG_SET_CLEANCACHE_SUCCESS;
@@ -164,12 +167,12 @@ switch ($op) {
             $sets[$id]['scope'] = $dir_str;
         }
         // buttons
-        $indexAdmin = new ModuleAdmin();
+        $adminObject = \Xmf\Module\Admin::getInstance();
         if ($totalSets > 0) {
-            $indexAdmin->addItemButton(_AM_USERLOG_SET_CLEANCACHE_ALL, 'setting.php?op=cleanCash', 'delete');
+            $adminObject->addItemButton(_AM_USERLOG_SET_CLEANCACHE_ALL, 'setting.php?op=cleanCash', 'delete');
         }
         if ($set_id) { // if in edit mode add a button
-            $indexAdmin->addItemButton(_AM_USERLOG_SET_ADD, 'setting.php');
+            $adminObject->addItemButton(_AM_USERLOG_SET_ADD, 'setting.php');
         }
         // template
         $template_main = USERLOG_DIRNAME . '_admin_sets.tpl';
@@ -194,7 +197,7 @@ switch ($op) {
         $optionEle->addOptionArray($headers);
         //$optionEle->isRequired();
         //$optionEle->renderValidationJS();
-        $check_all = _ALL . ": <input type=\"checkbox\" name=\"option_check\" id=\"option_check\" value=\"0\" onclick=\"xoopsCheckGroup('setting', 'option_check','option[]');\" />";
+        $check_all = _ALL . ": <input type=\"checkbox\" name=\"option_check\" id=\"option_check\" value=\"0\" onclick=\"xoopsCheckGroup('setting', 'option_check','option[]');\">";
         //$optiontrayEle = new XoopsFormElementTray(_AM_USERLOG_SET_OPTIONS, "<br\>", 'tray');
         $optionEle = new XoopsFormLabel(_AM_USERLOG_SET_OPTIONS, $check_all . "<br\>" . $optionEle->render());
         $optionEle->setDescription(_AM_USERLOG_SET_OPTIONS_DSC);
@@ -203,7 +206,7 @@ switch ($op) {
         $scopeEle          = new XoopsFormCheckBox(_AM_USERLOG_SET_SCOPE, 'scope[]', $scope_arr);
         $scopeEle->columns = 4;
         $scopeEle->addOptionArray($dirNames);
-        $check_all = _ALL . ": <input type=\"checkbox\" name=\"scope_check\" id=\"scope_check\" value=\"1\" onclick=\"xoopsCheckGroup('setting', 'scope_check','scope[]');\" />";
+        $check_all = _ALL . ": <input type=\"checkbox\" name=\"scope_check\" id=\"scope_check\" value=\"1\" onclick=\"xoopsCheckGroup('setting', 'scope_check','scope[]');\">";
         $scopeEle  = new XoopsFormLabel(_AM_USERLOG_SET_SCOPE, $check_all . "<br\>" . $scopeEle->render());
         $scopeEle->setDescription(_AM_USERLOG_SET_SCOPE_DSC);
 
@@ -231,8 +234,8 @@ if (!empty($pagenav)) {
     $GLOBALS['xoopsTpl']->assign('pagenav', $pagenav->renderNav());
 }
 if (!empty($indexAdmin)) {
-    $GLOBALS['xoopsTpl']->assign('addset', $indexAdmin->renderButton('left'));
-    $GLOBALS['xoopsTpl']->assign('logo', $indexAdmin->addNavigation(basename(__FILE__)));
+    $GLOBALS['xoopsTpl']->assign('addset', $adminObject->displayButton('left'));
+    $GLOBALS['xoopsTpl']->assign('logo', $adminObject->displayNavigation(basename(__FILE__)));
 }
 if (!empty($template_main)) {
     $GLOBALS['xoopsTpl']->display("db:{$template_main}");
