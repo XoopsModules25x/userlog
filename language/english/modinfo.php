@@ -79,3 +79,17 @@ define('_MI_USERLOG_BLOCK_VIEWS', 'All views in site');
 define('_MI_USERLOG_BLOCK_VIEWS_DSC', 'Show views in the whole site');
 // webmaster permission
 define('_MI_USERLOG_WEBMASTER_NOPERM', "You are one of the webmasters but don't have permission to access this area. Please contact webmasters with %1\$s UID or webmasters belong to %2\$s admin groups for more information.");
+
+//1.17
+//Help
+define('_MI_USERLOG_DIRNAME', basename(dirname(dirname(__DIR__))));
+define('_MI_USERLOG_HELP_HEADER', __DIR__.'/help/helpheader.tpl');
+define('_MI_USERLOG_BACK_2_ADMIN', 'Back to Administration of ');
+define('_MI_USERLOG_OVERVIEW', 'Overview');
+
+//define('_MI_USERLOG_HELP_DIR', __DIR__);
+
+//help multi-page
+define('_MI_USERLOG_DISCLAIMER', 'Disclaimer');
+define('_MI_USERLOG_LICENSE', 'License');
+define('_MI_USERLOG_SUPPORT', 'Support');

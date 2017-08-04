@@ -89,6 +89,15 @@ $modversion = array(
     'onUpdate'            => 'include/onupdate.php'
 
 );
+
+// ------------------- Help files ------------------- //
+$modversion['helpsection'] = array(
+    ['name' => _MI_USERLOG_OVERVIEW, 'link' => 'page=help'],
+    ['name' => _MI_USERLOG_DISCLAIMER, 'link' => 'page=disclaimer'],
+    ['name' => _MI_USERLOG_LICENSE, 'link' => 'page=license'],
+    ['name' => _MI_USERLOG_SUPPORT, 'link' => 'page=support'],
+);
+
 // ------------------- Templates ------------------- //
 
 xoops_loadLanguage('admin', $modversion['dirname']);
