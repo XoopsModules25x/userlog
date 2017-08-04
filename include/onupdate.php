@@ -23,7 +23,7 @@ require_once __DIR__ . '/common.php';
 
 /**
  * @param XoopsModule $module
- * @param null $prev_version
+ * @param null        $prev_version
  *
  * @return bool|mixed
  */

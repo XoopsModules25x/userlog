@@ -34,7 +34,7 @@ function xoops_module_uninstall_userlog(XoopsModule $module)
 
 /**
  * @param XoopsModule $module
- * @param null $prev_version
+ * @param null        $prev_version
  *
  * @return bool|mixed
  */

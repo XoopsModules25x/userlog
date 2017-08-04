@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -23,6 +24,7 @@ use Xmf\Request;
 
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 require_once __DIR__ . '/phpbrowscap/Browscap.php';
+
 // The Browscap class is in the phpbrowscap namespace, so import it
 use phpbrowscap\Browscap;
 
@@ -217,7 +219,7 @@ class Userlog
         foreach ($logPaths as $path) {
             $folderHandler                           = XoopsFile::getHandler('folder', $path . '/' . USERLOG_DIRNAME);
             $allFiles[$path . '/' . USERLOG_DIRNAME] = $folderHandler->find('.*' . $this->logext);
-            $totalFiles += count($allFiles[$path . '/' . USERLOG_DIRNAME]);
+            $totalFiles                              += count($allFiles[$path . '/' . USERLOG_DIRNAME]);
         }
         if (empty($totalFiles)) {
             return array(array(), 0);
