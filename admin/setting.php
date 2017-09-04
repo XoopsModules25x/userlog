@@ -81,7 +81,7 @@ switch ($op) {
             if ($logsetObj) {
                 $logsetObj = $logsetObj[0];
                 $message   = _AM_USERLOG_SET_UPDATE;
-            } elseif ($logby != '') {
+            } elseif ($logby !== '') {
                 $logsetObj = $Userlog->getHandler('setting')->create();
                 $message   = _AM_USERLOG_SET_CREATE;
             } else {
@@ -121,7 +121,6 @@ switch ($op) {
         break;
     case 'cancel':
         redirect_header('setting.php', 1, _AM_USERLOG_SET_CANCEL);
-
         // no break
     case 'cleanCash':
         // delete all settings caches

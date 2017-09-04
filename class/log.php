@@ -1051,7 +1051,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
     public $userlog = null;
 
     /**
-     * @param null|object|XoopsDatabase $db
+     * @param null|XoopsDatabase $db
      */
     public function __construct(XoopsDatabase $db)
     {

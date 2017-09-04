@@ -111,14 +111,14 @@ class UserlogRequest
         }
         if (isset($input[$name]) && $input[$name] !== null) {
             // Get the variable from the input hash and clean it
-            $var = UserlogRequest::_cleanVar($input[$name], $mask, $type);
+            $var = self::_cleanVar($input[$name], $mask, $type);
             // Handle magic quotes compatability
             if (get_magic_quotes_gpc() && ($var != $default) && ($hash !== 'FILES')) {
-                $var = UserlogRequest::_stripSlashesRecursive($var);
+                $var = self::_stripSlashesRecursive($var);
             }
         } elseif ($default !== null) {
             // Clean the default value
-            $var = UserlogRequest::_cleanVar($default, $mask, $type);
+            $var = self::_cleanVar($default, $mask, $type);
         } else {
             $var = $default;
         }
@@ -142,7 +142,7 @@ class UserlogRequest
      */
     public static function getInt($name, $default = 0, $hash = 'default')
     {
-        return UserlogRequest::getVar($name, $default, $hash, 'int');
+        return self::getVar($name, $default, $hash, 'int');
     }
 
     /**
@@ -161,7 +161,7 @@ class UserlogRequest
      */
     public static function getFloat($name, $default = 0.0, $hash = 'default')
     {
-        return UserlogRequest::getVar($name, $default, $hash, 'float');
+        return self::getVar($name, $default, $hash, 'float');
     }
 
     /**
@@ -180,7 +180,7 @@ class UserlogRequest
      */
     public static function getBool($name, $default = false, $hash = 'default')
     {
-        return UserlogRequest::getVar($name, $default, $hash, 'bool');
+        return self::getVar($name, $default, $hash, 'bool');
     }
 
     /**
@@ -199,7 +199,7 @@ class UserlogRequest
      */
     public static function getWord($name, $default = '', $hash = 'default')
     {
-        return UserlogRequest::getVar($name, $default, $hash, 'word');
+        return self::getVar($name, $default, $hash, 'word');
     }
 
     /**
@@ -218,7 +218,7 @@ class UserlogRequest
      */
     public static function getCmd($name, $default = '', $hash = 'default')
     {
-        return UserlogRequest::getVar($name, $default, $hash, 'cmd');
+        return self::getVar($name, $default, $hash, 'cmd');
     }
 
     /**
@@ -239,7 +239,7 @@ class UserlogRequest
     public static function getString($name, $default = '', $hash = 'default', $mask = 0)
     {
         // Cast to string, in case JREQUEST_ALLOWRAW was specified for mask
-        return (string)UserlogRequest::getVar($name, $default, $hash, 'string', $mask);
+        return (string)self::getVar($name, $default, $hash, 'string', $mask);
     }
 
     /**
@@ -251,7 +251,7 @@ class UserlogRequest
      */
     public static function getArray($name, $default = array(), $hash = 'default')
     {
-        return UserlogRequest::getVar($name, $default, $hash, 'array');
+        return self::getVar($name, $default, $hash, 'array');
     }
 
     /**
@@ -263,7 +263,7 @@ class UserlogRequest
      */
     public static function getText($name, $default = '', $hash = 'default')
     {
-        return (string)UserlogRequest::getVar($name, $default, $hash, 'string', Userlog_REQUEST_ALLOWRAW);
+        return (string)self::getVar($name, $default, $hash, 'string', Userlog_REQUEST_ALLOWRAW);
     }
 
     /**
@@ -368,10 +368,10 @@ class UserlogRequest
                 $input = $_REQUEST;
                 break;
         }
-        $result = UserlogRequest::_cleanVar($input, $mask);
+        $result = self::_cleanVar($input, $mask);
         // Handle magic quotes compatability
         if (get_magic_quotes_gpc() && ($hash !== 'FILES')) {
-            $result = UserlogRequest::_stripSlashesRecursive($result);
+            $result = self::_stripSlashesRecursive($result);
         }
 
         return $result;
@@ -387,7 +387,7 @@ class UserlogRequest
     public static function set($array, $hash = 'default', $overwrite = true)
     {
         foreach ($array as $key => $value) {
-            UserlogRequest::setVar($key, $value, $hash, $overwrite);
+            self::setVar($key, $value, $hash, $overwrite);
         }
     }
 
@@ -399,14 +399,14 @@ class UserlogRequest
      */
     public static function clean()
     {
-        UserlogRequest::_cleanArray($_FILES);
-        UserlogRequest::_cleanArray($_ENV);
-        UserlogRequest::_cleanArray($_GET);
-        UserlogRequest::_cleanArray($_POST);
-        UserlogRequest::_cleanArray($_COOKIE);
-        UserlogRequest::_cleanArray($_SERVER);
+        self::_cleanArray($_FILES);
+        self::_cleanArray($_ENV);
+        self::_cleanArray($_GET);
+        self::_cleanArray($_POST);
+        self::_cleanArray($_COOKIE);
+        self::_cleanArray($_SERVER);
         if (isset($_SESSION)) {
-            UserlogRequest::_cleanArray($_SESSION);
+            self::_cleanArray($_SESSION);
         }
         $REQUEST = $_REQUEST;
         $GET     = $_GET;
@@ -512,7 +512,7 @@ class UserlogRequest
      *
      * @return array|string The input array with stripshlashes applied to it
      */
-    protected function _stripSlashesRecursive($value)
+    protected static function _stripSlashesRecursive($value)
     {
         $value = is_array($value) ? array_map(array('UserlogRequest', '_stripSlashesRecursive'), $value) : stripslashes($value);
 
@@ -608,7 +608,7 @@ class UserlogFilterInput
      * @param int   $attrMethod WhiteList method = 0, BlackList method = 1
      * @param int   $xssAuto    Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
      *
-     * @return object The UserlogFilterInput object.
+     * @return UserlogFilterInput The UserlogFilterInput object.
      * @since   1.5
      */
     public static function getInstance(
@@ -624,7 +624,7 @@ class UserlogFilterInput
             $instances = array();
         }
         if (empty($instances[$sig])) {
-            $instances[$sig] = new UserlogFilterInput($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);
+            $instances[$sig] = new self($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);
         }
 
         return $instances[$sig];
@@ -680,7 +680,7 @@ class UserlogFilterInput
                 if (isset($this) && is_a($this, 'UserlogFilterInput')) {
                     $filter =& $this;
                 } else {
-                    $filter = UserlogFilterInput::getInstance();
+                    $filter = self::getInstance();
                 }
                 $result = (string)$filter->_remove($filter->_decode((string)$source));
                 break;
@@ -700,7 +700,7 @@ class UserlogFilterInput
                 if (is_object($this) && get_class($this) === 'UserlogFilterInput') {
                     $filter =& $this;
                 } else {
-                    $filter = UserlogFilterInput::getInstance();
+                    $filter = self::getInstance();
                 }
                 // Are we dealing with an array?
                 if (is_array($source)) {
@@ -963,7 +963,7 @@ class UserlogFilterInput
                 $attrSubSet[1] = stripslashes($attrSubSet[1]);
             }
             // Autostrip script tags
-            if (UserlogFilterInput::checkAttribute($attrSubSet)) {
+            if (self::checkAttribute($attrSubSet)) {
                 continue;
             }
             // Is our attribute in the user input array?

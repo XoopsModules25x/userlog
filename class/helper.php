@@ -86,7 +86,7 @@ class Userlog extends \Xmf\Module\Helper
     /**
      * @return null
      */
-    public function &getLogModule()
+    public function getLogModule()
     {
         if ($this->logmodule === null) {
             $this->initLogModule();
@@ -132,7 +132,7 @@ class Userlog extends \Xmf\Module\Helper
     /**
      * @return null
      */
-    public function &getUser()
+    public function getUser()
     {
         if ($this->user === null) {
             $this->initUser();
@@ -144,7 +144,7 @@ class Userlog extends \Xmf\Module\Helper
     /**
      * @return null
      */
-    public function &getGroupList()
+    public function getGroupList()
     {
         if ($this->groupList === null) {
             $this->initGroupList();

@@ -48,7 +48,7 @@ class NewbbUserlogPlugin extends Userlog_Module_Plugin_Abstract implements Userl
      * @return array $script_arr["item_name"] name of the item = array("subscribe_from1", "subscribe_from2") Name of the script
      *
      * !empty($subscribe_from):
-     * @return array $item["item_name"] name of the item, $item["item_id"] id of the item
+     * @return false|array $item["item_name"] name of the item, $item["item_id"] id of the item
      */
     public function item($subscribe_from)
     {
