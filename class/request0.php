@@ -816,7 +816,7 @@ class UserlogFilterInput
             $attrSet      = array();
             $currentSpace = strpos($tagLeft, ' ');
             // Are we an open tag or a close tag?
-            if (substr($currentTag, 0, 1) === '/') {
+            if (0 === strpos($currentTag, '/')) {
                 // Close Tag
                 $isCloseTag = true;
                 list($tagName) = explode(' ', $currentTag);
@@ -831,7 +831,7 @@ class UserlogFilterInput
              * OR no tagname
              * OR remove if xssauto is on and tag is blacklisted
              */
-            if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName)) || (!$tagName)
+            if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName)) || (!$tagName)
                 || (in_array(strtolower($tagName), $this->tagBlacklist) && $this->xssAuto)) {
                 $postTag       = substr($postTag, $tagLength + 2);
                 $tagOpen_start = strpos($postTag, '<');
@@ -943,7 +943,7 @@ class UserlogFilterInput
             if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
                 || ($this->xssAuto
                     && (in_array(strtolower($attrSubSet[0]), $this->attrBlacklist)
-                        || (substr($attrSubSet[0], 0, 2) === 'on')))) {
+                        || (0 === strpos($attrSubSet[0], 'on'))))) {
                 continue;
             }
             // XSS attribute value filtering
@@ -955,7 +955,7 @@ class UserlogFilterInput
                 // strip double quotes
                 $attrSubSet[1] = str_replace('"', '', $attrSubSet[1]);
                 // convert single quotes from either side to doubles (Single quotes shouldn't be used to pad attr value)
-                if ((substr($attrSubSet[1], 0, 1) === "'")
+                if ((0 === strpos($attrSubSet[1], "'"))
                     && (substr($attrSubSet[1], strlen($attrSubSet[1]) - 1, 1) === "'")) {
                     $attrSubSet[1] = substr($attrSubSet[1], 1, -2);
                 }
@@ -1009,7 +1009,7 @@ class UserlogFilterInput
         //$source = preg_replace('/&#(\d+);/me', "chr(\\1)", $source); // decimal notation
         //TODO swich to this once we have PHP 5.3 as minimum
         //        $source = preg_replace_callback('/&#(\d+);/m', function($m) {return chr($m[1]);}, $source); // decimal notation
-        $source = preg_replace_callback('/&#(\d+);/m', create_function('$matches', "return  chr(\$matches[1]);"), $source); // decimal notation
+        $source = preg_replace_callback('/&#(\d+);/m', create_function('$matches', 'return  chr($matches[1]);'), $source); // decimal notation
         // convert hex
         //$source = preg_replace('/&#x([a-f0-9]+);/mei', "chr(0x\\1)", $source); // hex notation
         //TODO swich to this once we have PHP 5.3 as minimum

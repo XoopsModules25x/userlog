@@ -59,8 +59,8 @@ foreach ($stats as $type => $arr) {
     }
     foreach ($arr as $period => $arr2) {
         // use sprintf in moduleadmin: sprintf($text, "<span style='color : " . $color . "; font-weight : bold;'>" . $value . "</span>")
-        $adminObject->addInfoBoxLine(_AM_USERLOG_STATS_ABSTRACT, sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%1\$s", $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'], $arr2['value'],
-                                     $arr2['value'] ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, '%1$s', $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period])) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'],
+            $arr2['value']), '', $arr2['value'] ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -70,7 +70,7 @@ $dirNames    = $Userlog->getModules();
 if (!empty($moduleViews)) {
     $adminObject->addInfoBox(_AM_USERLOG_VIEW_MODULE);
     foreach ($moduleViews as $mDir => $views) {
-        $adminObject->addInfoBoxLine(_AM_USERLOG_VIEW_MODULE, $dirNames[$mDir] . ': %s', $views, $views ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(sprintf($dirNames[$mDir] . ': %s', $views),'',  $views ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -80,7 +80,7 @@ $userViews = $Userlog->getHandler('log')->getCounts($criteria);
 if (!empty($userViews)) {
     $adminObject->addInfoBox(_AM_USERLOG_VIEW_USER);
     foreach ($userViews as $uid => $views) {
-        $adminObject->addInfoBoxLine(_AM_USERLOG_VIEW_USER, ($uid ? "<a href=\"" . XOOPS_URL . '/userinfo.php?uid=' . $uid . "\">" . XoopsUserUtility::getUnameFromId($uid) . '</a>' : XoopsUserUtility::getUnameFromId(0)) . ': %s', $views, $views ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(sprintf(($uid ? '<a href="' . XOOPS_URL . '/userinfo.php?uid=' . $uid . '">' . XoopsUserUtility::getUnameFromId($uid) . '</a>' : XoopsUserUtility::getUnameFromId(0)) . ': %s', $views),'' , $views ? 'GREEN' : 'RED');
     }
 }
 $criteria = new CriteriaCompo();
@@ -103,7 +103,7 @@ if (!empty($groupViews)) {
     }
     $groupNames = $Userlog->getGroupList();
     foreach ($gidViews as $gid => $views) {
-        $adminObject->addInfoBoxLine(_AM_USERLOG_VIEW_GROUP, $groupNames[$gid] . ': %s', $views, $views ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(sprintf( $groupNames[$gid] . ': %s', $views), '', $views ? 'GREEN' : 'RED');
     }
 }
 // START add stats_type

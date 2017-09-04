@@ -19,7 +19,7 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/../include/common.php';
 
 if (defined('USERLOG_BLOCK_LOGIN_REG_HISTORY_DEFINED')) {

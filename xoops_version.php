@@ -18,7 +18,7 @@
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 $moduleDirName = basename(__DIR__);
 
@@ -41,10 +41,10 @@ $modversion = array(
     'help'                => 'page=help',
     //
     'release_info'        => 'Changelog',
-    'release_file'        => XOOPS_URL . '/modules/{$moduleDirName}/docs/changelog file',
+    'release_file'        => XOOPS_URL . "/modules/{$moduleDirName}/docs/changelog file",
     //
     'manual'              => 'link to manual file',
-    'manual_file'         => XOOPS_URL . '/modules/{$moduleDirName}/docs/install.txt',
+    'manual_file'         => XOOPS_URL . "/modules/{$moduleDirName}/docs/install.txt",
     'min_php'             => '5.5',
     'min_xoops'           => '2.5.9',
     'min_admin'           => '1.2',

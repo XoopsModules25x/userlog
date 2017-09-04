@@ -19,7 +19,7 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/../include/common.php';
 
 xoops_loadLanguage('admin', USERLOG_DIRNAME);
@@ -492,7 +492,7 @@ class UserlogSetting extends XoopsObject
             return array_keys($ret);
         }
         $ret2     = array();
-        $emptyAll = ($V === 'value') ? true : false; // check if all values are empty
+        $emptyAll = $V === 'value'; // check if all values are empty
         foreach ($ret as $option => $val) {
             $ret2[$option] = $val[$V];
             // if there is a value || exceptions continue

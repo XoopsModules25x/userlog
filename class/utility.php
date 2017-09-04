@@ -28,9 +28,9 @@ class UserLogUtility extends XoopsObject
             if (!file_exists($folder)) {
                 if (!mkdir($folder) && !is_dir($folder)) {
                     throw new \RuntimeException(sprintf('Unable to create the %s directory', $folder));
-                } else {
-                    file_put_contents($folder . '/index.html', '<script>history.go(-1);</script>');
                 }
+
+                file_put_contents($folder . '/index.html', '<script>history.go(-1);</script>');
             }
         } catch (Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n", '<br>';
@@ -105,7 +105,9 @@ class UserLogUtility extends XoopsObject
             if (isset($currArray[$k])) {
                 if ($currArray[$k] > $v) {
                     break;
-                } elseif ($currArray[$k] == $v) {
+                }
+
+                if ($currArray[$k] == $v) {
                     continue;
                 } else {
                     $success = false;
@@ -119,7 +121,7 @@ class UserLogUtility extends XoopsObject
             }
         }
 
-        if (!$success) {
+        if (false === $success) {
             $module->setErrors(sprintf(_AM_USERLOG_ERROR_BAD_XOOPS, $requiredVer, $currentVer));
         }
 

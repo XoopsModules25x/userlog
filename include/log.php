@@ -19,7 +19,7 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 // to insure include only once
 if (defined('USERLOG_LOG_DEFINED')) {
     return;
@@ -77,7 +77,7 @@ if (!empty($setting) && strpos($setting, 'active')) {
     // store: 0,1->db 2->file 3->both
     $logObj->store = !empty($tolog['store_db']) ? $tolog['store_db'] : 0;
     if (!empty($tolog['store_file'])) {
-        $logObj->store = $logObj->store + $tolog['store_file'] * 2;
+        $logObj->store += $tolog['store_file'] * 2;
     }
 
     // logger

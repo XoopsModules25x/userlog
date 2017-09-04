@@ -39,9 +39,9 @@ if (isset($stats['set'][0]) && $stats['set'][0]['value'] == 0) {
     $adminObject->addItemButton(_AM_USERLOG_SET_ADD, 'setting.php');
 } else {
     $adminObject->addInfoBox(_AM_USERLOG_SUMMARY);
-    $adminObject->addInfoBoxLine(_AM_USERLOG_SUMMARY, '<a href="logs.php?options[referer]=del&options[request_method]=POST">' . _AM_USERLOG_SUMMARY_DELETED . '</a>');
-    $adminObject->addInfoBoxLine(_AM_USERLOG_SUMMARY, '<a href="logs.php?options[admin]=1">' . _AM_USERLOG_SUMMARY_ADMIN . '</a>');
-    $adminObject->addInfoBoxLine(_AM_USERLOG_SUMMARY, '<a href="logs.php?options[referer]=google.com">' . _AM_USERLOG_SUMMARY_GOOGLE . '</a>');
+    $adminObject->addInfoBoxLine('<a href="logs.php?options[referer]=del&options[request_method]=POST">' . _AM_USERLOG_SUMMARY_DELETED . '</a>');
+    $adminObject->addInfoBoxLine('<a href="logs.php?options[admin]=1">' . _AM_USERLOG_SUMMARY_ADMIN . '</a>');
+    $adminObject->addInfoBoxLine('<a href="logs.php?options[referer]=google.com">' . _AM_USERLOG_SUMMARY_GOOGLE . '</a>');
 }
 $adminObject->addInfoBox(_AM_USERLOG_STATS_ABSTRACT);
 $periods = array_flip($statsObj->period);
@@ -52,8 +52,11 @@ foreach ($stats as $type => $arr) {
     }
     foreach ($arr as $period => $arr2) {
         // use sprintf in moduleadmin: sprintf($text, "<span style='color : " . $color . "; font-weight : bold;'>" . $value . "</span>")
-        $adminObject->addInfoBoxLine(_AM_USERLOG_STATS_ABSTRACT, sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, "%1\$s", $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'], $arr2['value'],
-                                     $arr2['value'] ? 'GREEN' : 'RED');
+        $adminObject->addInfoBoxLine(
+            sprintf(
+            sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, '%1$s', $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'],
+            $arr2['value']),'', $arr2['value'] ? 'GREEN' : 'RED'
+        );
     }
 }
 // if there is no file in working check the parent folder chmod
@@ -69,6 +72,7 @@ if ((isset($stats['fileall'][0]) && $stats['fileall'][0]['value'] == 0) || ($sta
     $adminObject->addConfigBoxLine(array($Userlog->getConfig('logfilepath') . '/' . USERLOG_DIRNAME, 755), 'chmod');
 }
 $adminObject->addConfigBoxLine("<span class='bold " . ($Userlog->getConfig('status') ? 'green' : 'red') . "'>" . _MI_USERLOG_STATUS . ' ' . ($Userlog->getConfig('status') ? _MI_USERLOG_ACTIVE : _MI_USERLOG_IDLE) . '</span>', 'default');
+
 $adminObject->displayNavigation(basename(__FILE__));
 $adminObject->displayButton('left');
 $adminObject->displayIndex();

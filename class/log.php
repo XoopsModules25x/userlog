@@ -22,7 +22,7 @@
 
 use Xmf\Request;
 
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/../include/common.php';
 
 /**
@@ -359,7 +359,7 @@ class UserlogLog extends XoopsObject
             $logs[$log_id]['request_method'] = empty($logs[$log_id]['request_method']) ? '' : $logs[$log_id]['request_method'] . "\n";
             foreach ($this->sourceJSON as $option) {
                 if (!empty($logs[$log_id][$option])) {
-                    $logs[$log_id]['request_method'] .= "\$_" . strtoupper($option) . ' ' . $logs[$log_id][$option] . "\n";
+                    $logs[$log_id]['request_method'] .= '$_' . strtoupper($option) . ' ' . $logs[$log_id][$option] . "\n";
                 }
                 if ($option === 'env') {
                     break;
@@ -468,6 +468,7 @@ class UserlogLog extends XoopsObject
     {
         $csvFile = $this->userlog->getConfig('logfilepath') . '/' . USERLOG_DIRNAME . '/export/csv/' . $csvNamePrefix . '_' . date('Y-m-d_H-i-s') . '.csv';
         // file create/open/write
+        /** @var \XoopsFileHandler $fileHandler */
         $fileHandler = XoopsFile::getHandler();
         $fileHandler->__construct($csvFile, false);
         // force to create file if not exist
@@ -556,7 +557,7 @@ class UserlogLog extends XoopsObject
                     }
                     foreach ($val_arr as $qry) {
                         // if !QUERY eg: !logs.php,views.php
-                        if (substr($qry, 0, 1) === '!') {
+                        if (0 === strpos($qry, '!')) {
                             $flagStr = true;
                             if (strpos($log[$op], substr($qry, 1)) !== false) {
                                 $flagStr = false; // have that delete
@@ -935,7 +936,7 @@ class UserlogLog extends XoopsObject
         if (empty($zipFileName)) {
             $zipFileName = $this->userlog->getConfig('logfilename') . '_zip_' . $totalFiles . '_files_' . date('Y-m-d_H-i-s') . '.zip';
         } else {
-            $zipFileName = $zipFileName . '.zip';
+            $zipFileName .= '.zip';
         }
         $zipFile = $zipFolder . '/' . $zipFileName;
 

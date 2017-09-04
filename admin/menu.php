@@ -23,7 +23,7 @@
 use Xmf\Module\Admin;
 use Xmf\Module\Helper;
 
-// defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+// defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 //$path = dirname(dirname(dirname(__DIR__)));
 //require_once $path . '/mainfile.php';
@@ -33,11 +33,11 @@ $Userlog    = Userlog::getInstance();
 
 $moduleDirName = basename(dirname(__DIR__));
 
-if (false !== ($moduleHelper = Helper::getHelper($moduleDirName))) {
+if (false !== ($moduleHelper = Xmf\Module\Helper::getHelper($moduleDirName))) {
 } else {
-    $moduleHelper = Helper::getHelper('system');
+    $moduleHelper = Xmf\Module\Helper::getHelper('system');
 }
-$pathIcon32    = Admin::menuIconPath('');
+$pathIcon32    = \Xmf\Module\Admin::menuIconPath('');
 $pathModIcon32 = $moduleHelper->getModule()->getInfo('modicons32');
 
 xoops_loadLanguage('modinfo', $moduleDirName);
@@ -47,37 +47,45 @@ xoops_loadLanguage('admin', $moduleDirName);
 $i = 0;
 
 // Index
-$adminmenu[$i]['title'] = _AM_USERLOG_ADMENU_INDEX;
-$adminmenu[$i]['link']  = 'admin/index.php';
-$adminmenu[$i]['icon']  = '../../' . $pathIcon32 . '/home.png';
-++$i;
+$adminmenu[] = [
+'title' =>  _AM_USERLOG_ADMENU_INDEX,
+'link' =>  'admin/index.php',
+'icon' =>  $pathIcon32 . '/home.png',
+];
 
-$adminmenu[$i]['title'] = _AM_USERLOG_ADMENU_SETTING;
-$adminmenu[$i]['link']  = 'admin/setting.php';
-$adminmenu[$i]['icon']  = '../../' . $pathIcon32 . '/administration.png';
+$adminmenu[] = [
+'title' =>  _AM_USERLOG_ADMENU_SETTING,
+'link' =>  'admin/setting.php',
+'icon' =>  $pathIcon32 . '/administration.png',
+];
 
-++$i;
-$adminmenu[$i]['title'] = _AM_USERLOG_ADMENU_LOGS;
-$adminmenu[$i]['link']  = 'admin/logs.php';
-$adminmenu[$i]['icon']  = '../../' . $pathIcon32 . '/content.png';
+$adminmenu[] = [
+'title' =>  _AM_USERLOG_ADMENU_LOGS,
+'link' =>  'admin/logs.php',
+'icon' =>  $pathIcon32 . '/content.png',
+];
 
-++$i;
-$adminmenu[$i]['title'] = _AM_USERLOG_ADMENU_FILE;
-$adminmenu[$i]['link']  = 'admin/file.php';
-$adminmenu[$i]['icon']  = '../../' . $pathIcon32 . '/compfile.png';
+$adminmenu[] = [
+'title' =>  _AM_USERLOG_ADMENU_FILE,
+'link' =>  'admin/file.php',
+'icon' =>  $pathIcon32 . '/compfile.png',
+];
 
-++$i;
-$adminmenu[$i]['title'] = _AM_USERLOG_ADMENU_STATS;
-$adminmenu[$i]['link']  = 'admin/stats.php';
-$adminmenu[$i]['icon']  = '../../' . $pathIcon32 . '/stats.png';
+$adminmenu[] = [
+'title' =>  _AM_USERLOG_ADMENU_STATS,
+'link' =>  'admin/stats.php',
+'icon' =>  $pathIcon32 . '/stats.png',
+];
 
-++$i;
-$adminmenu[$i]['title'] = _AM_USERLOG_ABOUT;
-$adminmenu[$i]['link']  = 'admin/about.php';
-$adminmenu[$i]['icon']  = '../../' . $pathIcon32 . '/about.png';
+$adminmenu[] = [
+'title' =>  _AM_USERLOG_ABOUT,
+'link' =>  'admin/about.php',
+'icon' =>  $pathIcon32 . '/about.png',
+];
+
 // add js, css, toggle_cookie to admin pages
 global $xoTheme;
 $xoTheme->addScript('modules/' . USERLOG_DIRNAME . '/assets/js/scripts.js');
 $xoTheme->addStylesheet('modules/' . USERLOG_DIRNAME . '/assets/css/style.css');
-$toggle_script = "var toggle_cookie=\"" . $Userlog->cookiePrefix . 'TOGGLE' . "\";";
+$toggle_script = 'var toggle_cookie="' . $Userlog->cookiePrefix . 'TOGGLE' . '";';
 $xoTheme->addScript(null, array('type' => 'text/javascript'), $toggle_script);

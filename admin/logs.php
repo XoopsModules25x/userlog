@@ -68,7 +68,7 @@ foreach ($options as $key => $val) {
     if ($type_vars[$op] === 'text') {
         foreach ($val_arr as $qry) {
             // if !QUERY eg: !logs.php,views.php
-            if (substr($qry, 0, 1) === '!') {
+            if (0 === strpos($qry, '!')) {
                 $criteria_q[$key]->add(new Criteria($op, '%' . substr($qry, 1) . '%', 'NOT LIKE'), 'AND');
             } else {
                 $criteria_q[$key]->add(new Criteria($op, '%' . $qry . '%', 'LIKE'), 'OR');
@@ -173,7 +173,7 @@ $GLOBALS['xoopsTpl']->assign('types', $type_vars);
 // form, elements, headers
 list($form, $elements, $headers) = $logsetObj->logForm($options);
 // START export
-if (substr($opentry, 0, 6) === 'export') {
+if (0 === strpos($opentry, 'export')) {
     list($opentry, $export) = explode('-', $opentry);
     // if it is not bulk export get the actual logs in the page
     if (is_numeric($log_id[0])) {
@@ -236,18 +236,18 @@ foreach ($elements as $key => $ele) {
 }
 if ($engine === 'file') {
     $fileEl->setClass('floatleft left');
-    $fileEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+    $fileEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
     $formNav->addElement($fileEl);
 }
 $engineEl->setClass('floatleft left');
-$engineEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+$engineEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
 $formNav->addElement($engineEl);
 $limitEl->setClass('floatleft left');
 $formNav->addElement($limitEl);
-$sortEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+$sortEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
 $sortEl->setClass('floatleft left');
 $formNav->addElement($sortEl);
-$orderEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+$orderEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
 $orderEl->setClass('floatleft left');
 $formNav->addElement($orderEl);
 $submitEl = new XoopsFormButton('', 'submitlogsnav', _GO, 'submit');

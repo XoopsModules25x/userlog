@@ -19,7 +19,7 @@
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 // Here you can set ADDITIONAL permission in file for webmasters in your website, ONLY if you want to limit the access to userlog module for some of them.
 
 // Webmasters that dont have access cannot:

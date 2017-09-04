@@ -17,7 +17,7 @@
  * @author          Kazumi Ono (AKA onokazu) http://www.myweb.ne.jp/, http://jp.xoops.org/
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 /**
  * base class
@@ -36,11 +36,11 @@ class UserlogSimpleForm extends XoopsForm
      */
     public function render()
     {
-        $ret = ($this->getTitle() ? "<div class=\" center head \">" . $this->getTitle() . '</div>' : '');
+        $ret = ($this->getTitle() ? '<div class=" center head ">' . $this->getTitle() . '</div>' : '');
         $ret .= "<form name='" . $this->getName() . "' id='" . $this->getName() . "' action='" . $this->getAction() . "' method='" . $this->getMethod() . "'" . $this->getExtra() . ">\n";
         foreach ($this->getElements() as $ele) {
             if (!$ele->isHidden()) {
-                $ret .= "<div class=\"" . $ele->getClass() . "\"><strong>" . $ele->getCaption() . '</strong>' . $ele->render() . '</div>';
+                $ret .= '<div class="' . $ele->getClass() . '"><strong>' . $ele->getCaption() . '</strong>' . $ele->render() . '</div>';
             } else {
                 $ret .= $ele->render() . "\n";
             }

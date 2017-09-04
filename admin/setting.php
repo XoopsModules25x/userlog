@@ -122,6 +122,7 @@ switch ($op) {
     case 'cancel':
         redirect_header('setting.php', 1, _AM_USERLOG_SET_CANCEL);
 
+        // no break
     case 'cleanCash':
         // delete all settings caches
         if ($numfiles = $logsetObj->cleanCache()) {

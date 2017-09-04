@@ -22,7 +22,7 @@
 
 use Xmf\Request;
 
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/phpbrowscap/Browscap.php';
 
 // The Browscap class is in the phpbrowscap namespace, so import it
@@ -31,7 +31,7 @@ use phpbrowscap\Browscap;
 /**
  * Class Userlog
  */
-class Userlog
+class Userlog extends \Xmf\Module\Helper
 {
     public $dirname;
     public $module;
@@ -71,6 +71,9 @@ class Userlog
         return $instance;
     }
 
+    /**
+     * @return null
+     */
     public function getModule()
     {
         if ($this->module === null) {
@@ -80,6 +83,9 @@ class Userlog
         return $this->module;
     }
 
+    /**
+     * @return null
+     */
     public function &getLogModule()
     {
         if ($this->logmodule === null) {
@@ -123,6 +129,9 @@ class Userlog
         return $dirNames;
     }
 
+    /**
+     * @return null
+     */
     public function &getUser()
     {
         if ($this->user === null) {
@@ -132,6 +141,9 @@ class Userlog
         return $this->user;
     }
 
+    /**
+     * @return null
+     */
     public function &getGroupList()
     {
         if ($this->groupList === null) {
@@ -141,6 +153,9 @@ class Userlog
         return $this->groupList;
     }
 
+    /**
+     * @return null
+     */
     public function getBrowsCap()
     {
         if ($this->browscap === null) {
@@ -153,9 +168,10 @@ class Userlog
     /**
      * @param null $name
      *
+     * @param null $default
      * @return null
      */
-    public function getConfig($name = null)
+    public function getConfig($name = null, $default = null)
     {
         if ($this->config === null) {
             $this->initConfig();
@@ -271,9 +287,9 @@ class Userlog
     {
         if ($since > 0) {
             return (int)$since * 24 * 3600;
-        } else {
-            return (int)abs($since) * 3600;
         }
+
+        return (int)abs($since) * 3600;
     }
 
     /**
@@ -424,7 +440,7 @@ class Userlog
         return true;
     }
 
-    private function initConfig()
+    protected function initConfig()
     {
         $this->addLog('INIT CONFIG');
         $hModConfig   = xoops_getHandler('config');
@@ -434,7 +450,7 @@ class Userlog
     /**
      * @param $name
      */
-    private function initHandler($name)
+    protected function initHandler($name)
     {
         $this->addLog('INIT ' . $name . ' HANDLER');
         $this->handler[$name . 'Handler'] = xoops_getModuleHandler($name, $this->dirname);
@@ -443,7 +459,7 @@ class Userlog
     /**
      * @param $log
      */
-    private function addLog($log)
+    public function addLog($log)
     {
         if ($this->debug) {
             if (is_object($GLOBALS['xoopsLogger'])) {

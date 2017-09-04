@@ -19,7 +19,7 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/../include/common.php';
 
 if (defined('USERLOG_BLOCK_VIEWS_DEFINED')) {
@@ -115,7 +115,7 @@ function userlog_views_edit($options)
     } else {
         // prevent to select
         $viewsEle->addOption(0, _NONE);
-        $viewsEle->setExtra("class=\"hidden\"");
+        $viewsEle->setExtra('class="hidden"');
     }
 
     $viewsEle->setDescription(_AM_USERLOG_ITEMS_DSC);
