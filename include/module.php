@@ -43,7 +43,7 @@ function xoops_module_update_userlog(XoopsModule $module, $prev_version = null)
 {
     if ($prev_version == round($module->getInfo('version') * 100, 2)) {
         $module->setErrors('You have the latest ' . $module->getInfo('name') . ' module (' . $module->getInfo('dirname') . ' version ' . $module->getInfo('version') . ') and update is not necessary');
-        print_r($module->getErrors());
+//        print_r($module->getErrors());
 
         return true;
     }
@@ -63,7 +63,7 @@ function xoops_module_update_userlog(XoopsModule $module, $prev_version = null)
     }
     $errors = $module->getErrors();
     if (!empty($errors)) {
-        print_r($errors);
+//        print_r($errors);
     }
 
     return $ret;
@@ -79,7 +79,6 @@ function xoops_module_update_userlog(XoopsModule $module, $prev_version = null)
 function update_userlog_v100(XoopsModule $module)
 {
     $field   = 'module_name';
-    $moduleDirName = basename(dirname(__DIR__));
     $userlog  = Userlog::getInstance();
     $ret     = $userlog->getHandler('log')->showFields($field);
     preg_match_all('!\d+!', $ret[$field]['Type'], $nums);
@@ -102,7 +101,6 @@ function update_userlog_v100(XoopsModule $module)
  */
 function update_userlog_v114(XoopsModule $module)
 {
-    $moduleDirName = basename(dirname(__DIR__));
     $userlog    = Userlog::getInstance();
     $logsetsObj = $userlog->getHandler('setting')->getAll();
     $ret        = true;
@@ -127,7 +125,6 @@ function update_userlog_v114(XoopsModule $module)
  */
 function update_userlog_v115(XoopsModule $module)
 {
-    $moduleDirName = basename(dirname(__DIR__));
     $userlog  = Userlog::getInstance();
     // Only change the field from INDEX to UNIQUE if it is not unique
     // if (isset($indexArr[0]["Non_unique"]) || $indexArr[0]["Non_unique"] == 1) { }

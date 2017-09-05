@@ -3,7 +3,8 @@
 - conversion of Userlog helper class to XMF (mamba)
 - short array syntax (mamba)
 - converted to Yoda syntax (mamba)
-- CSS cosmetics (mamba) 
+- CSS cosmetics (mamba)
+- converted to XMF Request (mamba)
 
 <h5>1.17 Alpha 3   [NOT RELEASED]</h5>
 <hr>

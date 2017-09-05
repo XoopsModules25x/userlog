@@ -20,27 +20,19 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-use Xmf\Module\Admin;
-use Xmf\Module\Helper;
-
 // defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 //$path = dirname(dirname(dirname(__DIR__)));
 //require_once $path . '/mainfile.php';
 require_once __DIR__ . '/../include/common.php'; // after installation it will be included before admin_header.php
 $userlog    = Userlog::getInstance();
-//$pathIcon32 = $userlog->getModule()->getInfo('icons32');
 $moduleDirName = basename(dirname(__DIR__));
-if (false !== ($moduleHelper = \Xmf\Module\Helper::getHelper($moduleDirName))) {
-} else {
-    $moduleHelper = \Xmf\Module\Helper::getHelper('system');
-}
 $pathIcon32    = \Xmf\Module\Admin::menuIconPath('');
-$pathModIcon32 = $moduleHelper->getModule()->getInfo('modicons32');
+$pathModIcon32 = $userlog->getModule()->getInfo('modicons32');
 
 xoops_loadLanguage('modinfo', $moduleDirName);
 xoops_loadLanguage('admin', $moduleDirName);
-// xoops_loadLanguage('admin', USERLOG_DIRNAME);
+$userlog->loadLanguage('admin');
 
 $i = 0;
 

@@ -114,7 +114,7 @@ class UserlogLog extends XoopsObject
     /**
      * @return mixed
      */
-    public function log_time()
+    public function getLogTime()
     {
         return $this->userlog->formatTime($this->getVar('log_time'));
     }

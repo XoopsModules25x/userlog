@@ -19,6 +19,7 @@
 // change $xoops -> $GLOBALS['xoops']
 // change  Userlog_Module_Plugin_Abstract , Userlog_Module_Plugin
 // change  $xoops->getActiveModules() -> xoops_getActiveModules()
+
 class Userlog_Module_Plugin
 {
     /**

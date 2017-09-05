@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
@@ -18,6 +19,9 @@
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
+
+use Xmf\Request;
+
 defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 $moduleDirName = basename(__DIR__);
@@ -458,26 +462,27 @@ if (isset($xoopsOption['pagetype']) && 'admin' === $xoopsOption['pagetype'] && i
     // get dirname
     $dirname = $xoopsModule->getVar('dirname');
     // START if dirname is system
-    if ('system' === $dirname && isset($_REQUEST['fct'])) {
+    if ('system' === $dirname && Request::hasVar('fct')) {
         $hModule = xoops_getHandler('module');
         // if we are in preferences of modules
-        if ('preferences' === $_REQUEST['fct'] && isset($_REQUEST['mod'])) {
-            $mod     = (int)$_REQUEST['mod'];
+        if ('preferences' === Request::getString('fct') && Request::hasVar('mod')) {
+            $mod     = Request::getInt('mod');
             $module  = $hModule->get($mod);
             $dirname = $module->getVar('dirname');
         }
         // if we are in modules admin - can be done with onuninstall and onupdate???
-        if ('modulesadmin' === $_REQUEST['fct'] && isset($_REQUEST['module'])) {
-            $dirname = $_REQUEST['module'];
+        if ('modulesadmin' === Request::getString('fct') && Request::hasVar('module')) {
+            $dirname = Request::getString('module');
         }
+
         // if we are in maintenance - now all modules - how to do it for only one module?
-        if ('maintenance' === $_REQUEST['fct']) {
-            $dump_modules = isset($_REQUEST['dump_modules']) ? $_REQUEST['dump_modules'] : false;
-            $dump_tables  = isset($_REQUEST['dump_tables']) ? $_REQUEST['dump_tables'] : false;
-            if (true === $dump_tables || true === $dump_modules) {
-                $dirname = $modversion['dirname'];
-            }
+        if ('maintenance' === Request::getString('fct')) {
+           $dump_modules = Request::getBool('dump_modules', false);
+            $dump_tables = Request::getBool('dump_tables',  false);
+        if (true === $dump_tables || true === $dump_modules) {
+            $dirname = $modversion['dirname'];
         }
+    }
     }
     // END if dirname is system
 
@@ -492,7 +497,9 @@ if (isset($xoopsOption['pagetype']) && 'admin' === $xoopsOption['pagetype'] && i
                     $modversion['hasAdmin']    = 0;
                     $modversion['system_menu'] = 0;
                     $modversion['tables']      = null;
-                    redirect_header(XOOPS_URL . '/modules/system/help.php?mid=' . (!empty($mod) ? $mod : $xoopsModule->getVar('mid', 's')) . '&amp;page=help', 1, sprintf(_MI_USERLOG_WEBMASTER_NOPERM, implode(',', $perm['super']['uid']), implode(',', $perm['super']['group'])));
+                    redirect_header(XOOPS_URL . '/modules/system/help.php?mid='
+                                    . (!empty($mod) ? $mod : $xoopsModule->getVar('mid', 's'))
+                                    . '&amp;page=help', 1, sprintf(_MI_USERLOG_WEBMASTER_NOPERM, implode(',', $perm['super']['uid']), implode(',', $perm['super']['group'])));
                 }
             }
         }

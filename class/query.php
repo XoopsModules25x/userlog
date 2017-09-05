@@ -125,7 +125,7 @@ class UserlogQuery
                 $block[$log_id]['color']   = 'RED';
             }
             $this->userlog->setConfig('format_date', $this->userlog->getConfig('format_date_history'));
-            $block[$log_id]['log_time'] = $loginObj->log_time();
+            $block[$log_id]['log_time'] = $loginObj->getLogTime();
         }
         unset($block[$log_id]['pass'], $block[$log_id]['vpass']);
 
@@ -289,7 +289,7 @@ class UserlogQuery
             $query = parse_url($maObj->referer(), PHP_URL_QUERY);
             parse_str($query, $moduleAdmin);
             $moduleAdmin['op_lang']          = constant('_AM_SYSTEM_MODULES_' . strtoupper($moduleAdmin['op']));
-            $moduleAdmin['log_time']         = $maObj->log_time();
+            $moduleAdmin['log_time']         = $maObj->getLogTime();
             $block[$maObj->getVar('log_id')] = $moduleAdmin;
         }
 

@@ -67,7 +67,7 @@ class Userlog extends \Xmf\Module\Helper
     }
 
     /**
-     * @return null
+     * @return null|\XoopsModule
      */
     public function getLogModule()
     {
@@ -125,7 +125,7 @@ class Userlog extends \Xmf\Module\Helper
     }
 
     /**
-     * @return null
+     * @return null|array
      */
     public function getGroupList()
     {
@@ -345,6 +345,7 @@ class Userlog extends \Xmf\Module\Helper
 
     private function initGroupList()
     {
+        /** @var \XoopsMemberHandler $groupHandler */
         $groupHandler    = xoops_getHandler('member');
         $this->groupList = $groupHandler->getGroupList();
         $this->addLog('INIT GROUP LIST');
