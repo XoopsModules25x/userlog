@@ -25,6 +25,9 @@
     &nbsp;&nbsp;- updated addInfoBoxLine entries (mamba)
     &nbsp;&nbsp;- displayNavigation(basename(__FILE__))  (mamba)
     &nbsp;&nbsp;- changed to ->displayButton('left') (mamba)
+- conversion of Userlog helper class to XMF (mamba)
+- short array syntax (mamba)
+
 
 
 <h5>1.17 Alpha 2             [NOT RELEASED]</h5>

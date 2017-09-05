@@ -26,18 +26,17 @@ require_once __DIR__ . '/admin_header.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 
 xoops_cp_header();
-
-$Userlog = Userlog::getInstance(false);
+$userlog = Userlog::getInstance();
 $op      = Request::getString('op');
 // Where do we start ?
 $set_id    = Request::getInt('set_id', 0);
-$logsetObj = $set_id ? $Userlog->getHandler('setting')->get($set_id) : UserlogSetting::getInstance();
+$logsetObj = $set_id ? $userlog->getHandler('setting')->get($set_id) : UserlogSetting::getInstance();
 if ($set_id && !is_object($logsetObj)) {
     redirect_header('setting.php', 1, _AM_USERLOG_SET_ERROR);
 }
 $name  = Request::getString('name', '', 'post');
 $logby = Request::getString('logby', '', 'post');
-if ($logby === 'ip') {
+if ('ip' === $logby) {
     $unique_id = Request::getString('unique_id', -1, 'post');
     $unique_id = ip2long($unique_id);
 } else {
@@ -59,13 +58,13 @@ switch ($op) {
             if ($logsetObj->deleteFile($logsetObj->logby(), $logsetObj->getVar('unique_id'))) { //use getVar to get IP long
                 $msgDel = _AM_USERLOG_SET_CLEANCACHE_SUCCESS;
             }
-            if (!$Userlog->getHandler('setting')->delete($logsetObj)) {
+            if (!$userlog->getHandler('setting')->delete($logsetObj)) {
                 redirect_header('setting.php', 1, sprintf(_AM_USERLOG_SET_DELETE_ERROR, $logsetObj->name()));
             }
             $msgDel .= '<br>' . sprintf(_AM_USERLOG_SET_DELETE_SUCCESS, $logsetObj->name());
             redirect_header('setting.php', 1, sprintf($msgDel, 1)); // one cache file deleted
         } else {
-            xoops_confirm(array('op' => 'del', 'set_id' => $logsetObj->set_id(), 'confirm' => 1), 'setting.php', sprintf(_AM_USERLOG_SET_DELETE_CONFIRM, $logsetObj->name()), _DELETE);
+            xoops_confirm(['op' => 'del', 'set_id' => $logsetObj->set_id(), 'confirm' => 1], 'setting.php', sprintf(_AM_USERLOG_SET_DELETE_CONFIRM, $logsetObj->name()), _DELETE);
             xoops_cp_footer();
         }
         break;
@@ -77,12 +76,12 @@ switch ($op) {
             $criteria = new CriteriaCompo();
             $criteria->add(new Criteria('logby', $logby));
             $criteria->add(new Criteria('unique_id', $unique_id));
-            $logsetObj = $Userlog->getHandler('setting')->getObjects($criteria);
+            $logsetObj = $userlog->getHandler('setting')->getObjects($criteria);
             if ($logsetObj) {
                 $logsetObj = $logsetObj[0];
                 $message   = _AM_USERLOG_SET_UPDATE;
-            } elseif ($logby !== '') {
-                $logsetObj = $Userlog->getHandler('setting')->create();
+            } elseif ('' !== $logby) {
+                $logsetObj = $userlog->getHandler('setting')->create();
                 $message   = _AM_USERLOG_SET_CREATE;
             } else {
                 redirect_header('setting.php', 1, _AM_USERLOG_SET_ERROR);
@@ -93,7 +92,7 @@ switch ($op) {
         $logsetObj->setVar('unique_id', $unique_id);
         // select views means store uid, groups, script name, pagetitle, pageadmin, module, module_name, item name, item id in Database
         if (in_array('views', $option)) {
-            $option = array_merge(array(
+            $option = array_merge([
                                       'uid',
                                       'groups',
                                       'script',
@@ -103,11 +102,11 @@ switch ($op) {
                                       'module_name',
                                       'item_name',
                                       'item_id'
-                                  ), $option);
+                                  ], $option);
         }
         // always log id and time
         if (!empty($option[0])) {
-            $option = array_merge(array('log_id', 'log_time'), $option);
+            $option = array_merge(['log_id', 'log_time'], $option);
         }
         $options_arr = $logsetObj->getOptions($option, 'key');// empty means all. sanitize options
         $logsetObj->setVar('options', implode(',', $options_arr));
@@ -133,17 +132,17 @@ switch ($op) {
     case 'default':
     default:
         // get all dirnames for scope
-        $dirNames = $Userlog->getModules();
+        $dirNames = $userlog->getModules();
         // unset userlog
         //unset($dirNames[USERLOG_DIRNAME]);
         // get all settings as array
-        $sets      = $Userlog->getHandler('setting')->getSets($Userlog->getConfig('sets_perpage'), $startentry, null, 'set_id', 'DESC', null, false);
-        $totalSets = $Userlog->getHandler('setting')->getCount();
-        $pagenav   = new XoopsPageNav($totalSets, $Userlog->getConfig('sets_perpage'), $startentry, 'startentry');
+        $sets      = $userlog->getHandler('setting')->getSets($userlog->getConfig('sets_perpage'), $startentry, null, 'set_id', 'DESC', null, false);
+        $totalSets = $userlog->getHandler('setting')->getCount();
+        $pagenav   = new XoopsPageNav($totalSets, $userlog->getConfig('sets_perpage'), $startentry, 'startentry');
         // check set arrays
         foreach ($sets as $id => $set) {
             // ip to string
-            if ($set['logby'] === 'ip') {
+            if ('ip' === $set['logby']) {
                 $sets[$id]['unique_id'] = long2ip($set['unique_id']);
             }
             // logby to title

@@ -28,14 +28,12 @@ use Xmf\Module\Helper;
 //$path = dirname(dirname(dirname(__DIR__)));
 //require_once $path . '/mainfile.php';
 require_once __DIR__ . '/../include/common.php'; // after installation it will be included before admin_header.php
-$Userlog    = Userlog::getInstance();
-//$pathIcon32 = $Userlog->getModule()->getInfo('icons32');
-
+$userlog    = Userlog::getInstance();
+//$pathIcon32 = $userlog->getModule()->getInfo('icons32');
 $moduleDirName = basename(dirname(__DIR__));
-
-if (false !== ($moduleHelper = Xmf\Module\Helper::getHelper($moduleDirName))) {
+if (false !== ($moduleHelper = \Xmf\Module\Helper::getHelper($moduleDirName))) {
 } else {
-    $moduleHelper = Xmf\Module\Helper::getHelper('system');
+    $moduleHelper = \Xmf\Module\Helper::getHelper('system');
 }
 $pathIcon32    = \Xmf\Module\Admin::menuIconPath('');
 $pathModIcon32 = $moduleHelper->getModule()->getInfo('modicons32');
@@ -87,5 +85,5 @@ $adminmenu[] = [
 global $xoTheme;
 $xoTheme->addScript('modules/' . USERLOG_DIRNAME . '/assets/js/scripts.js');
 $xoTheme->addStylesheet('modules/' . USERLOG_DIRNAME . '/assets/css/style.css');
-$toggle_script = 'var toggle_cookie="' . $Userlog->cookiePrefix . 'TOGGLE' . '";';
-$xoTheme->addScript(null, array('type' => 'text/javascript'), $toggle_script);
+$toggle_script = 'var toggle_cookie="' . $userlog->cookiePrefix . 'TOGGLE' . '";';
+$xoTheme->addScript(null, ['type' => 'text/javascript'], $toggle_script);

@@ -32,8 +32,8 @@ class UserlogStats extends XoopsObject
      * @var string
      */
     public $userlog = null;
-    public $period  = array('all' => 0, 'today' => 1, 'week' => 7, 'month' => 30);
-    public $type    = array(
+    public $period  = ['all' => 0, 'today' => 1, 'week' => 7, 'month' => 30];
+    public $type    = [
         'log'      => _AM_USERLOG_STATS_LOG,
         'logdel'   => _AM_USERLOG_STATS_LOGDEL,
         'set'      => _AM_USERLOG_STATS_SET,
@@ -43,7 +43,7 @@ class UserlogStats extends XoopsObject
         'browser'  => _AM_USERLOG_STATS_BROWSER,
         'OS'       => _AM_USERLOG_STATS_OS,
         'views'    => _AM_USERLOG_STATS_VIEWS
-    );
+    ];
 
     /**
      *
@@ -105,7 +105,7 @@ class UserlogStats extends XoopsObject
      * @return mixed
      */
     public function getAll(
-        $type = array(),
+        $type = [],
         $start = 0,
         $limit = 0,
         $sort = 'stats_value',
@@ -114,7 +114,7 @@ class UserlogStats extends XoopsObject
     ) {
         $criteria = new CriteriaCompo();
         if (!empty($type)) {
-            $typeArr = is_array($type) ? $type : array($type);
+            $typeArr = is_array($type) ? $type : [$type];
             foreach ($typeArr as $tt) {
                 $criteria->add(new Criteria('stats_type', $tt), 'OR');
             }
@@ -133,13 +133,13 @@ class UserlogStats extends XoopsObject
         foreach ($statsObj as $sObj) {
             $link = $sObj->stats_link();
             // if there is a link and only one type just index link
-            $index1 = (!empty($link) && count($type) == 1) ? $link : $sObj->stats_type() . $link;
+            $index1 = (!empty($link) && 1 == count($type)) ? $link : $sObj->stats_type() . $link;
             $index2 = $sObj->stats_period();
             if (!isset($ret[$index1])) {
-                $ret[$index1] = array();
+                $ret[$index1] = [];
             }
             if (!isset($ret[$index1][$index2])) {
-                $ret[$index1][$index2] = array();
+                $ret[$index1][$index2] = [];
             }
             $ret[$index1][$index2]['value']       = $sObj->stats_value();
             $ret[$index1][$index2]['time_update'] = $sObj->time_update();
@@ -178,7 +178,7 @@ class UserlogStats extends XoopsObject
                 break;
             case 'log':
                 // if logs exceed the maxlogsperiod delete them
-                if ($this->userlog->getConfig('maxlogsperiod') != 0) {
+                if (0 != $this->userlog->getConfig('maxlogsperiod')) {
                     $criteriaDel = new CriteriaCompo();
                     $until       = time() - $this->userlog->getSinceTime($this->userlog->getConfig('maxlogsperiod'));
                     $criteriaDel->add(new Criteria('log_time', $until, '<'), 'AND');
@@ -206,7 +206,7 @@ class UserlogStats extends XoopsObject
                 $criteria->add(new Criteria('referer', XOOPS_URL . '%', 'NOT LIKE'));
                 $criteria->setGroupBy('referer');
                 $outsideReferers = $this->userlog->getHandler('log')->getCounts($criteria);
-                $referrals       = array();
+                $referrals       = [];
                 foreach ($outsideReferers as $ref => $views) {
                     if (empty($ref)) {
                         continue;
@@ -227,8 +227,8 @@ class UserlogStats extends XoopsObject
                 $criteria = new CriteriaCompo();
                 $criteria->setGroupBy('user_agent');
                 $agents   = $this->userlog->getHandler('log')->getCounts($criteria);
-                $browsers = array();
-                $OSes     = array();
+                $browsers = [];
+                $OSes     = [];
                 foreach ($agents as $agent => $views) {
                     if (empty($agent)) {
                         continue;
@@ -250,7 +250,7 @@ class UserlogStats extends XoopsObject
                 foreach ($OSes as $OS => $views) {
                     $this->update('OS', 0, $views, false, $OS);
                 }
-                $this->deleteExpiredStats(array('browser', 'OS'));
+                $this->deleteExpiredStats(['browser', 'OS']);
                 break;
         }
 
@@ -313,7 +313,7 @@ class UserlogStats extends XoopsObject
             return false;
         }
         // for file,referral,browser,OS we should have a link
-        if (in_array($type, array('file', 'referral', 'browser', 'OS')) && empty($link)) {
+        if (in_array($type, ['file', 'referral', 'browser', 'OS']) && empty($link)) {
             return false;
         }
         $statsObj = $this->userlog->getHandler('stats')->create();
@@ -324,10 +324,10 @@ class UserlogStats extends XoopsObject
         $statsObj->setVar('stats_value', $value);
         $statsObj->setVar('time_update', time());
         // increment value if increment is true
-        $ret = $this->userlog->getHandler('stats')->insertUpdate($statsObj, array(
+        $ret = $this->userlog->getHandler('stats')->insertUpdate($statsObj, [
             'stats_value' => empty($increment) ? $value : "stats_value + {$value}",
             'time_update' => time()
-        ));
+        ]);
         $this->unsetNew();
 
         return $ret;
@@ -343,7 +343,7 @@ class UserlogStats extends XoopsObject
      *
      * @return int count of deleted rows
      */
-    public function deleteExpiredStats($types = array('browser'), $expire = 1)
+    public function deleteExpiredStats($types = ['browser'], $expire = 1)
     {
         if (empty($expire)) {
             return false;
@@ -352,7 +352,7 @@ class UserlogStats extends XoopsObject
         $until       = time() - $this->userlog->getSinceTime($expire);
         if (!empty($types)) {
             $criteriaTypes = new CriteriaCompo();
-            $types         = is_array($types) ? $types : array($types);
+            $types         = is_array($types) ? $types : [$types];
             foreach ($types as $type) {
                 $criteriaTypes->add(new Criteria('stats_type', $type, '='), 'OR');
             }
@@ -389,7 +389,7 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
      *
      * @return bool
      */
-    public function insertUpdate($object, $duplicate = array(), $force = true)
+    public function insertUpdate($object, $duplicate = [], $force = true)
     {
         $handler = $this->loadHandler('write');
 
@@ -419,7 +419,7 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
             // START ON DUPLICATE KEY UPDATE
             if (!empty($duplicate)) {
                 $sql  .= ' ON DUPLICATE KEY UPDATE';
-                $keys = array();
+                $keys = [];
                 foreach ($duplicate as $keyD => $valD) {
                     $keys[] = " {$keyD} = {$valD} ";
                 }
@@ -433,7 +433,7 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
                 $object->assignVar($this->keyName, $object_id);
             }
         } elseif (!empty($object->cleanVars)) {
-            $keys = array();
+            $keys = [];
             foreach ($object->cleanVars as $k => $v) {
                 $keys[] = " `{$k}` = {$v}";
             }
@@ -468,8 +468,8 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
 
             return false;
         }
-        $ret = array();
-        while (($myrow = $this->db->fetchArray($result)) !== false) {
+        $ret = [];
+        while (false !== ($myrow = $this->db->fetchArray($result))) {
             $ret[] = $myrow;
         }
 
@@ -488,7 +488,7 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
      *
      * @return bool
      */
-    public function addIndex($index = null, $fields = array(), $index_type = 'INDEX')
+    public function addIndex($index = null, $fields = [], $index_type = 'INDEX')
     {
         if (empty($index) || empty($fields)) {
             return false;
@@ -497,7 +497,7 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
             return false;
         } // index is exist
         $index_type = strtoupper($index_type);
-        if (!in_array($index_type, array('INDEX', 'UNIQUE', 'SPATIAL', 'FULLTEXT'))) {
+        if (!in_array($index_type, ['INDEX', 'UNIQUE', 'SPATIAL', 'FULLTEXT'])) {
             return false;
         }
         $fields = is_array($fields) ? implode(',', $fields) : $fields;
@@ -551,7 +551,7 @@ class UserlogStatsHandler extends XoopsPersistableObjectHandler
      *
      * @return bool
      */
-    public function changeIndex($index = null, $fields = array(), $index_type = 'INDEX')
+    public function changeIndex($index = null, $fields = [], $index_type = 'INDEX')
     {
         if ($this->showIndex($index) && !$this->dropIndex($index)) {
             return false;

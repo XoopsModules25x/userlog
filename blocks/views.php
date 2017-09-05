@@ -44,25 +44,25 @@ xoops_loadLanguage('admin', USERLOG_DIRNAME);
 function userlog_views_show($options)
 {
     $loglogObj = UserlogLog::getInstance();
-    $module    = array();
+    $module    = [];
     if (!empty($options[1])) {
         $options_views = explode(',', $options[1]); // item views in where claus eg: news-storyid, newbb-topic_id, news-storytopic
         foreach ($options_views as $key => $item) {
             $module_script_item = explode('-', $item); // news:article.php-storyid news:index.php-storytopic => $module["news"]=array("storyid","storytopic");
             $module_script      = explode(':', $module_script_item[0]); //  news:article.php => $module_script = array(news,article.php);
             if (!isset($module[$module_script[0]])) {
-                $module[$module_script[0]]['item_name'] = array();
+                $module[$module_script[0]]['item_name'] = [];
                 $module[$module_script[0]]['script']    = array_slice($module_script, 1);
             }
             $module[$module_script[0]]['script']      = array_unique(array_merge($module[$module_script[0]]['script'], array_slice($module_script, 1)));
             $module[$module_script[0]]['item_name'][] = $module_script_item[1];
         }
     }
-    $users  = ($options[3] != -1) ? explode(',', $options[3]) : array();
-    $groups = !empty($options[4]) ? explode(',', $options[4]) : array();
+    $users  = ($options[3] != -1) ? explode(',', $options[3]) : [];
+    $groups = !empty($options[4]) ? explode(',', $options[4]) : [];
 
     $items          = $loglogObj->getViews($options[0], 0, $options[5], $options[6], $module, $options[2], $users, $groups);
-    $block          = array();
+    $block          = [];
     $block['items'] = $items;
     $block['sort']  = $options[5];
 
@@ -87,7 +87,7 @@ function userlog_views_edit($options)
     $criteria->add(new Criteria('hasnotification', 1));
     $criteria->add(new Criteria('isactive', 1));
     $modules  = $moduleHandler->getObjects($criteria, true);
-    $hasviews = array();
+    $hasviews = [];
     foreach ($modules as $module) {
         $not_config = $module->getInfo('notification');
         foreach ($not_config['category'] as $category) {
@@ -142,12 +142,12 @@ function userlog_views_edit($options)
 
     ++$i;
     $sortEle = new XoopsFormSelect(_AM_USERLOG_SORT, "options[{$i}]", $options[$i]);
-    $sortEle->addOptionArray(array(
+    $sortEle->addOptionArray([
                                  'count'        => _AM_USERLOG_VIEW,
                                  'module'       => _AM_USERLOG_MODULE,
                                  'module_name'  => _AM_USERLOG_MODULE_NAME,
                                  'module_count' => _AM_USERLOG_VIEW_MODULE
-                             ));
+                             ]);
     $sortEle->setDescription(_AM_USERLOG_SORT_DSC);
 
     ++$i;

@@ -49,7 +49,7 @@ function xoops_module_update_userlog(XoopsModule $module, $prev_version = null)
     }
     $ret = true;
     // first db update
-    if ($prev_version == 100) {
+    if (100 == $prev_version) {
         $ret = update_userlog_v100($module);
     }
     if ($prev_version < 114) {
@@ -79,12 +79,13 @@ function xoops_module_update_userlog(XoopsModule $module, $prev_version = null)
 function update_userlog_v100(XoopsModule $module)
 {
     $field   = 'module_name';
-    $Userlog = Userlog::getInstance();
-    $ret     = $Userlog->getHandler('log')->showFields($field);
+    $moduleDirName = basename(dirname(__DIR__));
+    $userlog  = Userlog::getInstance();
+    $ret     = $userlog->getHandler('log')->showFields($field);
     preg_match_all('!\d+!', $ret[$field]['Type'], $nums);
     // only change if module_name Type was VARCHAR(25)
-    if ($nums[0][0] == 25) {
-        $ret2 = $Userlog->getHandler('log')->changeField($field, "VARCHAR(50) NOT NULL default ''");
+    if (25 == $nums[0][0]) {
+        $ret2 = $userlog->getHandler('log')->changeField($field, "VARCHAR(50) NOT NULL default ''");
     } else {
         $ret2 = true;
         $module->setErrors("Your table field ({$field}) with size {$ret[$field]['Type']} don't need change.");
@@ -101,8 +102,9 @@ function update_userlog_v100(XoopsModule $module)
  */
 function update_userlog_v114(XoopsModule $module)
 {
-    $Userlog    = Userlog::getInstance();
-    $logsetsObj = $Userlog->getHandler('setting')->getAll();
+    $moduleDirName = basename(dirname(__DIR__));
+    $userlog    = Userlog::getInstance();
+    $logsetsObj = $userlog->getHandler('setting')->getAll();
     $ret        = true;
     foreach ($logsetsObj as $setObj) {
         if (strpos($setObj->getVar('options'), 'active')) {
@@ -125,19 +127,20 @@ function update_userlog_v114(XoopsModule $module)
  */
 function update_userlog_v115(XoopsModule $module)
 {
-    $Userlog = Userlog::getInstance();
+    $moduleDirName = basename(dirname(__DIR__));
+    $userlog  = Userlog::getInstance();
     // Only change the field from INDEX to UNIQUE if it is not unique
     // if (isset($indexArr[0]["Non_unique"]) || $indexArr[0]["Non_unique"] == 1) { }
     // change the index in _stats table
-    if (!$ret = $Userlog->getHandler('stats')->changeIndex('stats_type_link_period', array('stats_type', 'stats_link', 'stats_period'), 'UNIQUE')) {
+    if (!$ret = $userlog->getHandler('stats')->changeIndex('stats_type_link_period', ['stats_type', 'stats_link', 'stats_period'], 'UNIQUE')) {
         $module->setErrors("'stats_type_link_period' index is not changed to unique. Warning: do not use module until you change this index to unique.");
     }
     // drop the index in _log table
-    if (!$ret = $Userlog->getHandler('log')->dropIndex('log_id_uid')) {
+    if (!$ret = $userlog->getHandler('log')->dropIndex('log_id_uid')) {
         $module->setErrors("'log_id_uid' index is not dropped.");
     }
     // add the index in _log table
-    if (!$ret = $Userlog->getHandler('log')->addIndex('log_time', array('log_time'))) {
+    if (!$ret = $userlog->getHandler('log')->addIndex('log_time', ['log_time'])) {
         $module->setErrors("'log_time' index is not added.");
     }
 
@@ -153,10 +156,10 @@ function update_userlog_v116(XoopsModule $module)
 {
     // remove old html template files
     $template_directory = XOOPS_ROOT_PATH . '/modules/' . $module->getVar('dirname', 'n') . '/templates/';
-    $template_list      = array_diff(scandir($template_directory, SCANDIR_SORT_NONE), array('..', '.'));
+    $template_list      = array_diff(scandir($template_directory, SCANDIR_SORT_NONE), ['..', '.']);
     foreach ($template_list as $k => $v) {
         $fileinfo = new SplFileInfo($template_directory . $v);
-        if ($fileinfo->getExtension() === 'html' && $fileinfo->getFilename() !== 'index.html') {
+        if ('html' === $fileinfo->getExtension() && 'index.html' !== $fileinfo->getFilename()) {
             @unlink($template_directory . $v);
         }
     }

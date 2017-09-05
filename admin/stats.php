@@ -25,8 +25,7 @@ use Xmf\Request;
 require_once __DIR__ . '/admin_header.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
-
-$Userlog  = Userlog::getInstance(false);
+$userlog  =  Userlog::getInstance();
 $queryObj = UserlogQuery::getInstance();
 
 // Where do we start ?
@@ -45,10 +44,10 @@ $statsObj = UserlogStats::getInstance();
 $statsObj->updateAll('log', 100); // prob = 100
 $statsObj->updateAll('set', 100); // prob = 100
 $statsObj->updateAll('file', 100); // prob = 100
-$statsObj->updateAll('referral', $Userlog->getConfig('probstats'));
-$statsObj->updateAll('browser', $Userlog->getConfig('probstats')); // or $statsObj->updateAll("OS", $Userlog->getConfig("probstats"));
+$statsObj->updateAll('referral', $userlog->getConfig('probstats'));
+$statsObj->updateAll('browser', $userlog->getConfig('probstats')); // or $statsObj->updateAll("OS", $userlog->getConfig("probstats"));
 
-$stats       = $statsObj->getAll(array('log', 'logdel', 'set', 'file'));
+$stats       = $statsObj->getAll(['log', 'logdel', 'set', 'file']);
 $adminObject = \Xmf\Module\Admin::getInstance();
 $adminObject->addInfoBox(_AM_USERLOG_STATS_ABSTRACT);
 $periods = array_flip($statsObj->period);
@@ -65,8 +64,8 @@ foreach ($stats as $type => $arr) {
 }
 $criteria = new CriteriaCompo();
 $criteria->setGroupBy('module');
-$moduleViews = $Userlog->getHandler('log')->getCounts($criteria);
-$dirNames    = $Userlog->getModules();
+$moduleViews = $userlog->getHandler('log')->getCounts($criteria);
+$dirNames    = $userlog->getModules();
 if (!empty($moduleViews)) {
     $adminObject->addInfoBox(_AM_USERLOG_VIEW_MODULE);
     foreach ($moduleViews as $mDir => $views) {
@@ -76,7 +75,7 @@ if (!empty($moduleViews)) {
 $criteria = new CriteriaCompo();
 $criteria->setGroupBy('uid');
 $criteria->setLimit(10);
-$userViews = $Userlog->getHandler('log')->getCounts($criteria);
+$userViews = $userlog->getHandler('log')->getCounts($criteria);
 if (!empty($userViews)) {
     $adminObject->addInfoBox(_AM_USERLOG_VIEW_USER);
     foreach ($userViews as $uid => $views) {
@@ -87,7 +86,7 @@ $criteria = new CriteriaCompo();
 $criteria->add(new Criteria('groups', '%g%', 'LIKE')); // Why cannot use this?: $criteria->add(new Criteria("groups", "", "!="))
 $criteria->setGroupBy('groups');
 $criteria->setLimit(10);
-$groupViews = $Userlog->getHandler('log')->getCounts($criteria);
+$groupViews = $userlog->getHandler('log')->getCounts($criteria);
 if (!empty($groupViews)) {
     $adminObject->addInfoBox(_AM_USERLOG_VIEW_GROUP);
     foreach ($groupViews as $gids => $views) {
@@ -101,7 +100,7 @@ if (!empty($groupViews)) {
             }
         }
     }
-    $groupNames = $Userlog->getGroupList();
+    $groupNames = $userlog->getGroupList();
     foreach ($gidViews as $gid => $views) {
         $adminObject->addInfoBoxLine(sprintf( $groupNames[$gid] . ': %s', $views), '', $views ? 'GREEN' : 'RED');
     }
@@ -111,13 +110,13 @@ if (!empty($groupViews)) {
 // options[1] - stats_type - referral (default), browser, OS
 // options[2] - Sort - stats_link, stats_value (default), time_update
 // options[3] - Order - DESC, ASC default: DESC
-$refViews = $queryObj->stats_typeShow(array(10, 'referral', 'stats_value', 'DESC'));
+$refViews = $queryObj->stats_typeShow([10, 'referral', 'stats_value', 'DESC']);
 $GLOBALS['xoopsTpl']->assign('refViews', $refViews);
 
-$browserViews = $queryObj->stats_typeShow(array(10, 'browser', 'stats_value', 'DESC'));
+$browserViews = $queryObj->stats_typeShow([10, 'browser', 'stats_value', 'DESC']);
 $GLOBALS['xoopsTpl']->assign('browserViews', $browserViews);
 
-$OSViews = $queryObj->stats_typeShow(array(10, 'OS', 'stats_value', 'DESC'));
+$OSViews = $queryObj->stats_typeShow([10, 'OS', 'stats_value', 'DESC']);
 $GLOBALS['xoopsTpl']->assign('OSViews', $OSViews);
 // END add stats_type
 
@@ -136,26 +135,26 @@ if (file_exists($patchLoginFilePatch)) {
 // options[4] - never login before or login before or both
 // options[5] - Order - DESC, ASC default: DESC
 
-$loginsHistory = $queryObj->loginregHistoryShow(array(10, 0, 0, 0, 0, 'DESC'));
+$loginsHistory = $queryObj->loginregHistoryShow([10, 0, 0, 0, 0, 'DESC']);
 $GLOBALS['xoopsTpl']->assign('loginsHistory', $loginsHistory);
 // END add login/register history - TODO: in block
 
 // START add module admin history
 // args[0] - number of items to show in block. the default is 10
 // args[1] - module dirname - 0 or empty = all modules
-$moduleAdmin = $queryObj->modulesadminShow(array(10));
+$moduleAdmin = $queryObj->modulesadminShow([10]);
 $GLOBALS['xoopsTpl']->assign('moduleAdmin', $moduleAdmin);
 
 // END add module admin history
 
 // START module - script - item
-$module = array();
+$module = [];
 // items
 foreach ($moduleScriptItem as $key => $item) {
     $module_script_item = explode('-', $item); // news:article.php-storyid news:index.php-storytopic => $module["news"]=array("storyid","storytopic");
     $module_script      = explode(':', $module_script_item[0]); //  news:article.php => $module_script = array(news,article.php);
     if (!isset($module[$module_script[0]])) {
-        $module[$module_script[0]]['item_name'] = array();
+        $module[$module_script[0]]['item_name'] = [];
         $module[$module_script[0]]['script']    = array_slice($module_script, 1);
     }
     $module[$module_script[0]]['script']      = array_unique(array_merge($module[$module_script[0]]['script'], array_slice($module_script, 1)));
@@ -171,7 +170,7 @@ foreach ($modules as $dir) {
 $loglogObj = UserlogLog::getInstance();
 
 // get items views
-$items = $loglogObj->getViews($limitentry, $startentry, $sortentry, $orderentry, $module, $log_timeGT, ($users[0] != -1) ? $users : array(), ($groups[0] != 0) ? $groups : array());
+$items = $loglogObj->getViews($limitentry, $startentry, $sortentry, $orderentry, $module, $log_timeGT, ($users[0] != -1) ? $users : [], (0 != $groups[0]) ? $groups : []);
 $GLOBALS['xoopsTpl']->assign('sortentry', $sortentry);
 $GLOBALS['xoopsTpl']->assign('items', $items);
 // SRART form
@@ -179,20 +178,20 @@ $form = new XoopsThemeForm(_AM_USERLOG_VIEW, 'views', 'stats.php', 'post', true)
 // number of items to display element
 $limitEl = new XoopsFormText(_AM_USERLOG_ITEMS_NUM, 'limitentry', 10, 255, $limitentry);
 $sortEl  = new XoopsFormSelect(_AM_USERLOG_SORT, 'sortentry', $sortentry);
-$sortEl->addOptionArray(array(
+$sortEl->addOptionArray([
                             'count'        => _AM_USERLOG_VIEW,
                             'module'       => _AM_USERLOG_MODULE,
                             'module_name'  => _AM_USERLOG_MODULE_NAME,
                             'module_count' => _AM_USERLOG_VIEW_MODULE
-                        ));
+                        ]);
 $sortEl->setDescription(_AM_USERLOG_SORT_DSC);
 $orderEl = new XoopsFormSelect(_AM_USERLOG_ORDER, 'orderentry', $orderentry);
 $orderEl->addOption('DESC', _DESCENDING);
 $orderEl->addOption('ASC', _ASCENDING);
 $orderEl->setDescription(_AM_USERLOG_ORDER_DSC);
 // modules, items elements
-$moduleObjs = $Userlog->getModules(array(), null, true);
-$itemLinks  = array();
+$moduleObjs = $userlog->getModules([], null, true);
+$itemLinks  = [];
 foreach ($moduleObjs as $mObj) {
     $dirNames[$mObj->dirname()] = $mObj->name();
     $not_config                 = $mObj->getInfo('notification');
@@ -223,7 +222,7 @@ $userEl       = new XoopsFormLabel(_AM_USERLOG_UID, $userRadioEl->render() . $us
 
 $groupRadioEl = new XoopsFormRadio(_AM_USERLOG_GROUPS, 'groups', $groups[0]);
 $groupRadioEl->addOption(0, _ALL);
-$groupRadioEl->addOption(($groups[0] != 0) ? $groups[0] : 2, _SELECT); // if no group in selection box it select gid=2 registered users
+$groupRadioEl->addOption((0 != $groups[0]) ? $groups[0] : 2, _SELECT); // if no group in selection box it select gid=2 registered users
 $groupRadioEl->setExtra("onchange=\"var el=document.getElementById('groups'); el.disabled=(this.id == 'groups1'); if (!el.value) {el.value= this.value}\""); // if group dont select any option it select "all"
 $groupSelectEl = new XoopsFormSelectGroup(_AM_USERLOG_GROUPS, 'groups', true, $groups, 3, true);
 $groupEl       = new XoopsFormLabel(_AM_USERLOG_GROUPS, $groupRadioEl->render() . $groupSelectEl->render());

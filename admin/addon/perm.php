@@ -33,10 +33,10 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 // if you add uid of webmasters or those users who have admin permissions in userlog module, other admins will not have permission anymore.
 // e.g.: $perm["super"]["user"] = array(1,234,23451); // it means only users with uid=1,234,23451 have access and other webmasters dont have access.
-$perm['super']['uid'] = array();
+$perm['super']['uid'] = [];
 
 // if you add groups with admin permission in  whole site (webmasters) or admin permission in userlog module, other admin groups dont have access.
 // e.g.: $perm["super"]["group"] = array(1,7,9); // it means only groups 1,7,9 have access and other groups dont have access.
-$perm['super']['group'] = array();
+$perm['super']['group'] = [];
 
 return $perm;

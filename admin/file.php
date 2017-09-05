@@ -25,19 +25,19 @@ use Xmf\Request;
 require_once __DIR__ . '/admin_header.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
-$Userlog   = Userlog::getInstance(false);
+$userlog   = Userlog::getInstance();
 $loglogObj = UserlogLog::getInstance();
 
 $adminObject = \Xmf\Module\Admin::getInstance();
 
 // Where do we start ?
 $opentry    = Request::getString('op', '');
-$file       = Request::getArray('file', !empty($opentry) ? '' : $Userlog->getConfig('file'));
+$file       = Request::getArray('file', !empty($opentry) ? '' : $userlog->getConfig('file'));
 $filename   = Request::getString('filename', '');
 $confirm    = Request::getString('confirm', 0, 'post');
 $file       = $loglogObj->parseFiles($file);
 $totalFiles = count($file);
-if (!empty($opentry) && ($confirm == 0 || $totalFiles == 0)) {
+if (!empty($opentry) && (0 == $confirm || 0 == $totalFiles)) {
     redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, ''));
 }
 switch ($opentry) {
@@ -50,7 +50,7 @@ switch ($opentry) {
         break;
     case 'rename':
         // only one file. 0 file or more than one file => error
-        if ($totalFiles != 1) {
+        if (1 != $totalFiles) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, _AM_USERLOG_FILE_SELECT_ONE));
         }
         if ($newFile = $loglogObj->renameFile($file[0], $filename)) {
@@ -60,7 +60,7 @@ switch ($opentry) {
         break;
     case 'copy':
         // only one file. 0 file or more than one file => error
-        if ($totalFiles != 1) {
+        if (1 != $totalFiles) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, _AM_USERLOG_FILE_SELECT_ONE));
         }
         if ($newFile = $loglogObj->copyFile($file[0], $filename)) {
@@ -96,14 +96,14 @@ $form   = new XoopsThemeForm(_AM_USERLOG_ADMENU_FILE, 'filemanager', 'file.php',
 $fileEl = $loglogObj->buildFileSelectEle($file, true, 10);// multiselect = true, size=10
 $form->addElement($fileEl);
 $actionEl = new XoopsFormSelect(_AM_USERLOG_FILE_ACTION, 'op', $opentry);
-$actions  = array(
+$actions  = [
     'zip'        => _AM_USERLOG_FILE_ZIP,
     'del'        => _DELETE,
     'rename'     => _AM_USERLOG_FILE_RENAME,
     'copy'       => _AM_USERLOG_FILE_COPY,
     'merge'      => _AM_USERLOG_FILE_MERGE,
     'export-csv' => _AM_USERLOG_FILE_EXPORT_CSV
-);
+];
 $actionEl->addOptionArray($actions);
 $actionEl->setExtra("onchange=\"var el = document.forms.filemanager.filename.parentElement.parentElement; el.className = ''; if (this.value == 'del') { el.className = 'hidden'}\"");
 $form->addElement($actionEl);

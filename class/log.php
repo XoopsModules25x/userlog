@@ -37,7 +37,7 @@ class UserlogLog extends XoopsObject
 
     public $store = 0; // store: 0,1->db 2->file 3->both
 
-    public $sourceJSON = array(
+    public $sourceJSON = [
         'zget',
         'post',
         'request',
@@ -47,7 +47,7 @@ class UserlogLog extends XoopsObject
         'cookie',
         'header',
         'logger'
-    );// json_encoded fields
+    ];// json_encoded fields
 
     /**
      * constructor
@@ -154,10 +154,10 @@ class UserlogLog extends XoopsObject
         $start = 0,
         $sort = 'count',
         $order = 'DESC',
-        $modules = array(),
+        $modules = [],
         $since = 0,
-        $users = array(),
-        $groups = array()
+        $users = [],
+        $groups = []
     ) {
         if (!empty($modules)) {
             $criteriaModule = new CriteriaCompo();
@@ -217,10 +217,10 @@ class UserlogLog extends XoopsObject
         }
         $criteria->setLimit($limit);
         $criteria->setStart($start);
-        $sortItem = ($sort === 'module_count') ? 'module_name' : $sort;
+        $sortItem = ('module_count' === $sort) ? 'module_name' : $sort;
         $criteria->setSort($sortItem);
         $criteria->setOrder($order);
-        $fields = array(
+        $fields = [
             'uid',
             'groups',
             'pagetitle',
@@ -230,28 +230,28 @@ class UserlogLog extends XoopsObject
             'script',
             'item_name',
             'item_id'
-        );
+        ];
         $criteria->setGroupBy('pageadmin, module, script, item_name, item_id');
 
         list($loglogsObj, $itemViews) = $this->userlog->getHandler('log')->getLogsCounts($criteria, $fields);
         $criteria->setGroupBy('module');
-        $criteria->setSort(($sort === 'module_count') ? 'count' : 'module');
+        $criteria->setSort(('module_count' === $sort) ? 'count' : 'module');
         $moduleViews = $this->userlog->getHandler('log')->getCounts($criteria);
         unset($criteria);
         // initializing
-        $items = array(); // very important!!!
+        $items = []; // very important!!!
         foreach ($loglogsObj as $key => $loglogObj) {
             $module_dirname = $loglogObj->module();
             $item_id        = $loglogObj->item_id();
             if (!empty($item_id)) {
                 $link = 'modules/' . $module_dirname . '/' . $loglogObj->script() . '?' . $loglogObj->item_name() . '=' . $item_id;
-            } elseif ($module_dirname !== 'system-root') {
-                $link = 'modules/' . $module_dirname . (($module_dirname !== 'system'
+            } elseif ('system-root' !== $module_dirname) {
+                $link = 'modules/' . $module_dirname . (('system' !== $module_dirname
                                                          && $loglogObj->pageadmin()) ? '/admin/' : '/') . $loglogObj->script();
             } else {
                 $link = $loglogObj->script();
             }
-            $items[$link]                 = array();
+            $items[$link]                 = [];
             $items[$link]['count']        = $itemViews[$key];
             $items[$link]['pagetitle']    = $loglogObj->pagetitle();
             $items[$link]['module']       = $module_dirname;
@@ -263,7 +263,7 @@ class UserlogLog extends XoopsObject
             $col2[$link] = $item['count'];//second sort by
         }
         if (!empty($items)) {
-            array_multisort($col1, ($order === 'ASC') ? SORT_ASC : SORT_DESC, $col2, SORT_DESC, $items);
+            array_multisort($col1, ('ASC' === $order) ? SORT_ASC : SORT_DESC, $col2, SORT_DESC, $items);
         }
 
         return $items;
@@ -280,7 +280,7 @@ class UserlogLog extends XoopsObject
         if ($this->store > 1) {
             $this->storeFile($tolog);
         } // store file
-        if ($this->store == 2) {
+        if (2 == $this->store) {
             return true;
         } // do not store db
         $this->storeDb($tolog, $force);
@@ -306,7 +306,7 @@ class UserlogLog extends XoopsObject
                 switch ($option) {
                     // update referral in stats table
                     case 'referer':
-                        if (strpos($logvalue, XOOPS_URL) === false) {
+                        if (false === strpos($logvalue, XOOPS_URL)) {
                             $statsObj = UserlogStats::getInstance();
                             $statsObj->update('referral', 0, 1, true, parse_url($logvalue, PHP_URL_HOST)); // auto increment 1
                         }
@@ -334,7 +334,7 @@ class UserlogLog extends XoopsObject
      *
      * @return mixed
      */
-    public function arrayToDisplay($logs, $skips = array())
+    public function arrayToDisplay($logs, $skips = [])
     {
         foreach ($logs as $log_id => $log) {
             $logs[$log_id]['log_time']   = $this->userlog->formatTime($logs[$log_id]['log_time']);
@@ -361,7 +361,7 @@ class UserlogLog extends XoopsObject
                 if (!empty($logs[$log_id][$option])) {
                     $logs[$log_id]['request_method'] .= '$_' . strtoupper($option) . ' ' . $logs[$log_id][$option] . "\n";
                 }
-                if ($option === 'env') {
+                if ('env' === $option) {
                     break;
                 } // only $sourceJSON = array("zget","post","request","files","env"
             }
@@ -415,12 +415,12 @@ class UserlogLog extends XoopsObject
             $data = "\n";
         }
         $data .= json_encode($tolog, (PHP_VERSION > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
-        if ($fileHandler->open('a') === false) {
+        if (false === $fileHandler->open('a')) {
             $this->setErrors("Cannot open file ({$log_file})");
 
             return false;
         }
-        if ($fileHandler->write($data) === false) {
+        if (false === $fileHandler->write($data)) {
             $this->setErrors("Cannot write to file ({$log_file})");
 
             return false;
@@ -438,10 +438,10 @@ class UserlogLog extends XoopsObject
      *
      * @return bool|string
      */
-    public function exportFilesToCsv($log_files = array(), $headers, $csvNamePrefix = 'list_', $delimiter = ';')
+    public function exportFilesToCsv($log_files = [], $headers, $csvNamePrefix = 'list_', $delimiter = ';')
     {
         $log_files = $this->parseFiles($log_files);
-        if (($totalFiles = count($log_files)) == 0) {
+        if (0 == ($totalFiles = count($log_files))) {
             $this->setErrors(_AM_USERLOG_FILE_SELECT_ONE);
 
             return false;
@@ -476,7 +476,7 @@ class UserlogLog extends XoopsObject
             $fileHandler->__construct($csvFile, true); // create file and folder
             $this->setErrors("File was not exist create file ({$csvFile})");
         }
-        if ($fileHandler->open('a') === false) {
+        if (false === $fileHandler->open('a')) {
             $this->setErrors("Cannot open file ({$csvFile})");
 
             return false;
@@ -505,18 +505,18 @@ class UserlogLog extends XoopsObject
      * @return array
      */
     public function getLogsFromFiles(
-        $log_files = array(),
+        $log_files = [],
         $limit = 0,
         $start = 0,
         $options = null,
         $sort = 'log_time',
         $order = 'DESC'
     ) {
-        $logs    = array();
+        $logs    = [];
         $logsStr = $this->readFiles($log_files);
         // if no logs return empty array and total = 0
         if (empty($logsStr)) {
-            return array(array(), 0);
+            return [[], 0];
         }
         foreach ($logsStr as $id => $log) {
             $logArr = json_decode($log, true);
@@ -550,7 +550,7 @@ class UserlogLog extends XoopsObject
             }
             $val_arr = explode(',', $val);
             // if type is text
-            if (!empty($val_arr[0]) && (int)$val_arr[0] == 0) {
+            if (!empty($val_arr[0]) && 0 == (int)$val_arr[0]) {
                 foreach ($logs as $id => $log) {
                     if (is_array($log[$op])) {
                         $log[$op] = json_encode($log[$op], (PHP_VERSION > '5.4.0') ? JSON_UNESCAPED_UNICODE : 0);
@@ -559,13 +559,13 @@ class UserlogLog extends XoopsObject
                         // if !QUERY eg: !logs.php,views.php
                         if (0 === strpos($qry, '!')) {
                             $flagStr = true;
-                            if (strpos($log[$op], substr($qry, 1)) !== false) {
+                            if (false !== strpos($log[$op], substr($qry, 1))) {
                                 $flagStr = false; // have that delete
                                 break; // means AND
                             }
                         } else {
                             $flagStr = false;
-                            if (strpos($log[$op], $qry) !== false) {
+                            if (false !== strpos($log[$op], $qry)) {
                                 $flagStr = true; // have that dont delete
                                 break; // means OR
                             }
@@ -577,9 +577,9 @@ class UserlogLog extends XoopsObject
                 }
             } else {
                 // if there is one value - deal with =, > ,<
-                if (count($val_arr) == 1) {
+                if (1 == count($val_arr)) {
                     $val_int = $val_arr[0];
-                    if ($op === 'log_time' || $op === 'last_login') {
+                    if ('log_time' === $op || 'last_login' === $op) {
                         $val_int = time() - $this->userlog->getSinceTime($val_int);
                     }
                     // query is one int $t (=, < , >)
@@ -615,13 +615,13 @@ class UserlogLog extends XoopsObject
         // END Criteria in array
         // if no logs return empty array and total = 0
         if (empty($logs)) {
-            return array(array(), 0);
+            return [[], 0];
         }
 
         // sort order array. multisort is possible :D
         if (!empty($sort)) {
             // log_id is just the same as log_time
-            if ($sort === 'log_id') {
+            if ('log_id' === $sort) {
                 $sort = 'log_time';
             }
             // $typeFlag = is_numeric($logs[0][$sort]) ? SORT_NUMERIC : SORT_STRING;
@@ -631,7 +631,7 @@ class UserlogLog extends XoopsObject
                 //$col2[$key]  = $log[$sort2];
             }
             // Add $logs as the last parameter, to sort by the common key
-            array_multisort($col, ($order === 'ASC') ? SORT_ASC : SORT_DESC, $logs);
+            array_multisort($col, ('ASC' === $order) ? SORT_ASC : SORT_DESC, $logs);
         }
         // get count
         $total = count($logs);
@@ -640,7 +640,7 @@ class UserlogLog extends XoopsObject
             $logs = array_slice($logs, $start, $limit);
         }
 
-        return array($logs, $total);
+        return [$logs, $total];
     }
 
     /**
@@ -648,13 +648,13 @@ class UserlogLog extends XoopsObject
      *
      * @return array
      */
-    public function readFiles($log_files = array())
+    public function readFiles($log_files = [])
     {
         $log_files = $this->parseFiles($log_files);
-        if (($totalFiles = count($log_files)) == 0) {
+        if (0 == ($totalFiles = count($log_files))) {
             return $this->readFile();
         }
-        $logs = array();
+        $logs = [];
         foreach ($log_files as $file) {
             $logs = array_merge($logs, $this->readFile($file));
         }
@@ -668,15 +668,15 @@ class UserlogLog extends XoopsObject
      *
      * @return bool|string
      */
-    public function mergeFiles($log_files = array(), $mergeFileName = null)
+    public function mergeFiles($log_files = [], $mergeFileName = null)
     {
         $log_files = $this->parseFiles($log_files);
-        if (($totalFiles = count($log_files)) == 0) {
+        if (0 == ($totalFiles = count($log_files))) {
             $this->setErrors(_AM_USERLOG_FILE_SELECT_ONE);
 
             return false;
         }
-        $logs          = array();
+        $logs          = [];
         $logsStr       = $this->readFiles($log_files);
         $data          = implode("\n", $logsStr);
         $mergeFile     = $this->userlog->getConfig('logfilepath') . '/' . USERLOG_DIRNAME . '/';
@@ -697,12 +697,12 @@ class UserlogLog extends XoopsObject
             return false;
         }
         $fileHandler->__construct($mergeFile, true); // create file and folder
-        if ($fileHandler->open('a') === false) {
+        if (false === $fileHandler->open('a')) {
             $this->setErrors("Cannot open file ({$mergeFile})");
 
             return false;
         }
-        if ($fileHandler->write($data) === false) {
+        if (false === $fileHandler->write($data)) {
             $this->setErrors("Cannot write to file ({$mergeFile})");
 
             return false;
@@ -729,13 +729,13 @@ class UserlogLog extends XoopsObject
         if (!$fileHandler->exists()) {
             $this->setErrors("Cannot open file ({$log_file})");
 
-            return array();
+            return [];
         }
 
-        if (($data = $fileHandler->read()) === false) {
+        if (false === ($data = $fileHandler->read())) {
             $this->setErrors("Cannot read file ({$log_file})");
 
-            return array();
+            return [];
         }
         $fileHandler->close();
         $logs = explode("\n", $data);
@@ -748,10 +748,10 @@ class UserlogLog extends XoopsObject
      *
      * @return int
      */
-    public function deleteFiles($log_files = array())
+    public function deleteFiles($log_files = [])
     {
         $log_files = $this->parseFiles($log_files);
-        if (($totalFiles = count($log_files)) == 0) {
+        if (0 == ($totalFiles = count($log_files))) {
             $this->setErrors(_AM_USERLOG_FILE_SELECT_ONE);
 
             return false;
@@ -765,7 +765,7 @@ class UserlogLog extends XoopsObject
                 $this->setErrors("({$file}) is a folder or is not exist");
                 continue;
             }
-            if (($ret = $fileHandler->delete()) === false) {
+            if (false === ($ret = $fileHandler->delete())) {
                 $this->setErrors("Cannot delete ({$file})");
                 continue;
             }
@@ -869,13 +869,13 @@ class UserlogLog extends XoopsObject
      *
      * @return array
      */
-    public function getFilesFromFolders($folders = array())
+    public function getFilesFromFolders($folders = [])
     {
         list($allFiles, $totalFiles) = $this->userlog->getAllLogFiles();
         if (empty($totalFiles)) {
-            return array();
+            return [];
         }
-        $pathFiles = array();
+        $pathFiles = [];
         $getAll    = false;
         if (in_array('all', $folders)) {
             $getAll = true;
@@ -896,7 +896,7 @@ class UserlogLog extends XoopsObject
      *
      * @return array
      */
-    public function parseFiles($log_files = array())
+    public function parseFiles($log_files = [])
     {
         $pathFiles = $this->getFilesFromFolders($log_files);
         $log_files = array_unique(array_merge($log_files, $pathFiles));
@@ -921,10 +921,10 @@ class UserlogLog extends XoopsObject
      *
      * @return string
      */
-    public function zipFiles($log_files = array(), $zipFileName = null)
+    public function zipFiles($log_files = [], $zipFileName = null)
     {
         $log_files = $this->parseFiles($log_files);
-        if (($totalFiles = count($log_files)) == 0) {
+        if (0 == ($totalFiles = count($log_files))) {
             $this->setErrors('No file to zip');
 
             return false;
@@ -942,7 +942,7 @@ class UserlogLog extends XoopsObject
 
         $zip = new ZipArchive();
 
-        if ($zip->open($zipFile, ZipArchive::CREATE) !== true) {
+        if (true !== $zip->open($zipFile, ZipArchive::CREATE)) {
             $this->setErrors("Cannot open ({$zipFile})");
 
             return false;
@@ -969,10 +969,10 @@ class UserlogLog extends XoopsObject
      *
      * @return XoopsFormSelect
      */
-    public function buildFileSelectEle($currentFile = array(), $multi = false, $size = 3)
+    public function buildFileSelectEle($currentFile = [], $multi = false, $size = 3)
     {
         // $modversion['config'][$i]['options'] = array(_AM_USERLOG_FILE_WORKING=>'0',_AM_USERLOG_STATS_FILEALL=>'all');
-        if (count($currentFile) == 0 || $currentFile[0] == '0') {
+        if (0 == count($currentFile) || '0' == $currentFile[0]) {
             $currentFile = $this->userlog->getWorkingFile();
         }
         $fileEl = new XoopsFormSelect(_AM_USERLOG_FILE, 'file', $currentFile, $size, $multi);
@@ -1023,13 +1023,13 @@ class UserlogLog extends XoopsObject
 
             return true;
         }
-        // if no plugin use notifications
+        // if there is no plugin, use notifications
         $not_config = $this->userlog->getLogModule()->getInfo('notification');
         if (!empty($not_config)) {
             foreach ($not_config['category'] as $category) {
                 // if $item_id != 0 ---> return true
                 if (!empty($category['item_name'])
-                    && in_array($this->script(), is_array($category['subscribe_from']) ? $category['subscribe_from'] : array($category['subscribe_from']))
+                    && in_array($this->script(), is_array($category['subscribe_from']) ? $category['subscribe_from'] : [$category['subscribe_from']])
                     && $item_id = Request::getInt($category['item_name'], 0)) {
                     $this->setVar('item_name', $category['item_name']);
                     $this->setVar('item_id', $item_id);
@@ -1127,10 +1127,10 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             $start = $criteria->getStart();
         }
         $result   = $this->db->query($sql, $limit, $start);
-        $ret      = array();
-        $retCount = array();
+        $ret      = [];
+        $retCount = [];
         if ($asObject) {
-            while (($myrow = $this->db->fetchArray($result)) !== false) {
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 if ($id_as_key) {
                     $retCount[$myrow[$this->keyName]] = array_pop($myrow);
                 } else {
@@ -1147,7 +1147,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             }
         } else {
             $object = $this->create(false);
-            while (($myrow = $this->db->fetchArray($result)) !== false) {
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 if ($id_as_key) {
                     $retCount[$myrow[$this->keyName]] = array_pop($myrow);
                 } else {
@@ -1163,7 +1163,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             unset($object);
         }
 
-        return array($ret, $retCount);
+        return [$ret, $retCount];
     }
 
     /**
@@ -1227,7 +1227,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
 
             return false;
         }
-        $ret = array();
+        $ret = [];
         while ($myrow = $this->db->fetchArray($result)) {
             $ret[$myrow['Field']] = $myrow;
         }
@@ -1313,7 +1313,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
 
             return false;
         }
-        $ret = array();
+        $ret = [];
         while ($myrow = $this->db->fetchArray($result)) {
             $ret[] = $myrow;
         }
@@ -1333,7 +1333,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
      *
      * @return bool
      */
-    public function addIndex($index = null, $fields = array(), $index_type = 'INDEX')
+    public function addIndex($index = null, $fields = [], $index_type = 'INDEX')
     {
         if (empty($index) || empty($fields)) {
             return false;
@@ -1342,7 +1342,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             return false;
         } // index is exist
         $index_type = strtoupper($index_type);
-        if (!in_array($index_type, array('INDEX', 'UNIQUE', 'SPATIAL', 'FULLTEXT'))) {
+        if (!in_array($index_type, ['INDEX', 'UNIQUE', 'SPATIAL', 'FULLTEXT'])) {
             return false;
         }
         $fields = is_array($fields) ? implode(',', $fields) : $fields;
@@ -1396,7 +1396,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
      *
      * @return bool
      */
-    public function changeIndex($index = null, $fields = array(), $index_type = 'INDEX')
+    public function changeIndex($index = null, $fields = [], $index_type = 'INDEX')
     {
         if ($this->showIndex($index) && !$this->dropIndex($index)) {
             return false;
@@ -1421,7 +1421,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             $table = $this->table;
         } // the table for this object
         // check if database prefix is not added yet and then add it!!!
-        if (strpos($table, $this->db->prefix() . '_') !== 0) {
+        if (0 !== strpos($table, $this->db->prefix() . '_')) {
             $table = $this->db->prefix("{$table}");
         }
         $result = $this->db->queryF("SHOW TABLES LIKE '{$table}'");
@@ -1446,7 +1446,7 @@ class UserlogLogHandler extends XoopsPersistableObjectHandler
             return false;
         } // table is current || oldTable is not exist
         // check if database prefix is not added yet and then add it!!!
-        if (strpos($oldTable, $this->db->prefix() . '_') !== 0) {
+        if (0 !== strpos($oldTable, $this->db->prefix() . '_')) {
             $oldTable = $this->db->prefix("{$oldTable}");
         }
         if (!$result = $this->db->queryF("ALTER TABLE {$oldTable} RENAME {$this->table}")) {

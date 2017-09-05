@@ -33,14 +33,9 @@ use phpbrowscap\Browscap;
  */
 class Userlog extends \Xmf\Module\Helper
 {
-    public $dirname;
-    public $module;
     public $logmodule;
     public $user;
-    public $handler;
-    public $config;
-    public $debug;
-    public $debugArray   = array();
+    public $debugArray   = [];
     public $logext       = 'log';
     public $cookiePrefix = '';
     public $groupList;
@@ -74,21 +69,9 @@ class Userlog extends \Xmf\Module\Helper
     /**
      * @return null
      */
-    public function getModule()
-    {
-        if ($this->module === null) {
-            $this->initModule();
-        }
-
-        return $this->module;
-    }
-
-    /**
-     * @return null
-     */
     public function getLogModule()
     {
-        if ($this->logmodule === null) {
+        if (null === $this->logmodule) {
             $this->initLogModule();
         }
 
@@ -102,7 +85,7 @@ class Userlog extends \Xmf\Module\Helper
      *
      * @return mixed
      */
-    public function getModules($dirnames = array(), $otherCriteria = null, $asObj = false)
+    public function getModules($dirnames = [], $otherCriteria = null, $asObj = false)
     {
         // get all dirnames
         /** @var XoopsModuleHandler $moduleHandler */
@@ -134,7 +117,7 @@ class Userlog extends \Xmf\Module\Helper
      */
     public function getUser()
     {
-        if ($this->user === null) {
+        if (null === $this->user) {
             $this->initUser();
         }
 
@@ -146,7 +129,7 @@ class Userlog extends \Xmf\Module\Helper
      */
     public function getGroupList()
     {
-        if ($this->groupList === null) {
+        if (null === $this->groupList) {
             $this->initGroupList();
         }
 
@@ -158,38 +141,13 @@ class Userlog extends \Xmf\Module\Helper
      */
     public function getBrowsCap()
     {
-        if ($this->browscap === null) {
+        if (null === $this->browscap) {
             $this->initBrowsCap();
         }
 
         return $this->browscap;
     }
 
-    /**
-     * @param null $name
-     *
-     * @param null $default
-     * @return null
-     */
-    public function getConfig($name = null, $default = null)
-    {
-        if ($this->config === null) {
-            $this->initConfig();
-        }
-        if (!$name) {
-            $this->addLog('Getting all config');
-
-            return $this->config;
-        }
-        if (!isset($this->config[$name])) {
-            $this->addLog("ERROR :: CONFIG '{$name}' does not exist");
-
-            return null;
-        }
-        $this->addLog("Getting config '{$name}' : " . $this->config[$name]);
-
-        return $this->config[$name];
-    }
 
     /**
      * @param null $name
@@ -199,28 +157,13 @@ class Userlog extends \Xmf\Module\Helper
      */
     public function setConfig($name = null, $value = null)
     {
-        if ($this->config === null) {
+        if (null === $this->configs) {
             $this->initConfig();
         }
-        $this->config[$name] = $value;
-        $this->addLog("Setting config '{$name}' : " . $this->config[$name]);
+        $this->configs[$name] = $value;
+        $this->addLog("Setting config '{$name}' : " . $this->configs[$name]);
 
-        return $this->config[$name];
-    }
-
-    /**
-     * @param $name
-     *
-     * @return mixed
-     */
-    public function getHandler($name)
-    {
-        if (!isset($this->handler[$name . 'Handler'])) {
-            $this->initHandler($name);
-        }
-        $this->addLog("Getting handler '{$name}'");
-
-        return $this->handler[$name . 'Handler'];
+        return $this->configs[$name];
     }
 
     /**
@@ -228,9 +171,9 @@ class Userlog extends \Xmf\Module\Helper
      */
     public function getAllLogFiles()
     {
-        $logPaths    = $this->module->getInfo('log_paths');
+        $logPaths    = $this->object->getInfo('log_paths');
         $currentPath = $this->getConfig('logfilepath');
-        $allFiles    = array();
+        $allFiles    = [];
         $totalFiles  = 0;
         foreach ($logPaths as $path) {
             $folderHandler                           = XoopsFile::getHandler('folder', $path . '/' . USERLOG_DIRNAME);
@@ -238,10 +181,10 @@ class Userlog extends \Xmf\Module\Helper
             $totalFiles                              += count($allFiles[$path . '/' . USERLOG_DIRNAME]);
         }
         if (empty($totalFiles)) {
-            return array(array(), 0);
+            return [[], 0];
         }
 
-        return array($allFiles, $totalFiles);
+        return [$allFiles, $totalFiles];
     }
 
     /**
@@ -270,7 +213,7 @@ class Userlog extends \Xmf\Module\Helper
             return $array;
         } // all keys
         $keyarr = array_intersect(array_keys($array), $keyarr); // keys should be in array
-        $ret    = array();
+        $ret    = [];
         foreach ($keyarr as $key) {
             $ret[$key] = $array[$key];
         }
@@ -295,16 +238,16 @@ class Userlog extends \Xmf\Module\Helper
     /**
      * @param null   $intTime
      * @param string $dateFormat
-     * @param string $timeoffset
+     * @param null|string $timeoffset
      *
      * @return bool|string
      */
-    public function formatTime($intTime = null, $dateFormat = 'c', $timeoffset = '')
+    public function formatTime($intTime = null, $dateFormat = 'c', $timeoffset = null)
     {
         if (empty($intTime)) {
             return false;
         }
-        if ($dateFormat === 'custom' || $dateFormat === 'c') {
+        if ('custom' === $dateFormat || 'c' === $dateFormat) {
             $dateFormat = $this->getConfig('format_date');
         }
         xoops_load('XoopsLocal');
@@ -375,17 +318,6 @@ class Userlog extends \Xmf\Module\Helper
         return $postPatch;
     }
 
-    private function initModule()
-    {
-        global $xoopsModule;
-        if (isset($xoopsModule) && is_object($xoopsModule) && $xoopsModule->getVar('dirname') == $this->dirname) {
-            $this->module = $xoopsModule;
-        } else {
-            $hModule      = xoops_getHandler('module');
-            $this->module = $hModule->getByDirname($this->dirname);
-        }
-        $this->addLog('INIT MODULE');
-    }
 
     private function initLogModule()
     {
@@ -440,31 +372,4 @@ class Userlog extends \Xmf\Module\Helper
         return true;
     }
 
-    protected function initConfig()
-    {
-        $this->addLog('INIT CONFIG');
-        $hModConfig   = xoops_getHandler('config');
-        $this->config = $hModConfig->getConfigsByCat(0, $this->getModule()->getVar('mid'));
-    }
-
-    /**
-     * @param $name
-     */
-    protected function initHandler($name)
-    {
-        $this->addLog('INIT ' . $name . ' HANDLER');
-        $this->handler[$name . 'Handler'] = xoops_getModuleHandler($name, $this->dirname);
-    }
-
-    /**
-     * @param $log
-     */
-    public function addLog($log)
-    {
-        if ($this->debug) {
-            if (is_object($GLOBALS['xoopsLogger'])) {
-                $GLOBALS['xoopsLogger']->addExtra($this->getModule()->name(), $log);
-            }
-        }
-    }
 }

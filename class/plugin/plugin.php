@@ -32,7 +32,7 @@ class Userlog_Module_Plugin
     {
         $inactiveModules = false;
         if ($force) {
-            $inactiveModules = array($dirname);
+            $inactiveModules = [$dirname];
         }
         $available = self::getPlugins($pluginName, $inactiveModules);
         if (!in_array($dirname, array_keys($available))) {
@@ -50,9 +50,9 @@ class Userlog_Module_Plugin
      */
     public static function getPlugins($pluginName = 'system', $inactiveModules = false)
     {
-        static $plugins = array();
+        static $plugins = [];
         if (!isset($plugins[$pluginName])) {
-            $plugins[$pluginName] = array();
+            $plugins[$pluginName] = [];
             //$xoops = Xoops::getInstance();
 
             //Load interface for this plugin
@@ -111,7 +111,7 @@ class Userlog_Module_Plugin
 
     public static function fileExists($file)
     {
-        static $included = array();
+        static $included = [];
         if (!isset($included[$file])) {
             $included[$file] = file_exists($file);
         }

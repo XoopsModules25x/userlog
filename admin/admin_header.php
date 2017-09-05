@@ -28,9 +28,9 @@ require_once __DIR__ . '/../include/common.php';
 $moduleDirName = basename(dirname(__DIR__));
 xoops_load('XoopsFormLoader');
 
-if (false !== ($moduleHelper = Xmf\Module\Helper::getHelper($moduleDirName))) {
+if (false !== ($moduleHelper = \Xmf\Module\Helper::getHelper($moduleDirName))) {
 } else {
-    $moduleHelper = Xmf\Module\Helper::getHelper('system');
+    $moduleHelper = \Xmf\Module\Helper::getHelper('system');
 }
 $adminObject = \Xmf\Module\Admin::getInstance();
 

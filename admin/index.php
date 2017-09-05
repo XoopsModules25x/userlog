@@ -24,8 +24,7 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 $adminObject = \Xmf\Module\Admin::getInstance();
-
-$Userlog = Userlog::getInstance(false);
+$userlog = Userlog::getInstance();
 
 // update all time stats
 $statsObj = UserlogStats::getInstance();
@@ -33,9 +32,9 @@ $statsObj->updateAll('log', 100); // prob = 100
 $statsObj->updateAll('set', 100); // prob = 100
 $statsObj->updateAll('file', 100); // prob = 100
 
-$stats = $statsObj->getAll(array('log', 'logdel', 'set', 'file'));
+$stats = $statsObj->getAll(['log', 'logdel', 'set', 'file']);
 // if no set in database - start with a setting!
-if (isset($stats['set'][0]) && $stats['set'][0]['value'] == 0) {
+if (isset($stats['set'][0]) && 0 == $stats['set'][0]['value']) {
     $adminObject->addItemButton(_AM_USERLOG_SET_ADD, 'setting.php');
 } else {
     $adminObject->addInfoBox(_AM_USERLOG_SUMMARY);
@@ -60,18 +59,18 @@ foreach ($stats as $type => $arr) {
     }
 }
 // if there is no file in working check the parent folder chmod
-if ((isset($stats['fileall'][0]) && $stats['fileall'][0]['value'] == 0) || ($stats['file' . $Userlog->getWorkingFile()][0]['value'] == 0)) {
-    $adminObject->addConfigBoxLine(array($Userlog->getConfig('logfilepath'), 755), 'chmod');
+if ((isset($stats['fileall'][0]) && 0 == $stats['fileall'][0]['value']) || (0 == $stats['file' . $userlog->getWorkingFile()][0]['value'])) {
+    $adminObject->addConfigBoxLine([$userlog->getConfig('logfilepath'), 755], 'chmod');
     // core feature: if(!$adminObject->addConfigBoxLine())
-    if (substr(decoct(fileperms($Userlog->getConfig('logfilepath'))), 2) < 755) {
-        $adminObject->addConfigBoxLine("<span class='bold red'>" . sprintf(_AM_USERLOG_CONFIG_CHMOD_ERROR, $Userlog->getConfig('logfilepath'), 755) . '</span>', 'default');
-        $adminObject->addConfigBoxLine("<span class='bold red'>" . sprintf(_AM_USERLOG_CONFIG_CREATE_FOLDER, $Userlog->getConfig('logfilepath') . '/' . USERLOG_DIRNAME, 755) . '</span>', 'default');
+    if (substr(decoct(fileperms($userlog->getConfig('logfilepath'))), 2) < 755) {
+        $adminObject->addConfigBoxLine("<span class='bold red'>" . sprintf(_AM_USERLOG_CONFIG_CHMOD_ERROR, $userlog->getConfig('logfilepath'), 755) . '</span>', 'default');
+        $adminObject->addConfigBoxLine("<span class='bold red'>" . sprintf(_AM_USERLOG_CONFIG_CREATE_FOLDER, $userlog->getConfig('logfilepath') . '/' . USERLOG_DIRNAME, 755) . '</span>', 'default');
     }
 } else {
     // if there is file in working check the log folder chmod
-    $adminObject->addConfigBoxLine(array($Userlog->getConfig('logfilepath') . '/' . USERLOG_DIRNAME, 755), 'chmod');
+    $adminObject->addConfigBoxLine([$userlog->getConfig('logfilepath') . '/' . USERLOG_DIRNAME, 755], 'chmod');
 }
-$adminObject->addConfigBoxLine("<span class='bold " . ($Userlog->getConfig('status') ? 'green' : 'red') . "'>" . _MI_USERLOG_STATUS . ' ' . ($Userlog->getConfig('status') ? _MI_USERLOG_ACTIVE : _MI_USERLOG_IDLE) . '</span>', 'default');
+$adminObject->addConfigBoxLine("<span class='bold " . ($userlog->getConfig('status') ? 'green' : 'red') . "'>" . _MI_USERLOG_STATUS . ' ' . ($userlog->getConfig('status') ? _MI_USERLOG_ACTIVE : _MI_USERLOG_IDLE) . '</span>', 'default');
 
 $adminObject->displayNavigation(basename(__FILE__));
 $adminObject->displayButton('left');

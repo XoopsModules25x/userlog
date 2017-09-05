@@ -20,8 +20,9 @@
  */
 defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/common.php';
-$Userlog = Userlog::getInstance(false);
+$moduleDirName = basename(dirname(__DIR__));
+$userlog  = Userlog::getInstance();
 
-if (!empty($_POST) && $Userlog->getConfig('postlog')) {
+if (!empty($_POST) && $userlog->getConfig('postlog')) {
     include __DIR__ . '/log.php';
 }
