@@ -10,7 +10,7 @@
  */
 
 /**
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         http://www.fsf.org/copyleft/gpl.html GNU public license
  * @author          trabis <lusopoemas@gmail.com>
  */
@@ -19,6 +19,7 @@
 // change $xoops -> $GLOBALS['xoops']
 // change  Userlog_Module_Plugin_Abstract , Userlog_Module_Plugin
 // change  $xoops->getActiveModules() -> xoops_getActiveModules()
+
 class Userlog_Module_Plugin
 {
     /**
@@ -32,7 +33,7 @@ class Userlog_Module_Plugin
     {
         $inactiveModules = false;
         if ($force) {
-            $inactiveModules = array($dirname);
+            $inactiveModules = [$dirname];
         }
         $available = self::getPlugins($pluginName, $inactiveModules);
         if (!in_array($dirname, array_keys($available))) {
@@ -50,9 +51,9 @@ class Userlog_Module_Plugin
      */
     public static function getPlugins($pluginName = 'system', $inactiveModules = false)
     {
-        static $plugins = array();
+        static $plugins = [];
         if (!isset($plugins[$pluginName])) {
-            $plugins[$pluginName] = array();
+            $plugins[$pluginName] = [];
             //$xoops = Xoops::getInstance();
 
             //Load interface for this plugin
@@ -66,8 +67,7 @@ class Userlog_Module_Plugin
             }
             foreach ($dirnames as $dirname) {
                 if (self::loadFile($GLOBALS['xoops']->path("modules/{$dirname}/class/plugin/{$pluginName}.php"))
-                    || self::loadFile($GLOBALS['xoops']->path("modules/{$pluginName}/class/plugin/{$dirname}.php"))
-                ) {
+                    || self::loadFile($GLOBALS['xoops']->path("modules/{$pluginName}/class/plugin/{$dirname}.php"))) {
                     $className = ucfirst($dirname) . ucfirst($pluginName) . 'Plugin';
                     $interface = ucfirst($pluginName) . 'PluginInterface';
                     $class     = new $className($dirname);
@@ -93,7 +93,7 @@ class Userlog_Module_Plugin
         self::_securityCheck($file);
         if (self::fileExists($file)) {
             if ($once) {
-                include_once $file;
+                require_once $file;
             } else {
                 include $file;
             }
@@ -112,7 +112,7 @@ class Userlog_Module_Plugin
 
     public static function fileExists($file)
     {
-        static $included = array();
+        static $included = [];
         if (!isset($included[$file])) {
             $included[$file] = file_exists($file);
         }

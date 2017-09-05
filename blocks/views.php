@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog blocks
  * @since           1
@@ -19,8 +19,8 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-include_once dirname(__DIR__) . '/include/common.php';
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+require_once __DIR__ . '/../include/common.php';
 
 if (defined('USERLOG_BLOCK_VIEWS_DEFINED')) {
     return;
@@ -44,25 +44,25 @@ xoops_loadLanguage('admin', USERLOG_DIRNAME);
 function userlog_views_show($options)
 {
     $loglogObj = UserlogLog::getInstance();
-    $module    = array();
+    $module    = [];
     if (!empty($options[1])) {
         $options_views = explode(',', $options[1]); // item views in where claus eg: news-storyid, newbb-topic_id, news-storytopic
         foreach ($options_views as $key => $item) {
             $module_script_item = explode('-', $item); // news:article.php-storyid news:index.php-storytopic => $module["news"]=array("storyid","storytopic");
             $module_script      = explode(':', $module_script_item[0]); //  news:article.php => $module_script = array(news,article.php);
             if (!isset($module[$module_script[0]])) {
-                $module[$module_script[0]]['item_name'] = array();
+                $module[$module_script[0]]['item_name'] = [];
                 $module[$module_script[0]]['script']    = array_slice($module_script, 1);
             }
             $module[$module_script[0]]['script']      = array_unique(array_merge($module[$module_script[0]]['script'], array_slice($module_script, 1)));
             $module[$module_script[0]]['item_name'][] = $module_script_item[1];
         }
     }
-    $users  = ($options[3] != -1) ? explode(',', $options[3]) : array();
-    $groups = !empty($options[4]) ? explode(',', $options[4]) : array();
+    $users  = ($options[3] != -1) ? explode(',', $options[3]) : [];
+    $groups = !empty($options[4]) ? explode(',', $options[4]) : [];
 
     $items          = $loglogObj->getViews($options[0], 0, $options[5], $options[6], $module, $options[2], $users, $groups);
-    $block          = array();
+    $block          = [];
     $block['items'] = $items;
     $block['sort']  = $options[5];
 
@@ -76,17 +76,18 @@ function userlog_views_show($options)
  */
 function userlog_views_edit($options)
 {
-    // include_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
+    // require_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
     xoops_load('XoopsFormLoader');
     // $form = new XoopsBlockForm(); //reserve for 2.6
     $form = new XoopsThemeForm(_AM_USERLOG_VIEW, 'views', '');
 
+    /** @var XoopsModuleHandler $moduleHandler */
     $moduleHandler = xoops_getHandler('module');
     $criteria      = new CriteriaCompo();
     $criteria->add(new Criteria('hasnotification', 1));
     $criteria->add(new Criteria('isactive', 1));
     $modules  = $moduleHandler->getObjects($criteria, true);
-    $hasviews = array();
+    $hasviews = [];
     foreach ($modules as $module) {
         $not_config = $module->getInfo('notification');
         foreach ($not_config['category'] as $category) {
@@ -109,12 +110,12 @@ function userlog_views_edit($options)
     if (!empty($hasviews)) {
         $viewsEle->addOptionArray($hasviews);
         $viewsEle->setExtra("onchange = \"validate('options[{$i}][]','checkbox', true)\""); // prevent user select no option
-        $check_all = _ALL . ": <input type=\"checkbox\" name=\"item_check\" id=\"item_check\" value=\"1\" onclick=\"xoopsCheckGroup('blockform', 'item_check','options[{$i}][]');\" />"; // blockform is the main form
+        $check_all = _ALL . ": <input type=\"checkbox\" name=\"item_check\" id=\"item_check\" value=\"1\" onclick=\"xoopsCheckGroup('blockform', 'item_check','options[{$i}][]');\">"; // blockform is the main form
         $viewsEle  = new XoopsFormLabel(_AM_USERLOG_ITEMS, $check_all . "<br\>" . $viewsEle->render());
     } else {
         // prevent to select
         $viewsEle->addOption(0, _NONE);
-        $viewsEle->setExtra("class=\"hidden\"");
+        $viewsEle->setExtra('class="hidden"');
     }
 
     $viewsEle->setDescription(_AM_USERLOG_ITEMS_DSC);
@@ -141,12 +142,12 @@ function userlog_views_edit($options)
 
     ++$i;
     $sortEle = new XoopsFormSelect(_AM_USERLOG_SORT, "options[{$i}]", $options[$i]);
-    $sortEle->addOptionArray(array(
+    $sortEle->addOptionArray([
                                  'count'        => _AM_USERLOG_VIEW,
                                  'module'       => _AM_USERLOG_MODULE,
                                  'module_name'  => _AM_USERLOG_MODULE_NAME,
                                  'module_count' => _AM_USERLOG_VIEW_MODULE
-                             ));
+                             ]);
     $sortEle->setDescription(_AM_USERLOG_SORT_DSC);
 
     ++$i;

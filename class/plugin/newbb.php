@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog class plugin
  * @since           1.16
@@ -19,7 +19,9 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+use Xmf\Request;
+
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 /**
  * Class NewbbUserlogPlugin
@@ -48,39 +50,41 @@ class NewbbUserlogPlugin extends Userlog_Module_Plugin_Abstract implements Userl
      * @return array $script_arr["item_name"] name of the item = array("subscribe_from1", "subscribe_from2") Name of the script
      *
      * !empty($subscribe_from):
-     * @return array $item["item_name"] name of the item, $item["item_id"] id of the item
+     * @return false|array $item["item_name"] name of the item, $item["item_id"] id of the item
      */
     public function item($subscribe_from)
     {
         if (empty($subscribe_from)) {
-            $script_arr             = array();
-            $script_arr['topic_id'] = array('viewtopic.php');
-            $script_arr['forum']    = array('viewforum.php');
+            $script_arr             = [];
+            $script_arr['topic_id'] = ['viewtopic.php'];
+            $script_arr['forum']    = ['viewforum.php'];
 
             return $script_arr;
         }
 
         switch ($subscribe_from) {
             case 'viewtopic.php':
+
+                /** @var \NewbbTopicHandler $topicHandler */
                 $topicHandler = xoops_getModuleHandler('topic', 'newbb');
-                $post_id      = !empty($_REQUEST['post_id']) ? (int)$_REQUEST['post_id'] : 0;
-                $move         = isset($_GET['move']) ? strtolower($_GET['move']) : '';
-                $topic_id     = !empty($_REQUEST['topic_id']) ? (int)$_REQUEST['topic_id'] : 0;
+                $post_id      = Request::getInt('post_id',  0);
+                $move         = Request::getString('move', '', 'GET') ;
+                $topic_id     = Request::getInt('topic_id',  0);
                 if (!empty($post_id)) {
                     $topic_obj = $topicHandler->getByPost($post_id);
                     $topic_id  = $topic_obj->getVar('topic_id');
                 } elseif (!empty($move)) {
-                    $forum_id  = !empty($_REQUEST['forum_id']) ? (int)$_REQUEST['forum_id'] : 0;
-                    $topic_obj = $topicHandler->getByMove($topic_id, ($move === 'prev') ? -1 : 1, $forum_id);
+                    $forum_id  = Request::getInt('forum_id',  0);
+                    $topic_obj = $topicHandler->getByMove($topic_id, ('prev' === $move) ? -1 : 1, $forum_id);
                     $topic_id  = $topic_obj->getVar('topic_id');
                 }
 
-                return array('item_name' => 'topic_id', 'item_id' => $topic_id);
+                return ['item_name' => 'topic_id', 'item_id' => $topic_id];
                 break;
             case 'viewforum.php':
-                $forum_id = !empty($_REQUEST['forum']) ? (int)$_REQUEST['forum'] : 0;
+                $forum_id = Request::getInt('forum', 0);
 
-                return array('item_name' => 'forum', 'item_id' => $forum_id);
+                return ['item_name' => 'forum', 'item_id' => $forum_id];
                 break;
         }
 

@@ -11,17 +11,18 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog include
  * @since           1.1
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/common.php';
-$Userlog = Userlog::getInstance(false);
+$moduleDirName = basename(dirname(__DIR__));
+$userlog  = Userlog::getInstance();
 
-if (!empty($_POST) && $Userlog->getConfig('postlog')) {
+if (!empty($_POST) && $userlog->getConfig('postlog')) {
     include __DIR__ . '/log.php';
 }

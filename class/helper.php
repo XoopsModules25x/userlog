@@ -8,34 +8,34 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog class
  * @since           1
  * @author          irmtfan (irmtfan@yahoo.com)
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
+use Xmf\Request;
+
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 require_once __DIR__ . '/phpbrowscap/Browscap.php';
+
 // The Browscap class is in the phpbrowscap namespace, so import it
 use phpbrowscap\Browscap;
 
 /**
  * Class Userlog
  */
-class Userlog
+class Userlog extends \Xmf\Module\Helper
 {
-    public $dirname;
-    public $module;
     public $logmodule;
     public $user;
-    public $handler;
-    public $config;
-    public $debug;
-    public $debugArray   = array();
+    public $debugArray   = [];
     public $logext       = 'log';
     public $cookiePrefix = '';
     public $groupList;
@@ -66,18 +66,12 @@ class Userlog
         return $instance;
     }
 
-    public function getModule()
+    /**
+     * @return null|\XoopsModule
+     */
+    public function getLogModule()
     {
-        if ($this->module === null) {
-            $this->initModule();
-        }
-
-        return $this->module;
-    }
-
-    public function &getLogModule()
-    {
-        if ($this->logmodule === null) {
+        if (null === $this->logmodule) {
             $this->initLogModule();
         }
 
@@ -91,9 +85,10 @@ class Userlog
      *
      * @return mixed
      */
-    public function getModules($dirnames = array(), $otherCriteria = null, $asObj = false)
+    public function getModules($dirnames = [], $otherCriteria = null, $asObj = false)
     {
         // get all dirnames
+        /** @var XoopsModuleHandler $moduleHandler */
         $moduleHandler = xoops_getHandler('module');
         $criteria      = new CriteriaCompo();
         if (count($dirnames) > 0) {
@@ -117,57 +112,42 @@ class Userlog
         return $dirNames;
     }
 
-    public function &getUser()
+    /**
+     * @return null
+     */
+    public function getUser()
     {
-        if ($this->user === null) {
+        if (null === $this->user) {
             $this->initUser();
         }
 
         return $this->user;
     }
 
-    public function &getGroupList()
+    /**
+     * @return null|array
+     */
+    public function getGroupList()
     {
-        if ($this->groupList === null) {
+        if (null === $this->groupList) {
             $this->initGroupList();
         }
 
         return $this->groupList;
     }
 
+    /**
+     * @return null
+     */
     public function getBrowsCap()
     {
-        if ($this->browscap === null) {
+        if (null === $this->browscap) {
             $this->initBrowsCap();
         }
 
         return $this->browscap;
     }
 
-    /**
-     * @param null $name
-     *
-     * @return null
-     */
-    public function getConfig($name = null)
-    {
-        if ($this->config === null) {
-            $this->initConfig();
-        }
-        if (!$name) {
-            $this->addLog('Getting all config');
-
-            return $this->config;
-        }
-        if (!isset($this->config[$name])) {
-            $this->addLog("ERROR :: CONFIG '{$name}' does not exist");
-
-            return null;
-        }
-        $this->addLog("Getting config '{$name}' : " . $this->config[$name]);
-
-        return $this->config[$name];
-    }
 
     /**
      * @param null $name
@@ -177,28 +157,13 @@ class Userlog
      */
     public function setConfig($name = null, $value = null)
     {
-        if ($this->config === null) {
+        if (null === $this->configs) {
             $this->initConfig();
         }
-        $this->config[$name] = $value;
-        $this->addLog("Setting config '{$name}' : " . $this->config[$name]);
+        $this->configs[$name] = $value;
+        $this->addLog("Setting config '{$name}' : " . $this->configs[$name]);
 
-        return $this->config[$name];
-    }
-
-    /**
-     * @param $name
-     *
-     * @return mixed
-     */
-    public function getHandler($name)
-    {
-        if (!isset($this->handler[$name . 'Handler'])) {
-            $this->initHandler($name);
-        }
-        $this->addLog("Getting handler '{$name}'");
-
-        return $this->handler[$name . 'Handler'];
+        return $this->configs[$name];
     }
 
     /**
@@ -206,20 +171,20 @@ class Userlog
      */
     public function getAllLogFiles()
     {
-        $logPaths    = $this->module->getInfo('log_paths');
+        $logPaths    = $this->object->getInfo('log_paths');
         $currentPath = $this->getConfig('logfilepath');
-        $allFiles    = array();
+        $allFiles    = [];
         $totalFiles  = 0;
         foreach ($logPaths as $path) {
             $folderHandler                           = XoopsFile::getHandler('folder', $path . '/' . USERLOG_DIRNAME);
             $allFiles[$path . '/' . USERLOG_DIRNAME] = $folderHandler->find('.*' . $this->logext);
-            $totalFiles += count($allFiles[$path . '/' . USERLOG_DIRNAME]);
+            $totalFiles                              += count($allFiles[$path . '/' . USERLOG_DIRNAME]);
         }
         if (empty($totalFiles)) {
-            return array(array(), 0);
+            return [[], 0];
         }
 
-        return array($allFiles, $totalFiles);
+        return [$allFiles, $totalFiles];
     }
 
     /**
@@ -248,7 +213,7 @@ class Userlog
             return $array;
         } // all keys
         $keyarr = array_intersect(array_keys($array), $keyarr); // keys should be in array
-        $ret    = array();
+        $ret    = [];
         foreach ($keyarr as $key) {
             $ret[$key] = $array[$key];
         }
@@ -265,24 +230,24 @@ class Userlog
     {
         if ($since > 0) {
             return (int)$since * 24 * 3600;
-        } else {
-            return (int)abs($since) * 3600;
         }
+
+        return (int)abs($since) * 3600;
     }
 
     /**
      * @param null   $intTime
      * @param string $dateFormat
-     * @param string $timeoffset
+     * @param null|string $timeoffset
      *
      * @return bool|string
      */
-    public function formatTime($intTime = null, $dateFormat = 'c', $timeoffset = '')
+    public function formatTime($intTime = null, $dateFormat = 'c', $timeoffset = null)
     {
         if (empty($intTime)) {
             return false;
         }
-        if ($dateFormat === 'custom' || $dateFormat === 'c') {
+        if ('custom' === $dateFormat || 'c' === $dateFormat) {
             $dateFormat = $this->getConfig('format_date');
         }
         xoops_load('XoopsLocal');
@@ -297,7 +262,7 @@ class Userlog
      */
     public function getCookie($name = 'TOGGLE')
     {
-        $toggles = XoopsRequest::getString($this->cookiePrefix . $name, null, 'cookie');
+        $toggles = Request::getString($this->cookiePrefix . $name, null, 'cookie');
 
         return explode(',', $toggles);
     }
@@ -353,17 +318,6 @@ class Userlog
         return $postPatch;
     }
 
-    private function initModule()
-    {
-        global $xoopsModule;
-        if (isset($xoopsModule) && is_object($xoopsModule) && $xoopsModule->getVar('dirname') == $this->dirname) {
-            $this->module = $xoopsModule;
-        } else {
-            $hModule      = xoops_getHandler('module');
-            $this->module = $hModule->getByDirname($this->dirname);
-        }
-        $this->addLog('INIT MODULE');
-    }
 
     private function initLogModule()
     {
@@ -391,6 +345,7 @@ class Userlog
 
     private function initGroupList()
     {
+        /** @var \XoopsMemberHandler $groupHandler */
         $groupHandler    = xoops_getHandler('member');
         $this->groupList = $groupHandler->getGroupList();
         $this->addLog('INIT GROUP LIST');
@@ -398,6 +353,7 @@ class Userlog
 
     /**
      * @return bool
+     * @throws \phpbrowscap\Exception
      */
     private function initBrowsCap()
     {
@@ -416,33 +372,5 @@ class Userlog
         $this->addLog('INIT BrowsCap');
 
         return true;
-    }
-
-    private function initConfig()
-    {
-        $this->addLog('INIT CONFIG');
-        $hModConfig   = xoops_getHandler('config');
-        $this->config = $hModConfig->getConfigsByCat(0, $this->getModule()->getVar('mid'));
-    }
-
-    /**
-     * @param $name
-     */
-    private function initHandler($name)
-    {
-        $this->addLog('INIT ' . $name . ' HANDLER');
-        $this->handler[$name . 'Handler'] = xoops_getModuleHandler($name, $this->dirname);
-    }
-
-    /**
-     * @param $log
-     */
-    private function addLog($log)
-    {
-        if ($this->debug) {
-            if (is_object($GLOBALS['xoopsLogger'])) {
-                $GLOBALS['xoopsLogger']->addExtra($this->getModule()->name(), $log);
-            }
-        }
     }
 }

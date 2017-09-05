@@ -1,10 +1,7 @@
 <div id="help-template" class="outer">
-    <h1 class="head">Help: <a class="ui-corner-all tooltip" href="<{$smarty.const.USERLOG_ADMIN_URL}>/index.php"
-                              title="Back to the administration of <{$smarty.const._MI_USERLOG_NAME}>">
-        <{$smarty.const._MI_USERLOG_NAME}> <img src="<{xoAdminIcons home.png}>"
-                                                alt="Back to the administration of <{$smarty.const._MI_USERLOG_NAME}>"/></a>
-    </h1>
-    <h4 class="odd"><{$smarty.const._DESCRIPTION}></h4>
+    <{include file=$smarty.const._MI_USERLOG_HELP_HEADER}>
+
+    <h4 class="odd">DESCRIPTION</h4> <br>
     <p class="even">
         Userlog is a node logger which can log your user/visitor activities in your site from a preferred node.<br>
         This is a very useful tool for webmasters in busy sites. For example, you can log your other Admins

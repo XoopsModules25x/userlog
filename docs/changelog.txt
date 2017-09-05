@@ -1,11 +1,49 @@
-1.17 Alpha 2             NOT RELEASED
----------------------------------------
+<h5>1.17 Beta 1   [2017-09-04]</h5>
+<hr>
+- conversion of Userlog helper class to XMF (mamba)
+- short array syntax (mamba)
+- converted to Yoda syntax (mamba)
+- CSS cosmetics (mamba)
+- converted to XMF Request (mamba)
+
+<h5>1.17 Alpha 3   [NOT RELEASED]</h5>
+<hr>
+- XOOPS 2.5.9, PHP 7 (mamba)
+- Converted to XOOPS 2.5.8 Admin GUI (mamba)
+- removed @version (mamba)
+- PSR-2 code cosmetics (mamba)
+- addNavigation(basename(__FILE__))  (mamba)
+- dirname(__FILE__) to __DIR__ (mamba)
+- replaced < br /> with < br > (mamba)
+- Unnecessary double quotes (mamba)
+- reference mismatch (mamba)
+- Hardening to type safe (mamba)
+- update Help (mamba)
+- changed _handler to Handler (mamba)
+- removed '/' from void HTML elements (&lt;br&gt;, &lt;img&gt;, etc) (mamba)
+- HTML 5: removed 'selected' and 'checked' (mamba)
+- updated file headers for consistency (mamba)
+- renamed several $indexAdmin with $adminObject for consistency (mamba)
+- Updates for PayPal changes (zyspec)
+- added Contributing.md (mamba)
+- moved functions to Utility class (mamba)
+- include_once to require_once (mamba)
+- php-cs-fixer updates (mamba)
+- started conversion to XMF (mamba)
+    &nbsp;&nbsp;- updated addInfoBoxLine entries (mamba)
+    &nbsp;&nbsp;- displayNavigation(basename(__FILE__))  (mamba)
+    &nbsp;&nbsp;- changed to ->displayButton('left') (mamba)
+
+
+
+<h5>1.17 Alpha 2             [NOT RELEASED]</h5>
+<hr>
 - bug fixes (mamba)
 - updated Browsecap to 2.1.1 (mamba)
 
 
-1.17 Alpha 1             NOT RELEASED
----------------------------------------
+<h5>1.17 Alpha 1             [NOT RELEASED]</h5>
+<hr>
 - removed @version (mamba)
 - some PSR-2 code cosmetics (mamba)
 - addNavigation(basename(__FILE__))  (mamba)
@@ -24,8 +62,8 @@
 
 
 
-1.16 Alpha 3             NOT RELEASED
----------------------------------------
+<h5>1.16 Alpha 3             [NOT RELEASED]</h5>
+<hr>
 - Standard norms updated and fixed typos for the English folder (Cesag) (2013/10/04)
 - Adding PHP 5.5.x implementation for preg_replace_callback (Mamba) (2013/09/23)
 - bug fix: persian translations turned to utf-8 without BOM in language/persian/*.* (2013/05/20)
@@ -64,8 +102,8 @@
 
 - change version to 1.16 ALPHA 2 (2013/05/11)
 
-1.15
----------------------------------------
+<h5>1.15</h5>
+<hr>
 - change version to 1.15 ALPHA 2 (2013/05/05)
 - add: recognize bots and crawlers with get_browser in statistics in class/log.php and class/stats.php (2013/05/06)
 - improve: drop 'log_id_uid' index and add 'log_time' index in '_log' table (for DELETE logs older than feature ...) in include/module.php and sql/mysql.php (2013/05/05)
@@ -73,8 +111,8 @@
 - improve: add insertUpdate function to enhance the 'insert' XOOPS core function and use "ON DUPLICATE KEY UPDATE" to update (increment) any stats type (log, logdel, set, file, referral, browser, OS, ...) in class/stats.php (2013/05/05)
 - enhance: add more comments for alter/show functions in class/log.php (2013/05/05)
 
-1.14
----------------------------------------
+<h5>1.14        </h5>
+<hr>
 - enhance: rename hard-code class/userlog.php to class/helper.php in include/common.php (2013/05/04)
 - enhance: remove hard-code dirname in admin/menu.php (2013/05/03)
 - improve: add index_type to addIndex function in class/log.php (2013/05/03)
@@ -92,21 +130,21 @@
 - security improve: unset passwords information in blocks for more security in blocks/login_reg_history.php (2013/04/27)
 - improve: possibility to log methods when user dont set to log request_method itself in class/log.php (2013/04/27)
 
-1.12
----------------------------------------
+<h5>1.12        </h5>
+<hr>
 - improve: check if all values are empty and do not log if all values are empty in class/setting.php and include/log.php (2013/04/26)
 - change version to 1.12 ALPHA 1 (2013/04/24)
 - add language and config for elapsed times in xoops_version.php and language/english/admin.php and admin/stats.php and blocks/login_reg_history.php(2013/04/24)
 - add stats_type block (referral, browser, OS) (2013/04/24)
 
-1.11
----------------------------------------
+<h5>1.11        </h5>
+<hr>
 - change version to 1.11 ALPHA 1 (2013/04/24)
 - add languages for failed and successful in language/english/admin.php and admin/stats.php (2013/04/24)
 - add: login / register history block in xoops_version.php and blocks/login_reg_history.php and templates/blocks/userlog_login_reg_history.html (2013/04/24)
 
-1.10
----------------------------------------
+<h5>1.10        </h5>
+<hr>
 - improve performance: patch login/register $_POST before store to database in class/helper.php and class/setting.php and class/log.php and admin/stats.php and class/patch/patch_login_history.php (2013/04/24)
 - add: login / register history in admin/stats.php(2013/04/23)
 - improve performance: only get needed stats from getAll($type) function in class/stats.php and admin/stats.php and admin/index.php (2013/04/23)
@@ -119,8 +157,8 @@
 - add: add referral to stats table to show outside referer websites in class/stats.php and admin/stats.php(2013/04/22)
 - improve: update referral in stats table when the log contain it (2013/04/22)
 
-1.01
----------------------------------------
+<h5>1.01        </h5>
+<hr>
 - improve: remove all get() functions in userlog classes to be more compatible with xoops26 in class/setting.php and class/log.php and class/stats.php (2013/04/17)
 - improve: use "XoopsLocale" instead of "XoopsLocal" in xoops26 in class/helper.php (2013/04/17)
 - improve: add "static" to functions to be more compatible with xoops26 in preloads/core.php (2013/04/17)
@@ -146,8 +184,8 @@
 - add update functionality - e.g.: update is possible from v1 beta1 to v1.01 rc1(2013/04/07)
 - fix: change module_name field in mod_userlog_log table size from VARCHAR(25) to VARCHAR(50) (2013/04/07)
 
-1.00
----------------------------------------
+<h5>1.00        </h5>
+<hr>
 - fix and improve: parse all files in all paths before any action in class/log.php and admin/file.php(2013/04/06)
 - fix: return false when no file is selected in class/log.php(2013/04/06)
 - fix: hide filename element when delete is selected in admin/file.php(2013/04/06)

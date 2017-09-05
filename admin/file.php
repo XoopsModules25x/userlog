@@ -8,10 +8,11 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog admin
  * @since           1
@@ -19,22 +20,24 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-include_once __DIR__ . '/admin_header.php';
-include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+use Xmf\Request;
+
+require_once __DIR__ . '/admin_header.php';
+require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
-$Userlog   = Userlog::getInstance(false);
+$userlog   = Userlog::getInstance();
 $loglogObj = UserlogLog::getInstance();
 
-$indexAdmin = new ModuleAdmin();
+$adminObject = \Xmf\Module\Admin::getInstance();
 
 // Where do we start ?
-$opentry    = XoopsRequest::getString('op', '');
-$file       = XoopsRequest::getArray('file', !empty($opentry) ? '' : $Userlog->getConfig('file'));
-$filename   = XoopsRequest::getString('filename', '');
-$confirm    = XoopsRequest::getString('confirm', 0, 'post');
+$opentry    = Request::getString('op', '');
+$file       = Request::getArray('file', !empty($opentry) ? '' : $userlog->getConfig('file'));
+$filename   = Request::getString('filename', '');
+$confirm    = Request::getString('confirm', 0, 'post');
 $file       = $loglogObj->parseFiles($file);
 $totalFiles = count($file);
-if (!empty($opentry) && ($confirm == 0 || $totalFiles == 0)) {
+if (!empty($opentry) && (0 == $confirm || 0 == $totalFiles)) {
     redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, ''));
 }
 switch ($opentry) {
@@ -47,7 +50,7 @@ switch ($opentry) {
         break;
     case 'rename':
         // only one file. 0 file or more than one file => error
-        if ($totalFiles != 1) {
+        if (1 != $totalFiles) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, _AM_USERLOG_FILE_SELECT_ONE));
         }
         if ($newFile = $loglogObj->renameFile($file[0], $filename)) {
@@ -57,7 +60,7 @@ switch ($opentry) {
         break;
     case 'copy':
         // only one file. 0 file or more than one file => error
-        if ($totalFiles != 1) {
+        if (1 != $totalFiles) {
             redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, _AM_USERLOG_FILE_SELECT_ONE));
         }
         if ($newFile = $loglogObj->copyFile($file[0], $filename)) {
@@ -89,18 +92,18 @@ switch ($opentry) {
         redirect_header('file.php', 5, sprintf(_AM_USERLOG_ERROR, implode("<br\>", $loglogObj->getErrors())));
         break;
 }
-$form   = new XoopsThemeForm(_AM_USERLOG_ADMENU_FILE, 'filemanager', 'file.php', 'post');
+$form   = new XoopsThemeForm(_AM_USERLOG_ADMENU_FILE, 'filemanager', 'file.php', 'post', true);
 $fileEl = $loglogObj->buildFileSelectEle($file, true, 10);// multiselect = true, size=10
 $form->addElement($fileEl);
 $actionEl = new XoopsFormSelect(_AM_USERLOG_FILE_ACTION, 'op', $opentry);
-$actions  = array(
+$actions  = [
     'zip'        => _AM_USERLOG_FILE_ZIP,
     'del'        => _DELETE,
     'rename'     => _AM_USERLOG_FILE_RENAME,
     'copy'       => _AM_USERLOG_FILE_COPY,
     'merge'      => _AM_USERLOG_FILE_MERGE,
     'export-csv' => _AM_USERLOG_FILE_EXPORT_CSV
-);
+];
 $actionEl->addOptionArray($actions);
 $actionEl->setExtra("onchange=\"var el = document.forms.filemanager.filename.parentElement.parentElement; el.className = ''; if (this.value == 'del') { el.className = 'hidden'}\"");
 $form->addElement($actionEl);
@@ -113,7 +116,7 @@ $confirmEl                         = new XoopsFormHidden('confirm', 0);
 $confirmEl->customValidationCode[] = "if (confirm('" . _AM_USERLOG_FILE_CONFIRM . " ' + myform.op.options[myform.op.selectedIndex].innerHTML + '\\n " . _AM_USERLOG_FILE . ": ' + myform.file.value)) {myform.confirm.value = 1;} else {return false;};";
 $form->addElement($confirmEl);
 $GLOBALS['xoopsTpl']->assign('form', $form->render());
-$GLOBALS['xoopsTpl']->assign('logo', $indexAdmin->addNavigation(basename(__FILE__)));
+$GLOBALS['xoopsTpl']->assign('logo', $adminObject->displayNavigation(basename(__FILE__)));
 // template
 $template_main = USERLOG_DIRNAME . '_admin_file.tpl';
 if (!empty($template_main)) {

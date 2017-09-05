@@ -25,11 +25,11 @@
                 <div class="truncate ellipsis left">
                     <a href="setting.php?set_id=<{$set.set_id}>" title="<{$smarty.const._EDIT}>"><img
                                 src="<{xoModuleIcons16 edit.png}>" alt="<{$smarty.const._EDIT}>"
-                                title="<{$smarty.const._EDIT}>"/></a>
+                                title="<{$smarty.const._EDIT}>"></a>
                     |
                     <a href="setting.php?op=del&amp;set_id=<{$set.set_id}>" title="<{$smarty.const._DELETE}>"><img
                                 src="<{xoModuleIcons16 delete.png}>" alt="<{$smarty.const._DELETE}>"
-                                title="<{$smarty.const._DELETE}>"/></a>
+                                title="<{$smarty.const._DELETE}>"></a>
                     |
                     <a href=
                        <{if $set.unique_id eq 0}>

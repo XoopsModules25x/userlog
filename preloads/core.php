@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog preloads
  * @since           1
@@ -19,7 +19,7 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
 
 /**
  * Class UserlogCorePreload
@@ -32,16 +32,17 @@ class UserlogCorePreload extends XoopsPreloadItem
      */
     public static function eventCoreFooterStart($args)
     {
-        include dirname(__DIR__) . '/include/log.php';
+        include __DIR__ . '/../include/log.php';
     }
 
     // to log redirects because usually prorammers use exit() after redirect_header function.
+
     /**
      * @param $args
      */
     public static function eventCoreIncludeFunctionsRedirectheader($args)
     {
-        include dirname(__DIR__) . '/include/log.php';
+        include __DIR__ . '/../include/log.php';
     }
 
     /**
@@ -49,7 +50,7 @@ class UserlogCorePreload extends XoopsPreloadItem
      */
     public static function eventCoreIncludeCommonEnd($args)
     {
-        include dirname(__DIR__) . '/include/postlog.php';
+        include __DIR__ . '/../include/postlog.php';
     }
     // in XOOPS255/index.php (homepage) when no module is set for start page there is a bug in XOOPS255/header.php exit() should be commented
     /*$xoopsPreload->triggerEvent('core.header.checkcache');
@@ -64,6 +65,6 @@ class UserlogCorePreload extends XoopsPreloadItem
      */
     public static function eventSystemClassGuiHeader($args)
     {
-        include dirname(__DIR__) . '/include/log.php';
+        include __DIR__ . '/../include/log.php';
     }
 }

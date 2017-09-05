@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog blocks
  * @since           1.11
@@ -19,8 +19,8 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-include_once dirname(__DIR__) . '/include/common.php';
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+require_once __DIR__ . '/../include/common.php';
 
 if (defined('USERLOG_BLOCK_LOGIN_REG_HISTORY_DEFINED')) {
     return;

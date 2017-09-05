@@ -8,10 +8,11 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog admin
  * @since           1
@@ -19,22 +20,23 @@
  * @author          XOOPS Project <www.xoops.org> <www.xoops.ir>
  */
 
-include_once __DIR__ . '/admin_header.php';
-include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+use Xmf\Request;
+
+require_once __DIR__ . '/admin_header.php';
+require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 xoops_cp_header();
-
-$Userlog = Userlog::getInstance(false);
+$userlog = Userlog::getInstance();
 // Where do we start ?
-$startentry = XoopsRequest::getInt('startentry', 0);
-$limitentry = XoopsRequest::getInt('limitentry', $Userlog->getConfig('logs_perpage'));
-$sortentry  = XoopsRequest::getString('sortentry', 'log_id');
-$orderentry = XoopsRequest::getString('orderentry', 'DESC');
+$startentry = Request::getInt('startentry', 0);
+$limitentry = Request::getInt('limitentry', $userlog->getConfig('logs_perpage'));
+$sortentry  = Request::getString('sortentry', 'log_id');
+$orderentry = Request::getString('orderentry', 'DESC');
 
-$options   = XoopsRequest::getArray('options');
-$engine    = XoopsRequest::getString('engine', $Userlog->getConfig('engine'));
-$file      = XoopsRequest::getArray('file', $Userlog->getConfig('file'));
-$opentry   = XoopsRequest::getString('op', '', 'post');
-$log_id    = XoopsRequest::getArray('log_id', 0, 'post');
+$options   = Request::getArray('options');
+$engine    = Request::getString('engine', $userlog->getConfig('engine'));
+$file      = Request::getArray('file', $userlog->getConfig('file'));
+$opentry   = Request::getString('op', '', 'post');
+$log_id    = Request::getArray('log_id', 0, 'post');
 $logsetObj = UserlogSetting::getInstance();
 // START build Criteria for database
 // get var types int, text, bool , ...
@@ -62,10 +64,10 @@ foreach ($options as $key => $val) {
     $val_arr           = explode(',', $val);
     $query_array[$key] = "options[{$key}]={$val}"; // to keep options in url. very important
     // if type is text
-    if ($type_vars[$op] === 'text') {
+    if ('text' === $type_vars[$op]) {
         foreach ($val_arr as $qry) {
             // if !QUERY eg: !logs.php,views.php
-            if (substr($qry, 0, 1) === '!') {
+            if (0 === strpos($qry, '!')) {
                 $criteria_q[$key]->add(new Criteria($op, '%' . substr($qry, 1) . '%', 'NOT LIKE'), 'AND');
             } else {
                 $criteria_q[$key]->add(new Criteria($op, '%' . $qry . '%', 'LIKE'), 'OR');
@@ -73,10 +75,10 @@ foreach ($options as $key => $val) {
         }
     } else {
         // if there is one value - deal with =, > ,<
-        if (count($val_arr) == 1) {
+        if (1 == count($val_arr)) {
             $val_int = $val_arr[0];
-            if ($op === 'log_time' || $op === 'last_login') {
-                $val_int = time() - $Userlog->getSinceTime($val_int);
+            if ('log_time' === $op || 'last_login' === $op) {
+                $val_int = time() - $userlog->getSinceTime($val_int);
             }
             // query is one int $t (=, < , >)
             $criteria_q[$key]->add(new Criteria($op, $val_int, $t));
@@ -96,16 +98,16 @@ if (!empty($query_array)) {
 }
 // create query entry
 $query_entry = '&amp;engine=' . $engine . '&amp;limitentry=' . $limitentry . '&amp;sortentry=' . $sortentry . '&amp;orderentry=' . $orderentry;
-if ($engine === 'file') {
+if ('file' === $engine) {
     foreach ($file as $oneFile) {
         $query_entry .= '&amp;file[]=' . $oneFile;
     }
 }
 
 // START delete/purge
-$confirm = XoopsRequest::getString('confirm', 0, 'post');
-if ($opentry === 'del' && !empty($confirm)) {
-    if ($engine === 'db') {
+$confirm = Request::getString('confirm', 0, 'post');
+if ('del' === $opentry && !empty($confirm)) {
+    if ('db' === $engine) {
         // delete logs in database
         $statsObj = UserlogStats::getInstance();
         if (is_numeric($log_id[0])) {
@@ -113,7 +115,7 @@ if ($opentry === 'del' && !empty($confirm)) {
             $criteriaLogId->add(new Criteria('log_id', '(' . implode(',', $log_id) . ')', 'IN'));
             $numDel = $statsObj->delete('log', 0, 0, $criteriaLogId);
             redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : ''), 1, sprintf(_AM_USERLOG_LOG_DELETE_SUCCESS, $numDel));
-        } elseif ($log_id[0] === 'bulk') {
+        } elseif ('bulk' === $log_id[0]) {
             $numDel = $statsObj->delete('log', 0, 0, $criteria);
             redirect_header('logs.php?op=' . $query_entry, 10, sprintf(_AM_USERLOG_LOG_DELETE_SUCCESS_QUERY, $numDel, $query_page));
         }
@@ -127,9 +129,9 @@ if ($opentry === 'del' && !empty($confirm)) {
 
 // get logs from engine: 1- db 2- file
 $loglogObj = UserlogLog::getInstance();
-if ($engine === 'db') {
-    $logs      = $Userlog->getHandler('log')->getLogs($limitentry, $startentry, $criteria, $sortentry, $orderentry, null, false);
-    $totalLogs = $Userlog->getHandler('log')->getLogsCount($criteria);
+if ('db' === $engine) {
+    $logs      = $userlog->getHandler('log')->getLogs($limitentry, $startentry, $criteria, $sortentry, $orderentry, null, false);
+    $totalLogs = $userlog->getHandler('log')->getLogsCount($criteria);
 } else {
     list($logs, $totalLogs) = $loglogObj->getLogsFromFiles($file, $limitentry, $startentry, $options, $sortentry, $orderentry);
 }
@@ -150,7 +152,7 @@ $GLOBALS['xoopsTpl']->assign('sortentry', $sortentry);
 $GLOBALS['xoopsTpl']->assign('orderentry', $orderentry);
 
 // skip these headers because we can merge it to request method column
-$skips = array('zget', 'post', 'request', 'files', 'env');
+$skips = ['zget', 'post', 'request', 'files', 'env'];
 // prepared for display. timestamps and var_export
 $logs = $loglogObj->arrayToDisplay($logs);
 
@@ -170,22 +172,21 @@ $GLOBALS['xoopsTpl']->assign('types', $type_vars);
 // form, elements, headers
 list($form, $elements, $headers) = $logsetObj->logForm($options);
 // START export
-if (substr($opentry, 0, 6) === 'export') {
+if (0 === strpos($opentry, 'export')) {
     list($opentry, $export) = explode('-', $opentry);
     // if it is not bulk export get the actual logs in the page
     if (is_numeric($log_id[0])) {
-        $logs = $Userlog->getFromKeys($logs, $log_id);
+        $logs = $userlog->getFromKeys($logs, $log_id);
     }
     $totalLogsExport = count($logs);
     switch ($export) {
         case 'csv':
             if ($csvFile = $loglogObj->exportLogsToCsv($logs, $headers, 'engine_' . $engine . '_total_' . $totalLogsExport, ';')) {
-                redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 7,
-                                sprintf(_AM_USERLOG_LOG_EXPORT_SUCCESS, $totalLogsExport, $csvFile));
+                redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $userlog->getConfig('logs_perpage') : $limitentry), 7, sprintf(_AM_USERLOG_LOG_EXPORT_SUCCESS, $totalLogsExport, $csvFile));
             }
-            redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $Userlog->getConfig('logs_perpage') : $limitentry), 1, _AM_USERLOG_LOG_EXPORT_ERROR);
+            redirect_header('logs.php?op=' . $query_entry . (!empty($query_page) ? '&amp;' . $query_page : '') . '&amp;limitentry=' . (empty($limitentry) ? $userlog->getConfig('logs_perpage') : $limitentry), 1, _AM_USERLOG_LOG_EXPORT_ERROR);
             break;
-        default :
+        default:
             break;
     }
 }
@@ -197,13 +198,13 @@ $engineEl->addOption('db', _AM_USERLOG_ENGINE_DB);
 $engineEl->addOption('file', _AM_USERLOG_ENGINE_FILE);
 $engineEl->setDescription(_AM_USERLOG_ENGINE_DSC);
 // file element
-if ($engine === 'file') {
+if ('file' === $engine) {
     $fileEl = $loglogObj->buildFileSelectEle($file, true);// multiselect = true
     $fileEl->setDescription(_AM_USERLOG_FILE_DSC);
 }
 // limit, sort, order
 $limitEl = new XoopsFormText(_AM_USERLOG_LOGS_PERPAGE, 'limitentry', 10, 255, $limitentry);
-$limitEl->setDescription(sprintf(_AM_USERLOG_LOGS_PERPAGE_DSC, $Userlog->getConfig('logs_perpage')));
+$limitEl->setDescription(sprintf(_AM_USERLOG_LOGS_PERPAGE_DSC, $userlog->getConfig('logs_perpage')));
 $sortEl = new XoopsFormSelect(_AM_USERLOG_SORT, 'sortentry', $sortentry);
 $sortEl->addOptionArray($headers);
 $sortEl->setDescription(_AM_USERLOG_SORT_DSC);
@@ -215,7 +216,7 @@ $orderEl->setDescription(_AM_USERLOG_ORDER_DSC);
 $submitEl = new XoopsFormButton(_SUBMIT, 'submitlogs', _SUBMIT, 'submit');
 // add elements
 $form->addElement($engineEl);
-if ($engine === 'file') {
+if ('file' === $engine) {
     $form->addElement($fileEl);
 }
 $form->addElement($limitEl);
@@ -226,26 +227,26 @@ $GLOBALS['xoopsTpl']->assign('form', $form->render());
 // END main form
 // START form navigation
 // formNav in the upper section
-include_once USERLOG_ROOT_PATH . '/class/form/simpleform.php';
+require_once USERLOG_ROOT_PATH . '/class/form/simpleform.php';
 $formNav = new UserlogSimpleForm('', 'logsnav', 'logs.php', 'get');
 foreach ($elements as $key => $ele) {
     $ele->setClass('hidden');
     $formNav->addElement($elements[$key]);
 }
-if ($engine === 'file') {
+if ('file' === $engine) {
     $fileEl->setClass('floatleft left');
-    $fileEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+    $fileEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
     $formNav->addElement($fileEl);
 }
 $engineEl->setClass('floatleft left');
-$engineEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+$engineEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
 $formNav->addElement($engineEl);
 $limitEl->setClass('floatleft left');
 $formNav->addElement($limitEl);
-$sortEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+$sortEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
 $sortEl->setClass('floatleft left');
 $formNav->addElement($sortEl);
-$orderEl->setExtra("onchange=\"document.forms.logsnav.submitlogsnav.click()\"");
+$orderEl->setExtra('onchange="document.forms.logsnav.submitlogsnav.click()"');
 $orderEl->setClass('floatleft left');
 $formNav->addElement($orderEl);
 $submitEl = new XoopsFormButton('', 'submitlogsnav', _GO, 'submit');
@@ -258,21 +259,21 @@ $GLOBALS['xoopsTpl']->assign('formNav', $formNav->render());
 // use _class = array("hidden") to reset element class
 $formHead = new UserlogSimpleForm(_AM_USERLOG_LOGFORM, 'logshead', 'logs.php', 'get');
 foreach ($elements as $key => $ele) {
-    $ele->_class = array('floatleft', 'left');
+    $ele->_class = ['floatleft', 'left'];
     $formHead->addElement($elements[$key]);
 }
 // add class hidden to formHead
-if ($engine === 'file') {
-    $fileEl->_class = array('hidden');
+if ('file' === $engine) {
+    $fileEl->_class = ['hidden'];
     $formHead->addElement($fileEl);
 }
-$engineEl->_class = array('hidden');
+$engineEl->_class = ['hidden'];
 $formHead->addElement($engineEl);
-$limitEl->_class = array('hidden');
+$limitEl->_class = ['hidden'];
 $formHead->addElement($limitEl);
-$sortEl->_class = array('hidden');
+$sortEl->_class = ['hidden'];
 $formHead->addElement($sortEl);
-$orderEl->_class = array('hidden');
+$orderEl->_class = ['hidden'];
 $formHead->addElement($orderEl);
 // add submit to formHead
 $submitEl = new XoopsFormButton('', 'submitlogshead', _SUBMIT, 'submit');
@@ -282,8 +283,8 @@ $formHead->setExtra("onsubmit=\"preventSubmitEmptyInput('options[');\"");
 $GLOBALS['xoopsTpl']->assign('formHead', $formHead->render());
 // END form head
 
-$indexAdmin = new ModuleAdmin(); // add this just to include the css file to template
-$GLOBALS['xoopsTpl']->assign('logo', $indexAdmin->addNavigation(basename(__FILE__)));
+$adminObject = \Xmf\Module\Admin::getInstance(); // add this just to include the css file to template
+$GLOBALS['xoopsTpl']->assign('logo', $adminObject->displayNavigation(basename(__FILE__)));
 
 //headers skip then to template
 foreach ($skips as $option) {
@@ -291,7 +292,7 @@ foreach ($skips as $option) {
 }
 $GLOBALS['xoopsTpl']->assign('headers', $headers);
 // get TOGGLE cookie
-$toggles = $Userlog->getCookie('TOGGLE');
+$toggles = $userlog->getCookie('TOGGLE');
 $expand  = (count($toggles) > 0) ? (in_array('formhead', $toggles) ? false : true) : true;
 if ($expand) {
     $formHeadToggle['toggle'] = 'toggle_block';

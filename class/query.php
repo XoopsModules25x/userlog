@@ -11,7 +11,7 @@
 /**
  *  userlog module
  *
- * @copyright       XOOPS Project (http://xoops.org)
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @package         userlog class
  * @since           1.16
@@ -20,8 +20,8 @@
  */
 // Important note: use $eleNamePrefix = "options" because it is hard-coded in XOOPS CORE > BLOCKS
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-include_once dirname(__DIR__) . '/include/common.php';
+defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+require_once __DIR__ . '/../include/common.php';
 
 xoops_loadLanguage('admin', USERLOG_DIRNAME);
 xoops_load('XoopsFormLoader');
@@ -92,8 +92,8 @@ class UserlogQuery
         if (!empty($args[$i])) {
             $criteria->add(new Criteria('post', '%last_visit%', $opt[$args[$i]]), 'AND'); // never login before "NOT LIKE" login before "LIKE"
         }
-        $loginsObj = $this->userlog->getHandler('log')->getLogs($args[0], 0, $criteria, 'log_id', $args[5], array('log_id', 'log_time', 'post'), true); // true => as Obj
-        $block     = array();
+        $loginsObj = $this->userlog->getHandler('log')->getLogs($args[0], 0, $criteria, 'log_id', $args[5], ['log_id', 'log_time', 'post'], true); // true => as Obj
+        $block     = [];
         if (empty($loginsObj)) {
             return $block;
         }
@@ -103,29 +103,29 @@ class UserlogQuery
             if (!empty($block[$log_id]['success'])) {
                 $block[$log_id]['msg'] = _AM_USERLOG_SUCCESS . ' ';
                 if (empty($block[$log_id]['level'])) {
-                    $block[$log_id]['msg'] .= _MA_USER_LEVEL_INACTIVE;
+                    $block[$log_id]['msg']   .= _MA_USER_LEVEL_INACTIVE;
                     $block[$log_id]['color'] = 'YELLOW';
                 } else {
-                    $block[$log_id]['msg'] .= _MA_USER_LEVEL_ACTIVE;
+                    $block[$log_id]['msg']   .= _MA_USER_LEVEL_ACTIVE;
                     $block[$log_id]['color'] = 'GREEN';
                 }
                 if (empty($block[$log_id]['last_visit'])) {
-                    if ($block[$log_id]['loginOrRegister'] === 'register') {
-                        $block[$log_id]['msg'] .= ' ' . sprintf(_US_HASJUSTREG, $block[$log_id]['uname']);
+                    if ('register' === $block[$log_id]['loginOrRegister']) {
+                        $block[$log_id]['msg']   .= ' ' . sprintf(_US_HASJUSTREG, $block[$log_id]['uname']);
                         $block[$log_id]['color'] = 'GREEN';
                     } else {
-                        $block[$log_id]['msg'] .= ' ' . sprintf(_US_CONFMAIL, $block[$log_id]['uname']);
+                        $block[$log_id]['msg']   .= ' ' . sprintf(_US_CONFMAIL, $block[$log_id]['uname']);
                         $block[$log_id]['color'] = 'BROWN';
                     }
                 }
             } else {
                 $block[$log_id]['success'] = 0;
                 $block[$log_id]['msg']     = _AM_USERLOG_FAIL . ' ';
-                $block[$log_id]['msg'] .= ($block[$log_id]['loginOrRegister'] === 'register') ? _ERRORS : _US_INCORRECTLOGIN;
-                $block[$log_id]['color'] = 'RED';
+                $block[$log_id]['msg']     .= ('register' === $block[$log_id]['loginOrRegister']) ? _ERRORS : _US_INCORRECTLOGIN;
+                $block[$log_id]['color']   = 'RED';
             }
             $this->userlog->setConfig('format_date', $this->userlog->getConfig('format_date_history'));
-            $block[$log_id]['log_time'] = $loginObj->log_time();
+            $block[$log_id]['log_time'] = $loginObj->getLogTime();
         }
         unset($block[$log_id]['pass'], $block[$log_id]['vpass']);
 
@@ -140,7 +140,7 @@ class UserlogQuery
      */
     public function loginregHistoryForm($args, $eleNamePrefix = 'options')
     {
-        // include_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
+        // require_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
         xoops_load('XoopsFormLoader');
         // $form = new XoopsBlockForm(); //reserve for 2.6
         $form = new XoopsThemeForm(_AM_USERLOG_LOGIN_REG_HISTORY, 'login_reg_history', '');
@@ -207,7 +207,7 @@ class UserlogQuery
         if (empty($refViews)) {
             return false;
         }
-        $block = array('stats' => $refViews, 'stats_type' => $args[1]);
+        $block = ['stats' => $refViews, 'stats_type' => $args[1]];
 
         return $block;
     }
@@ -220,7 +220,7 @@ class UserlogQuery
      */
     public function stats_typeForm($args, $eleNamePrefix = 'options')
     {
-        // include_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
+        // require_once XOOPS_ROOT_PATH . "/class/blockform.php"; //reserve for 2.6
         xoops_load('XoopsFormLoader');
         // $form = new XoopsBlockForm(); //reserve for 2.6
         $form = new XoopsThemeForm(_AM_USERLOG_STATS_TYPE, 'stats_type', '');
@@ -230,20 +230,20 @@ class UserlogQuery
         $numitemsEle = new XoopsFormText(_AM_USERLOG_ITEMS_NUM, "{$eleNamePrefix}[{$i}]", 10, 255, (int)$args[$i]);
         ++$i;
         $typeEle = new XoopsFormSelect(_AM_USERLOG_STATS_TYPE, "{$eleNamePrefix}[{$i}]", $args[$i]);
-        $typeEle->addOptionArray(array(
+        $typeEle->addOptionArray([
                                      'referral' => _AM_USERLOG_STATS_REFERRAL,
                                      'browser'  => _AM_USERLOG_STATS_BROWSER,
                                      'OS'       => _AM_USERLOG_STATS_OS
-                                 ));
+                                 ]);
         $typeEle->setDescription(_AM_USERLOG_STATS_TYPE_DSC);
 
         ++$i;
         $sortEle = new XoopsFormSelect(_AM_USERLOG_SORT, "{$eleNamePrefix}[{$i}]", $args[$i]);
-        $sortEle->addOptionArray(array(
+        $sortEle->addOptionArray([
                                      'stats_link'  => _AM_USERLOG_ITEM_NAME,
                                      'stats_value' => _AM_USERLOG_VIEW,
                                      'time_update' => _AM_USERLOG_STATS_TIME_UPDATE
-                                 ));
+                                 ]);
         $sortEle->setDescription(_AM_USERLOG_SORT_DSC);
 
         ++$i;
@@ -280,16 +280,16 @@ class UserlogQuery
         }
         $criteria->add(new Criteria('referer', "{$refLike}", 'LIKE'), 'AND'); // modules admin
 
-        $modulesadminObjs = $this->userlog->getHandler('log')->getLogs($args[0], 0, $criteria, 'log_id', 'DESC', array('log_id', 'log_time', 'referer'), true); // true => as Obj
+        $modulesadminObjs = $this->userlog->getHandler('log')->getLogs($args[0], 0, $criteria, 'log_id', 'DESC', ['log_id', 'log_time', 'referer'], true); // true => as Obj
         if (empty($modulesadminObjs)) {
             return false;
         }
-        $block = array();
+        $block = [];
         foreach ($modulesadminObjs as $maObj) {
             $query = parse_url($maObj->referer(), PHP_URL_QUERY);
             parse_str($query, $moduleAdmin);
             $moduleAdmin['op_lang']          = constant('_AM_SYSTEM_MODULES_' . strtoupper($moduleAdmin['op']));
-            $moduleAdmin['log_time']         = $maObj->log_time();
+            $moduleAdmin['log_time']         = $maObj->getLogTime();
             $block[$maObj->getVar('log_id')] = $moduleAdmin;
         }
 
