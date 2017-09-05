@@ -40,8 +40,8 @@ class UserlogSetting extends XoopsObject
     /**
      * constructor
      */
-    public function __construct()    {
-
+    public function __construct()
+    {
         $this->userlog = Userlog::getInstance();
         $this->initVar('set_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('name', XOBJ_DTYPE_TXTBOX, null, false, 100);

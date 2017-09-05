@@ -150,7 +150,7 @@ define('_AM_USERLOG_ITEM_IDGT_FORM', _AM_USERLOG_INTGT_FORM);
 define('_AM_USERLOG_ITEM_IDLT', sprintf(_AM_USERLOG_INTLT, _AM_USERLOG_ITEM_ID));
 define('_AM_USERLOG_ITEM_IDLT_FORM', _AM_USERLOG_INTLT_FORM);
 // END DO NOT TOUCH
-define('_AM_USERLOG_ADMIN_FORM', 'SELECT Yes TO SHOW ALL LOGS FROM Admins');
+define('_AM_USERLOG_ADMIN_FORM', 'Select "Yes" to show all logs from Admins');
 define('_AM_USERLOG_PAGEADMIN_FORM', 'Select Yes to show all pages in admin side of modules');
 define(
     '_AM_USERLOG_GROUPS_FORM',

@@ -381,7 +381,7 @@ class Browscap
 
                 $browser = [
                     $user_agent, // Original useragent
-                    trim(strtolower($pattern), self::REGEX_DELIMITER),
+                    strtolower(trim($pattern, self::REGEX_DELIMITER)),
                     $this->_pregUnQuote($pattern, $simpleMatch ? false : $matches)
                 ];
 
@@ -1353,7 +1353,6 @@ class Browscap
                 }
 
                 throw new Exception('Cannot open the local file');
-            // no break
             case self::UPDATE_FOPEN:
                 if (ini_get('allow_url_fopen') && function_exists('file_get_contents')) {
                     // include proxy settings in the file_get_contents() call

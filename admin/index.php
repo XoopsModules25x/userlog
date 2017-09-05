@@ -54,7 +54,10 @@ foreach ($stats as $type => $arr) {
         $adminObject->addInfoBoxLine(
             sprintf(
             sprintf(_AM_USERLOG_STATS_TYPE_PERIOD, '%1$s', $types[$type], constant('_AM_USERLOG_' . strtoupper($periods[$period]))) . ' ' . _AM_USERLOG_STATS_TIME_UPDATE . ' ' . $arr2['time_update'],
-            $arr2['value']),'', $arr2['value'] ? 'GREEN' : 'RED'
+            $arr2['value']
+            ),
+            '',
+            $arr2['value'] ? 'GREEN' : 'RED'
         );
     }
 }

@@ -352,6 +352,7 @@ class Userlog extends \Xmf\Module\Helper
 
     /**
      * @return bool
+     * @throws \phpbrowscap\Exception
      */
     private function initBrowsCap()
     {
@@ -371,5 +372,4 @@ class Userlog extends \Xmf\Module\Helper
 
         return true;
     }
-
 }
