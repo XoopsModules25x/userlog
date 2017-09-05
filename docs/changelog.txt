@@ -1,3 +1,10 @@
+<h5>1.17 Beta 1   [2017-09-04]</h5>
+<hr>
+- conversion of Userlog helper class to XMF (mamba)
+- short array syntax (mamba)
+- converted to Yoda syntax (mamba)
+- CSS cosmetics (mamba) 
+
 <h5>1.17 Alpha 3   [NOT RELEASED]</h5>
 <hr>
 - XOOPS 2.5.9, PHP 7 (mamba)
@@ -25,8 +32,6 @@
     &nbsp;&nbsp;- updated addInfoBoxLine entries (mamba)
     &nbsp;&nbsp;- displayNavigation(basename(__FILE__))  (mamba)
     &nbsp;&nbsp;- changed to ->displayButton('left') (mamba)
-- conversion of Userlog helper class to XMF (mamba)
-- short array syntax (mamba)
 
 
 
